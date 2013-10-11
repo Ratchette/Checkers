@@ -33,7 +33,7 @@ public class BoardDesign {
 		return blackCorner;
 	}
 	
-	public void setBlackCorner() {
+	public void setBlackCorner(char blackCorner) {
 		this.blackCorner = blackCorner;
 	}
 }

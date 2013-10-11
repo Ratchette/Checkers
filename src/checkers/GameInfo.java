@@ -42,7 +42,7 @@ public class GameInfo {
 		return currentBoard;
 	}
 
-	public void setCurrentBoard() {
+	public void setCurrentBoard(Board currentBoard) {
 		this.currentBoard = currentBoard;
 	}
 

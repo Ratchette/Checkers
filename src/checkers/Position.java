@@ -13,7 +13,7 @@ class Position {
     private int x = 0;
     private int y = 0;
 
-    void Position(int xPos, int yPos) {
+    public Position(int xPos, int yPos) {
          x = xPos;
          y = yPos;
     }

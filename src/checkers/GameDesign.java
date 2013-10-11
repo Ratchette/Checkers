@@ -21,7 +21,7 @@ public class GameDesign {
 	public GameDesign(int gameCode, BoardDesign gameBoardDesign, Board initialBoard) {
 		this.gameCode = gameCode;
 		this.gameBoardDesign = gameBoardDesign;
-		this.initialBoard = initialBoard;
+		this.setInitialBoard(initialBoard);
 	}
 	
 	public 	int getGameCode() {
@@ -36,7 +36,15 @@ public class GameDesign {
 		return gameBoardDesign;
 	}
 
-	public void setGameBoardDesign() {
+	public void setGameBoardDesign(BoardDesign gameBoardDesign) {
 		this.gameBoardDesign = gameBoardDesign;
+	}
+
+	public Board getInitialBoard() {
+		return initialBoard;
+	}
+
+	public void setInitialBoard(Board initialBoard) {
+		this.initialBoard = initialBoard;
 	}
 }

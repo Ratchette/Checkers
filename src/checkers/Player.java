@@ -12,7 +12,7 @@ public class Player
 {
 	private Object considerGame (GameDesign aGame)
 	{
-		//To be implemented
+		return new Object();
 	}
 
 	private void startGame ()
@@ -22,7 +22,7 @@ public class Player
 
 	private String move (Move playersMove)
 	{
-		//To be implemented
+		return new String();
 	}
 
 	private void opponentResigned (PlayerInfo player, char code, String message)
@@ -32,7 +32,7 @@ public class Player
 
 	private String resign ()
 	{
-		//To be implemented
+		return new String();
 	}
 
 	private void youWin ()
