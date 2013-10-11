@@ -10,32 +10,32 @@ package checkers;
 
 public class Player
 {
-	private Object considerGame (GameDesign aGame)
+	public Object considerGame (GameDesign aGame)
 	{
 		return new Object();
 	}
 
-	private void startGame ()
+	public void startGame ()
 	{
 		//To be implemented
 	}
 
-	private String move (Move playersMove)
+	public String move (Move playersMove)
 	{
 		return new String();
 	}
 
-	private void opponentResigned (PlayerInfo player, char code, String message)
+	public void opponentResigned (PlayerInfo player, char code, String message)
 	{
 		//To be implemented
 	}
 
-	private String resign ()
+	public String resign ()
 	{
 		return new String();
 	}
 
-	private void youWin ()
+	public void youWin ()
 	{
 		//To be implemented
 	}

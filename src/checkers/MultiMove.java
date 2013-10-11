@@ -10,42 +10,23 @@ package checkers;
 
 public class MultiMove extends Move {
 
-	private Piece pieceBeingMoved;
-	private Position endPosition;
-	private Piece capturedPiece;
-
+	private SingleMove[] moveSequence;
+	
 	public MultiMove() {
 
 	}
 	
-	public MultiMove(Piece pieceBeingMoved, Position endPosition, Piece capturedPiece) {
-		this.pieceBeingMoved = pieceBeingMoved;
-		this.endPosition = endPosition;
-		this.capturedPiece = capturedPiece;
+	public MultiMove(SingleMove[] moveSequence) {
+		this.setMoveSequence(moveSequence);
 	}
 
-	public Piece getPieceBeingMoved() {
-		return pieceBeingMoved;
-	}	
+	public SingleMove[] getMoveSequence() {
+		return moveSequence;
+	}
+
+	public void setMoveSequence(SingleMove[] moveSequence) {
+		this.moveSequence = moveSequence;
+	}
 	
-	public void setPieceBeingMoved(Piece pieceBeingMoved) {
-		this.pieceBeingMoved = pieceBeingMoved;
-	}
-
-	public Position getEndPosition() {
-		return endPosition;
-	}
-
-	public void setEndPosition(Position endPosition) {
-		this.endPosition = endPosition;
-	}
-
-	public Piece getCapturedPiece() {
-		return capturedPiece;
-	}
-
-	public void setCapturedPiece(Piece capturedPiece) {
-		this.capturedPiece = capturedPiece;
-	} 
 }
 

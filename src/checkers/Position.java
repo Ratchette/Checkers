@@ -13,9 +13,19 @@ class Position {
     private int x = 0;
     private int y = 0;
 
-    public Position(int xPos, int yPos) {
-         x = xPos;
-         y = yPos;
+    public Position(int xPos, int yPos) throws Exception {
+    	if(xPos < 0) {
+    			throw new Exception("Ivalid position: The x position " + xPos + 
+    					" is not a valid position.");
+    	}
+    	
+    	if(yPos < 0) {
+			throw new Exception("Ivalid position: The y position " + yPos + 
+					" is not a valid position.");
+    	}
+    	
+        x = xPos;
+        y = yPos;
     }
 
     int getX () {
@@ -26,12 +36,20 @@ class Position {
          return y;
     }
 
-    void setX (int xPos) {
-         x = xPos;
+    void setX (int xPos) throws Exception {
+    	if(xPos < 0) {
+			throw new Exception("Ivalid position: The x position " + xPos + 
+					" is not a valid position.");
+    	}
+        x = xPos;
     }
 
-    void setY (int yPos) {
-         y = yPos;
+    void setY (int yPos) throws Exception {
+    	if(yPos < 0) {
+			throw new Exception("Ivalid position: The y position " + yPos + 
+					" is not a valid position.");
+    	}
+        y = yPos;
     }
 
 }
