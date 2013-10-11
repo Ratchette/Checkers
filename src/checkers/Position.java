@@ -1,3 +1,13 @@
+/**
+ * @author Rafael Aquino de Carvalho
+ * @author Danielle Fudger
+ * @author Ben Douek
+ * @author Jennifer Winer
+ *
+ */
+
+package checkers;
+
 class Position {
 
     private int x = 0;
@@ -5,14 +15,14 @@ class Position {
 
     void Position(int xPos, int yPos) {
          x = xPos;
-         y = yPos
+         y = yPos;
     }
 
-    void getX () {
+    int getX () {
          return x;
     }
 
-    void getX () {
+    int getY () {
          return y;
     }
 

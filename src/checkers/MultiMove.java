@@ -1,14 +1,24 @@
+/**
+ * @author Rafael Aquino de Carvalho
+ * @author Danielle Fudger
+ * @author Ben Douek
+ * @author Jennifer Winer
+ *
+ */
+
+package checkers;
+
 public class MultiMove extends Move {
 
 	private Piece pieceBeingMoved;
 	private Position endPosition;
 	private Piece capturedPiece;
 
-	public Move() {
+	public MultiMove() {
 
 	}
 	
-	public Move(Piece pieceBeingMoved, Position endPosition, Piece capturedPiece) {
+	public MultiMove(Piece pieceBeingMoved, Position endPosition, Piece capturedPiece) {
 		this.pieceBeingMoved = pieceBeingMoved;
 		this.endPosition = endPosition;
 		this.capturedPiece = capturedPiece;

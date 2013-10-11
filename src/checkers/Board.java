@@ -1,4 +1,15 @@
-public Class Board {
+/**
+ * @author Rafael Aquino de Carvalho
+ * @author Danielle Fudger
+ * @author Ben Douek
+ * @author Jennifer Winer
+ *
+ */
+
+package checkers;
+
+
+public class Board {
 	private BoardDesign theBoard;
 	private Piece[] piecePlacement;
 	
