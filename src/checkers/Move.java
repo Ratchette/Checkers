@@ -10,15 +10,9 @@ package checkers;
 
 public abstract class Move {
 	
-	public int numberOfSteps(){
-            return -1;
-        };
+	public abstract int numberOfSteps();
 
-	public Piece[] capturedPieces(){
-            return null;
-        };
+	public abstract Piece[] capturedPieces();
 
-	public SingleMove[] moveSequence(){
-            return null;
-        };
+	public abstract SingleMove[] moveSequence();
 }

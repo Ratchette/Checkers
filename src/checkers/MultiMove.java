@@ -8,6 +8,7 @@
 
 package checkers;
 
+
 public class MultiMove extends Move {
 
 	private SingleMove[] moveSequence;
@@ -20,12 +21,27 @@ public class MultiMove extends Move {
 		this.setMoveSequence(moveSequence);
 	}
 
-	public SingleMove[] getMoveSequence() {
-		return moveSequence;
-	}
-
 	public void setMoveSequence(SingleMove[] moveSequence) {
 		this.moveSequence = moveSequence;
+	}
+
+	@Override
+	public int numberOfSteps() {
+		return moveSequence.length;
+	}
+
+	@Override
+	public Piece[] capturedPieces() {
+		Piece[] capturedPieces = new Piece[moveSequence.length];
+		for(int i = 0; i < capturedPieces.length; i ++) {
+			capturedPieces[i] = moveSequence[i].getCapturedPiece();
+		}
+		return capturedPieces;
+	}
+
+	@Override
+	public SingleMove[] moveSequence() {
+		return moveSequence;
 	}
 	
 }

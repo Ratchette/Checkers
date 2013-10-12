@@ -8,7 +8,7 @@
 
 package checkers;
 
-public class SingleMove{
+public class SingleMove extends Move{
     private Piece pieceBeignMoved;
     private Piece capturedPiece;
     private Position endPosition;
@@ -47,6 +47,23 @@ public class SingleMove{
 		this.endPosition = endPosition;
 	
 	}
-    
-    
+
+	@Override
+	public int numberOfSteps() {
+		return 1;
+	}
+
+	@Override
+	public Piece[] capturedPieces() {
+		Piece[] capturedPieces = new Piece[1];
+		capturedPieces[0] = capturedPiece;
+		return capturedPieces;
+	}
+
+	@Override
+	public SingleMove[] moveSequence() {
+		SingleMove[] moveSequence = new SingleMove[1];
+		moveSequence[0] = this;
+		return moveSequence;
+	}
 }
