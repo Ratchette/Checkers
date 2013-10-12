@@ -47,4 +47,16 @@ public class Piece {
 	public void setColour(char colour) {
 		this.colour = colour;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Piece) {
+			Piece pieceToBeCompared = (Piece) obj;
+			Position pieceToBeComparedPosition = pieceToBeCompared.getPiecePosition();
+			char pieceToBeComparedColour = pieceToBeCompared.getColour();
+			return pieceToBeComparedPosition.equals(this.getPiecePosition()) 
+					&& pieceToBeComparedColour == this.getColour();
+		}
+		return false;
+	}
 }

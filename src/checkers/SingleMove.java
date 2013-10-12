@@ -17,7 +17,7 @@ public class SingleMove extends Move{
     	
 	}
     
-    public SingleMove(Piece pieceBeingMoved, Piece capturedPiece, Position endPosition){
+    public SingleMove(Piece pieceBeingMoved, Piece capturedPiece, Position endPosition) {
     	this.pieceBeignMoved = pieceBeingMoved;
     	this.capturedPiece = capturedPiece;
     	this.endPosition = endPosition;
