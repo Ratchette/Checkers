@@ -11,14 +11,13 @@ package checkers;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public class CheckersClient implements Remote{
+public class CheckersClient implements Remote, GameObserver, Player{
 	private GameObserver observer;
 	private Player player;
+	
 	private GameInfo myGame;
 	
-	/**
-	 * @param args
-	 */
+	
 	CheckersClient(boolean Player) throws RemoteException{
 		// TODO - bind this method to an action listener INSTEAD of taking a string as a parameter
 		// When client starts up, the GUI will have two buttons, one to be an observer, and one to be a client
@@ -33,13 +32,106 @@ public class CheckersClient implements Remote{
 		
 		this.myGame = null;
 	}
-	
-	public static void main(String[] args) {
-		// TODO start GUI
-		
-		
-		System.out.println("It works!");
 
+
+	public GameInfo getGame() throws RemoteException{
+		return new GameInfo(myGame);
 	}
 
+	@Override
+	public Object considerGame(GameDesign aGame) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public void startGame() throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void opponentResigned(PlayerInfo player, char code, String message)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public String resign() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public void youWin() throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public String move(Move playerMove) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public String playerResigned(PlayerInfo aPlayer, char code, String aMessage)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public void gameOver(PlayerInfo winner) throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public boolean equals (Object other){
+		if(other == null){
+			return false;
+		}
+		
+		if(other.getClass() != this.getClass()){
+			return false;
+		}
+		
+		CheckersClient otherClient = (CheckersClient) other;
+		try{
+			return this.player.equals(otherClient.player)
+				&& this.observer.equals(otherClient.observer)
+				&& this.myGame.equals(otherClient.getGame());
+		}
+		catch(Exception e){
+			System.out.println("Excpetion Occured");
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+
+	
+//	public static void main(String[] args) {
+//	// TODO start GUI
+//	
+//	
+//	System.out.println("It works!");
+//
+//}
 }

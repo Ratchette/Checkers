@@ -88,5 +88,24 @@ public class GameInfo implements Remote, Serializable{
 		this.currentRound = currentRound;
 	}
 	
-
+	@Override
+	public boolean equals (Object other){
+		if(other == null){
+			return false;
+		}
+		
+		if(other.getClass() != this.getClass()){
+			return false;
+		}
+		
+		GameInfo otherGame = (GameInfo) other;
+		try{
+			// TODO what does it mean for two games to be equal? the same board? the same turn? ONLY the same playerID?
+		}
+		
+		catch(Exception e){
+			System.out.println("Excpetion Occured");
+			e.printStackTrace();
+			return false;
+		}
 }
