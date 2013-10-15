@@ -22,12 +22,17 @@ public class MoveTest {
 	
 	@Before
 	public void setup() {
-		pieceToBeMoved = new Piece();
-		capturedPiece = new Piece();
-		endPosition = new Position();
-		capturedPiecePosition = new Position();
-		pieceToBeMovedPosition = new Position();
-		movecontroller = new MoveController();
+		try {
+			pieceToBeMoved = new Piece(new Position(1,1), false, 'D');
+			capturedPiece = new Piece(new Position(1,3), false, 'L');
+			endPosition = new Position();
+			capturedPiecePosition = new Position();
+			pieceToBeMovedPosition = new Position();
+			movecontroller = new MoveController();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -153,8 +158,7 @@ public class MoveTest {
 		
 		pieceToBeMoved.setPiecePosition(pieceToBeMovedPosition);
 		capturedPiece.setPiecePosition(capturedPiecePosition);
-		capturedPiece.setColour('L');
-		pieceToBeMoved.setColour('D');
+
 		try {
 			SingleMove singleMove = movecontroller.
 					manFirstJumpMove(pieceToBeMoved, capturedPiece, endPosition);
