@@ -15,26 +15,26 @@ import java.rmi.RemoteException;
 public class BoardDesign implements Remote, Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private int n;
+	private int gridSize;
 	private char blackCorner;
 	private String gameType;
 
 	public BoardDesign(BoardDesign copy)  throws RemoteException{
-		this.n = copy.getN();
+		this.gridSize = copy.getN();
 		this.blackCorner = copy.getBlackCorner();
 	}
 
-	public BoardDesign(int n, char blackCorner) throws RemoteException {
-		this.n = n;
+	public BoardDesign(int gridSize, char blackCorner) throws RemoteException {
+		this.gridSize = gridSize;
 		this.blackCorner = blackCorner;
 	}
 	
-	public int getN() throws RemoteException {
-		return n;
+	public int getGridSize() throws RemoteException {
+		return gridSize;
 	}
 
-	public void setN(int n) throws RemoteException {
-		this.n = n;
+	public void setGridSize(int gridSize) throws RemoteException {
+		this.gridSize = gridSize;
 	}
 	
 	public char getBlackCorner() throws RemoteException {
