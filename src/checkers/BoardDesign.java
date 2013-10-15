@@ -20,7 +20,7 @@ public class BoardDesign implements Remote, Serializable{
 	private String gameType;
 
 	public BoardDesign(BoardDesign copy)  throws RemoteException{
-		this.gridSize = copy.getN();
+		this.gridSize = copy.getGridSize();
 		this.blackCorner = copy.getBlackCorner();
 	}
 
@@ -61,7 +61,7 @@ public class BoardDesign implements Remote, Serializable{
 		BoardDesign newObj = (BoardDesign) obj;
 		try {
 			return newObj.getBlackCorner() == this.getBlackCorner() && newObj.getGameType().equals(this.getGameType())
-					&& newObj.getN() == this.getN();
+					&& newObj.getGridSize() == this.getGridSize();
 		} catch (RemoteException e) {
 			return false;
 		}
