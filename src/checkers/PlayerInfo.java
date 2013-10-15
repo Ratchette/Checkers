@@ -36,7 +36,7 @@ public class PlayerInfo implements Remote, Serializable{
 		if(other == null)
 			return false;
 		
-		if(this.getClass() != other.getClass())
+		if(! (other instanceof PlayerInfo))
 			return false;
 		
 		PlayerInfo otherPlayer = (PlayerInfo)other;

@@ -54,4 +54,19 @@ public class GameDesign implements Remote, Serializable{
 	public void setInitialBoard(Board initialBoard) throws RemoteException {
 		this.initialBoard = initialBoard;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof GameDesign)) {
+			return false;
+		}
+		GameDesign newObj = (GameDesign) obj;
+		
+		try {
+			return newObj.getGameBoardDesign().equals(this.getGameBoardDesign()) &&
+					newObj.getGameCode() == this.getGameCode() && newObj.getInitialBoard().equals(this.getInitialBoard());
+		} catch (RemoteException e) {
+			return false;
+		}
+	}
 }

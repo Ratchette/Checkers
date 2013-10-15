@@ -11,6 +11,7 @@ package checkers;
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 
 
 public class Board implements Remote, Serializable{
@@ -48,5 +49,19 @@ public class Board implements Remote, Serializable{
 	
 	public void setPiecePlacement(Piece[] piecePlacement) throws RemoteException {
 		this.piecePlacement = piecePlacement;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Board)) {
+			return false;
+		}
+		Board newObj = (Board) obj;			
+		try {
+			return newObj.getTheBoard().equals(this.getTheBoard()) && 
+					Arrays.equals(newObj.getPiecePlacement(), this.getPiecePlacement());
+		} catch (RemoteException e) {
+			return false;
+		}
 	}
 }

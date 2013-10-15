@@ -52,4 +52,19 @@ public class BoardDesign implements Remote, Serializable{
 	public void setGameType(String gameType) {
 		this.gameType = gameType;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof BoardDesign)) {
+			return false;
+		}
+		BoardDesign newObj = (BoardDesign) obj;
+		try {
+			return newObj.getBlackCorner() == this.getBlackCorner() && newObj.getGameType().equals(this.getGameType())
+					&& newObj.getN() == this.getN();
+		} catch (RemoteException e) {
+			return false;
+		}
+	}
+	
 }
