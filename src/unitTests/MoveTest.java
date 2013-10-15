@@ -22,15 +22,16 @@ public class MoveTest {
 	
 	@Before
 	public void setup() {
+		
 		try {
-			pieceToBeMoved = new Piece(new Position(1,1), false, 'D');
-			capturedPiece = new Piece(new Position(1,3), false, 'L');
+			pieceToBeMoved = new Piece(new Position(1,1), false, 'D', null);
+			capturedPiece = new Piece(new Position(1,3), false, 'L', null);
 			endPosition = new Position();
 			capturedPiecePosition = new Position();
 			pieceToBeMovedPosition = new Position();
 			movecontroller = new MoveController();
+			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

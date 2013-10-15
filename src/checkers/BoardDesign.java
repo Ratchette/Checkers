@@ -17,6 +17,7 @@ public class BoardDesign implements Remote, Serializable{
 	
 	private int n;
 	private char blackCorner;
+	private String gameType;
 
 	public BoardDesign(BoardDesign copy)  throws RemoteException{
 		this.n = copy.getN();
@@ -42,5 +43,13 @@ public class BoardDesign implements Remote, Serializable{
 	
 	public void setBlackCorner(char blackCorner) throws RemoteException {
 		this.blackCorner = blackCorner;
+	}
+
+	public String getGameType() {
+		return gameType;
+	}
+
+	public void setGameType(String gameType) {
+		this.gameType = gameType;
 	}
 }

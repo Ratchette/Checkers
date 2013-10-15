@@ -8,6 +8,7 @@
 
 package checkers;
 
+import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 
 public class Piece {
@@ -15,6 +16,7 @@ public class Piece {
 	private Position piecePosition;
 	private Boolean crown;
 	private char colour;
+	private BufferedImage pieceImage;
 
 	public Piece(Piece copy)  throws RemoteException{
 		this.piecePosition = new Position(copy.getPiecePosition());
@@ -22,10 +24,11 @@ public class Piece {
 		this.colour = copy.getColour();
 	}
 
-	public Piece(Position piecePosition, Boolean crown, char colour)  throws RemoteException{
+	public Piece(Position piecePosition, Boolean crown, char colour, BufferedImage pieceImage)  throws RemoteException{
 		this.piecePosition = piecePosition;
 		this.crown = crown;
 		this.colour = colour;
+		this.setPieceImage(pieceImage);
 	}
 
 	public Position getPiecePosition() {
@@ -63,4 +66,13 @@ public class Piece {
 		}
 		return false;
 	}
+
+	public BufferedImage getPieceImage() {
+		return pieceImage;
+	}
+
+	public void setPieceImage(BufferedImage pieceImage) {
+		this.pieceImage = pieceImage;
+	}
+
 }
