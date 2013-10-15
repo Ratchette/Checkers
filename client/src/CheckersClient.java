@@ -11,6 +11,14 @@
  */
 public class CheckersClient {
 
+	private String move (Move playersMove)
+	{
+		//To be implemented
+	}
+
+	private void playerResigned
+
+
 	/**
 	 * @param args
 	 */
