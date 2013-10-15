@@ -1,0 +1,51 @@
+<project name="Checkers" basedir="." default="all" >
+	<description>
+        The buildfile for our game of Checkers
+    </description>
+
+    <property name="src"            value="src"/>
+    <property name="libs"           value="libs"/>
+    <property name="bin"            value="bin"/>
+    <property name="dist"           value="dist"/>
+    <property name="docs"           value="docs"/>
+	
+    <property name="main-class"     value="Assignment2.Main"/>
+    <property name="arg0"           value="true"/>
+	
+    <!--**************************************************************-->
+    <!--*************** DONT TOUCH BELLOW THIS LINE ******************-->
+    <!--**************************************************************-->
+
+	<target name="all" depends="build"/>
+    <target name="build" depends="javadoc, jar"/>
+
+    <target name="class">
+        <mkdir dir="${bin}"/>
+        <javac includeantruntime="false" source="1.6" target="1.6" srcdir="${src}" destdir="${bin}" />
+    </target>
+
+    <target name="jar" depends="class">
+        <mkdir dir="${dist}"/>
+        <jar destfile="${dist}/${ant.project.name}.jar" basedir="${bin}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="jar">
+        <java jar="${dist}/${ant.project.name}.jar" fork="true">
+            <arg value="${arg0}"/>
+        </java>
+    </target>
+	
+    <target name="clean" description="Removes all .class and .jar files">
+        <delete dir="${bin}"/>
+        <delete dir="${dist}"/>
+    </target>
+	    
+    <target name="javadoc">
+        <delete dir="${docs}"/>
+        <javadoc sourcepath="${src}" destdir="${docs}" private="true" use="true" header="true" footer="true" windowtitle="PacMan Documentation"/>
+    </target>
+</project>

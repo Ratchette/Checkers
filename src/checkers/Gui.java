@@ -1,3 +1,13 @@
+/**
+ * @author Rafael Aquino de Carvalho
+ * @author Danielle Fudger
+ * @author Ben Douek
+ * @author Jennifer Winer
+ *
+ */
+
+package checkers;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;  //notice javax
