@@ -8,9 +8,10 @@
 
 package checkers;
 
+import java.rmi.RemoteException;
 
 public class MultiMove extends Move {
-
+	private static final long serialVersionUID = 1L;
 	private SingleMove[] moveSequence;
 	
 	public MultiMove() {
@@ -26,12 +27,12 @@ public class MultiMove extends Move {
 	}
 
 	@Override
-	public int numberOfSteps() {
+	public int numberOfSteps() throws RemoteException{
 		return moveSequence.length;
 	}
 
 	@Override
-	public Piece[] capturedPieces() {
+	public Piece[] capturedPieces() throws RemoteException{
 		Piece[] capturedPieces = new Piece[moveSequence.length];
 		for(int i = 0; i < capturedPieces.length; i ++) {
 			capturedPieces[i] = moveSequence[i].getCapturedPiece();
@@ -40,7 +41,7 @@ public class MultiMove extends Move {
 	}
 
 	@Override
-	public SingleMove[] moveSequence() {
+	public SingleMove[] moveSequence() throws RemoteException{
 		return moveSequence;
 	}
 	

@@ -8,19 +8,12 @@
 
 package checkers;
 
-public class GameObserver{
-    
-    public String move(Move playerMove) {
-    	return new String();
-    }
-    
-	public String playerResigned(PlayerInfo aPlayer, char code, String aMessage) {
-		return new String();
-	}
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-	public void gameOver (PlayerInfo winner)
-	{
-		//To be implemented
-	}
-    
+public interface GameObserver extends Remote{
+	
+    public String move(Move playerMove)throws RemoteException;
+	public String playerResigned(PlayerInfo aPlayer, char code, String aMessage)throws RemoteException;
+	public void gameOver (PlayerInfo winner)throws RemoteException;
 }

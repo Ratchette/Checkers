@@ -8,17 +8,21 @@
 
 package checkers;
 
+import java.rmi.RemoteException;
+
 public class Piece {
 
 	private Position piecePosition;
 	private Boolean crown;
 	private char colour;
 
-	public Piece() {
-
+	public Piece(Piece copy)  throws RemoteException{
+		this.piecePosition = new Position(copy.getPiecePosition());
+		this.crown = new Boolean(copy.isCrown());
+		this.colour = copy.getColour();
 	}
 
-	public Piece(Position piecePosition, Boolean crown, char colour) {
+	public Piece(Position piecePosition, Boolean crown, char colour)  throws RemoteException{
 		this.piecePosition = piecePosition;
 		this.crown = crown;
 		this.colour = colour;

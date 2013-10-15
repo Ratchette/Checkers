@@ -8,23 +8,29 @@
 
 package checkers;
 
-public class PlayerInfo {
+import java.io.Serializable;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
+public class PlayerInfo implements Remote, Serializable{
+	private static final long serialVersionUID = 1L;
 	String name;
-
-	public PlayerInfo () {
-
-	}
 	
-	public PlayerInfo(String name) {
+	public PlayerInfo(String name) throws RemoteException{
 		this.name = name;
 	}
+	public PlayerInfo(PlayerInfo copy) throws RemoteException{
+		this.name = copy.getName();
+	}
+	
+	public String getName() throws RemoteException{
 
-	public String getName() {
 		return name;
 	}
 	
-	public void setName(String name) {
+	public void setName(String name) throws RemoteException{
 		this.name = name;
 	}
+	
+	
 }

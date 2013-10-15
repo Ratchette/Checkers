@@ -8,8 +8,12 @@
 
 package checkers;
 
+import java.rmi.RemoteException;
+
 public class SingleMove extends Move{
-    private Piece pieceBeignMoved;
+	private static final long serialVersionUID = 1L;
+	
+	private Piece pieceBeignMoved;
     private Piece capturedPiece;
     private Position endPosition;
     
@@ -49,19 +53,19 @@ public class SingleMove extends Move{
 	}
 
 	@Override
-	public int numberOfSteps() {
+	public int numberOfSteps() throws RemoteException{
 		return 1;
 	}
 
 	@Override
-	public Piece[] capturedPieces() {
+	public Piece[] capturedPieces() throws RemoteException{
 		Piece[] capturedPieces = new Piece[1];
 		capturedPieces[0] = capturedPiece;
 		return capturedPieces;
 	}
 
 	@Override
-	public SingleMove[] moveSequence() {
+	public SingleMove[] moveSequence() throws RemoteException{
 		SingleMove[] moveSequence = new SingleMove[1];
 		moveSequence[0] = this;
 		return moveSequence;

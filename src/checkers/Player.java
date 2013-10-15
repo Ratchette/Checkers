@@ -8,37 +8,16 @@
 
 package checkers;
 
-public class Player
-{
-	public Object considerGame (GameDesign aGame)
-	{
-		return new Object();
-	}
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-	public void startGame ()
-	{
-		//To be implemented
-	}
-
-	public String move (Move playersMove)
-	{
-		return new String();
-	}
-
-	public void opponentResigned (PlayerInfo player, char code, String message)
-	{
-		//To be implemented
-	}
-
-	public String resign ()
-	{
-		return new String();
-	}
-
-	public void youWin ()
-	{
-		//To be implemented
-	}
-
-
+public interface Player extends Remote{
+	public Object considerGame (GameDesign aGame) throws RemoteException;
+	public void startGame () throws RemoteException;
+	
+	public String move (Move playersMove) throws RemoteException;
+	
+	public void opponentResigned (PlayerInfo player, char code, String message) throws RemoteException;
+	public String resign () throws RemoteException;
+	public void youWin () throws RemoteException;
 }

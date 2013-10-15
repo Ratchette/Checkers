@@ -8,11 +8,17 @@
 
 package checkers;
 
-public class Position {
+import java.io.Serializable;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
+public class Position implements Remote, Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	private int x;
 	private int y;
 
+	
 	public Position(int xPos, int yPos) throws Exception {
 		if(xPos < 1) {
 			throw new Exception("Ivalid position: The x position " + xPos + 
@@ -28,16 +34,21 @@ public class Position {
 		y = yPos;
 	}
 
-	public Position() {
+	public Position() throws RemoteException{
 		x = 0;
 		y = 0;
 	}
+	
+	public Position(Position copy) throws RemoteException{
+		this.x = copy.getX();
+		this.y = copy.getY();
+	}
 
-	public int getX () {
+	public int getX (){
 		return x;
 	}
 
-	public int getY () {
+	public int getY (){
 		return y;
 	}
 
@@ -69,8 +80,7 @@ public class Position {
 		Position positionToCompare;
 		if (obj instanceof Position) {
 			positionToCompare = (Position) obj;
-			return this.getX() == positionToCompare.getX() && 
-					this.getY() == positionToCompare.getY();
+			return (this.getX() == positionToCompare.getX() && this.getY() == positionToCompare.getY());
 		}
 		return false;
 	}
