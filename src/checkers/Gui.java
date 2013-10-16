@@ -10,9 +10,14 @@ package checkers;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;  //notice javax
+import javax.swing.border.LineBorder;
+
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.rmi.RemoteException;
@@ -148,7 +153,7 @@ public class Gui implements ActionListener
     try {
 
       
-      //pressedButton.setText(pressedButton.getName());
+      pressedButton.setBorder(new LineBorder(Color.GREEN, 2));
       if (turn.getText().equals("STOP")){
         turn.setText("GO");
         turn.setBackground(Color.green);
