@@ -102,6 +102,5 @@ public class CheckersPlayer implements Player{
 
 	}
 	
-	public void get
 
 }

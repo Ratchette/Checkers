@@ -1,1 +1,33 @@
 Testcase name, input variables, expected output, number of bugs it found in total
+CheckersClient.testConstructorVars,client,client,0
+CheckersClient.testConstructorVars,client,null,0
+CheckersClient.testConstructorVars,client,client,0
+CheckersClient.testConstructorVars,client,client,0
+CheckersClient.testConstructorVars,null,null,0
+CheckersClient.testConstructorVars,null,null,0
+CheckersClient.testConstructorVars,GameObserver,GameObserver,0
+BoardDesignTest.testInvalidGameType,'L','L',0
+BoardDesignTest.testInvalidGameType,8,8,0
+BoardDesignTest.testInvalidGameType,'L','L',0
+BoardDesignTest.testInvalidGameType,8,8,0
+BoardDesignTest.testInvalidGameType,'L','R',0
+PositionTest.setInvalidXPositionTest,failureMessage,expectedErrorMessage,0
+PositionTest.setInvalidXPositionTest,failureMessage,expectedErrorMessage,0
+PositionTest.setValidXPositionTest,5,5,0
+PositionTest.setValidXPositionTest,failureMessage,expectedErrorMessage,0
+PositionTest.setValidXPositionTest,2,5,0
+PositionTest.setValidXPositionTest,failureMessage,expectedErrorMessage,0
+PositionTest.setInvalidYPositionTest,failureMessage,expectedErrorMessage,0
+PositionTest.setInvalidYPositionTest,failureMessage,expectedErrorMessage,0
+PositionTest.setValidYPositionTest,6,6,0
+PositionTest.setValidYPositionTest,1,1,0
+MoveTest.setInvalidMoveTest,failureMessage,expectedErrorMessage,0
+MoveTest.setValidMoveTest,3 5,3 5,0
+MoveTest.setValidFirstJumpMoveTest,failureMessage,expectedErrorMessage,0
+MoveTest.setInvalidFirstJumpMoveTest,3 4,
+MoveTest.setInvalidFirstJumpMoveTest,num,num,0
+BoardTest.testNullPiecePlacementValue,Piece,Piece,0
+BoardTest.testNullPiecePlacementValue,Piece,Piece,0
+BoardTest.testInvalidBoardDesignValue,Board,Board,0
+BoardTest.testInvalidBoardDesignValue,Board,Board,0
+
