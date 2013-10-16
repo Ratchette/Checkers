@@ -43,8 +43,11 @@ public class Board implements Remote, Serializable{
 		return theBoard;
 	}
 	
-	public void setTheBoard(BoardDesign theBoard) throws RemoteException 
+	public void setTheBoard(BoardDesign theBoard) throws Exception 
 	{
+		if (theBoard == null ) {
+			throw new Exception("Wrong value");
+		}
 		this.theBoard = theBoard;
 	}
 
@@ -53,8 +56,11 @@ public class Board implements Remote, Serializable{
 		return piecePlacement;
 	}
 	
-	public void setPiecePlacement(Piece[] piecePlacement) throws RemoteException 
+	public void setPiecePlacement(Piece[] piecePlacement) throws Exception 
 	{
+		if (piecePlacement == null ) {
+			throw new Exception("Wrong value");
+		}
 		this.piecePlacement = piecePlacement;
 	}
 	
