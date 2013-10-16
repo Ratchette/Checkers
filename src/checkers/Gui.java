@@ -45,10 +45,10 @@ public class Gui implements ActionListener
   {
     try {
 		setBoardType(theBoard.getTheBoard());
-	} catch (RemoteException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
+  	} catch (RemoteException e1) {
+  		// TODO Auto-generated catch block
+  		e1.printStackTrace();
+  	}
     
     
     /* Setup Window */
@@ -129,10 +129,10 @@ public class Gui implements ActionListener
 		  } catch (Exception ex) {
 		  }
 		}
-	} catch (RemoteException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+  	} catch (RemoteException e) {
+  		// TODO Auto-generated catch block
+  		e.printStackTrace();
+  	}
   }
 
 
