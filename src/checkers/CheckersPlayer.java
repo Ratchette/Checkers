@@ -101,7 +101,5 @@ public class CheckersPlayer implements Player{
 		// TODO Auto-generated method stub
 
 	}
-	
-	public void get
 
 }
