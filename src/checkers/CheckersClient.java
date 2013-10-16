@@ -8,8 +8,10 @@
 
 package checkers;
 
+import java.io.Console;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Scanner;
 
 public class CheckersClient implements Remote, GameObserver, Player{
 	private GameObserver observer;
@@ -129,7 +131,15 @@ public class CheckersClient implements Remote, GameObserver, Player{
 	
 	public static void main(String[] args) {
 
-		System.out.println("It works!");
+		//TODO: Implement connection to server
+		
+		System.out.println("Welcome to Checkers! Choose your game type:");
+		System.out.println("Currently Available:\n\t\"British\"");
+		System.out.println("\n");
+		Scanner scanner = new Scanner (System.in);  
+		String name = scanner.next();
+		
+		System.out.println("You've entered: " + name);
 
 	}
 }
