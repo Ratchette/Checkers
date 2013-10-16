@@ -40,11 +40,13 @@ public class Gui implements ActionListener
   private int gridSize = 0;
   private int type = 0;
 
+
+
   /* Init GUI */
   public Gui(Board theBoard)
   {
     try {
-		setBoardType(theBoard.getTheBoard());
+		  setBoardType(theBoard.getTheBoard());
   	} catch (RemoteException e1) {
   		// TODO Auto-generated catch block
   		e1.printStackTrace();
@@ -153,34 +155,34 @@ public class Gui implements ActionListener
     JButton pressedButton = (JButton)a.getSource();
     
     // TODO get all valid moves, then highlight them
-	/*for (int i=0; i<boardInfo.getPiecePlacement().length; i++){
-		    int pos = (boardInfo.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (boardInfo.getPiecePlacement()[i].getPiecePosition().getX());
-		    if(pos == Integer.parseInt(pressedButton.getName())){
-		    	
-		    	if(boardInfo.getPiecePlacement()[i].getColour() == 'w'){
-		    		pressedButton.setBorder(new LineBorder(Color.GREEN, 2));
-		    	}
-		    }
-		}*/
-    try {
-
+  	/*for (int i=0; i<boardInfo.getPiecePlacement().length; i++){
+  		    int pos = (boardInfo.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (boardInfo.getPiecePlacement()[i].getPiecePosition().getX());
+  		    if(pos == Integer.parseInt(pressedButton.getName())){
+  		    	
+  		    	if(boardInfo.getPiecePlacement()[i].getColour() == 'w'){
+  		    		pressedButton.setBorder(new LineBorder(Color.GREEN, 2));
+  		    	}
+  		    }
+  		}*/
       //pressedButton.setBorder(new LineBorder(Color.GREEN, 2));
-      if (turn.getText().equals("STOP")){
-        turn.setText("GO");
-        turn.setBackground(Color.green);
-      }
-      turn.setText("STOP");
-      turn.setBackground(Color.red);
-    } catch (Exception ex) {
-    	
-    }
+    
   }
 
   
- public void highlightSquare(int pos){
-	 this.square[pos].setBorder(new LineBorder(Color.GREEN, 2));
- }
+  public void highlightSquare(int pos){
+	  this.square[pos].setBorder(new LineBorder(Color.GREEN, 2));
+  }
 
+  public void changeTurn(){
+    if (turn.getText().equals("STOP")){
+        turn.setText("GO");
+        turn.setBackground(Color.green);
+    }
+    if (turn.getText().equals("GO")){
+        turn.setText("STOP");
+        turn.setBackground(Color.red);
+    }
+  }
 
 
 
