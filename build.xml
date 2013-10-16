@@ -9,7 +9,7 @@
     <property name="dist"           value="dist"/>
     <property name="docs"           value="docs"/>
 	
-    <property name="main-class"     value="Assignment2.Main"/>
+    <property name="main-class"     value="checkers.CheckersClient"/>
     <property name="arg0"           value="true"/>
 	
     <!--**************************************************************-->
@@ -30,6 +30,7 @@
             <manifest>
                 <attribute name="Main-Class" value="${main-class}"/>
             </manifest>
+            <fileset dir="resources"/>
         </jar>
     </target>
 
@@ -46,6 +47,6 @@
 	    
     <target name="javadoc">
         <delete dir="${docs}"/>
-        <javadoc sourcepath="${src}" destdir="${docs}" private="true" use="true" header="true" footer="true" windowtitle="PacMan Documentation"/>
+        <javadoc sourcepath="${src}" destdir="${docs}" private="true" use="true" header="true" footer="true" windowtitle="Documentation"/>
     </target>
 </project>
