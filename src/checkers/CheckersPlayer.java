@@ -22,13 +22,13 @@ public class CheckersPlayer implements Player{
 	}
 
 	@Override
-	public void startGame(PlayerInfo player) {
+	public void startGame(PlayerInfo player, String gameType) {
 		// Create a new board
 
 		Board theBoard;
 		try {
-			Piece pieces[] = new Piece[24];
-			theBoard = new Board(new BoardDesign("British"), pieces );
+			Piece pieces[] = new Piece[36];
+			theBoard = new Board(new BoardDesign(gameType), pieces );
 			Gui window = new Gui(theBoard);
 			int count = 0;
 			for (int i = 0; i< 3; i++) {
@@ -40,7 +40,7 @@ public class CheckersPlayer implements Player{
 							piece.setCrown(false);
 							piece.setColour('b'); 
 							piece.setPieceImage(window.scale(
-									ImageIO.read(getClass().getResource("peice8x8.png")), 73, 73));
+									ImageIO.read(getClass().getResource("peice8x8.png")), 600/theBoard.getTheBoard().getGridSize(), 600/theBoard.getTheBoard().getGridSize()));
 							pieces[count] = piece;
 							count ++;
 						} catch (Exception e) {
@@ -59,7 +59,7 @@ public class CheckersPlayer implements Player{
 							piece.setCrown(false);
 							piece.setColour('w'); 
 							piece.setPieceImage(window.scale(
-									ImageIO.read(getClass().getResource("peice8x8w.png")), 73, 73));
+									ImageIO.read(getClass().getResource("peice8x8w.png")), 600/theBoard.getTheBoard().getGridSize(), 600/theBoard.getTheBoard().getGridSize()));
 							pieces[count] = piece;
 							count ++;
 						} catch (Exception e) {
