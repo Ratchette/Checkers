@@ -140,6 +140,9 @@ public class CheckersClient implements Remote, GameObserver, Player{
 		String name = scanner.next();
 		
 		System.out.println("You've entered: " + name);
-
+		
+		//TODO: Wait until the server accepts client
+		
+		//TODO: When game approved, start game
 	}
 }
