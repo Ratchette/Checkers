@@ -13,6 +13,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public class GameDesign implements Remote, Serializable{
+	
 	private static final long serialVersionUID = 1L;
 	
 	private int gameCode;

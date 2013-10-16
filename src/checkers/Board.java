@@ -19,34 +19,41 @@ public class Board implements Remote, Serializable{
 	private BoardDesign theBoard;
 	private Piece[] piecePlacement;
 	
-	public Board(Board copy) throws RemoteException{
+	public Board(Board copy) throws RemoteException
+	{
 		this.theBoard = new BoardDesign(copy.getTheBoard());
 		this.piecePlacement = new Piece[copy.getPiecePlacement().length];
 		
-		for(int i=0; i<copy.getPiecePlacement().length; i++){
+		for(int i=0; i<copy.getPiecePlacement().length; i++)
+		{
 			this.piecePlacement[i] = new Piece(copy.getPiecePlacement()[i]);
 		}
 		
 	}
 	
-	public Board(BoardDesign theBoard, Piece[] piecePlacement) throws RemoteException {
+	public Board(BoardDesign theBoard, Piece[] piecePlacement) throws RemoteException 
+	{
 		this.theBoard = theBoard;
 		this.piecePlacement = piecePlacement;
 	}	
 	
-	public BoardDesign getTheBoard() throws RemoteException {
+	public BoardDesign getTheBoard() throws RemoteException 
+	{
 		return theBoard;
 	}
 	
-	public void setTheBoard(BoardDesign theBoard) throws RemoteException {
+	public void setTheBoard(BoardDesign theBoard) throws RemoteException 
+	{
 		this.theBoard = theBoard;
 	}
 
-	public Piece[] getPiecePlacement() throws RemoteException {
+	public Piece[] getPiecePlacement() throws RemoteException 
+	{
 		return piecePlacement;
 	}
 	
-	public void setPiecePlacement(Piece[] piecePlacement) throws RemoteException {
+	public void setPiecePlacement(Piece[] piecePlacement) throws RemoteException 
+	{
 		this.piecePlacement = piecePlacement;
 	}
 }
