@@ -1,6 +1,9 @@
 
 package checkers;
 
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 
@@ -8,6 +11,7 @@ import javax.imageio.ImageIO;
 
 public class CheckersPlayer implements Player{
 	private GameInfo myGame;
+	public Board theBoard;
 
 	public CheckersPlayer()
 	{
@@ -24,8 +28,6 @@ public class CheckersPlayer implements Player{
 	@Override
 	public void startGame(PlayerInfo player, String gameType) {
 		// Create a new board
-
-		Board theBoard;
 		try {
 			Piece pieces[] = new Piece[36];
 			theBoard = new Board(new BoardDesign(gameType), pieces );

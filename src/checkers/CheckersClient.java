@@ -162,8 +162,8 @@ public class CheckersClient implements Remote, GameObserver, Player{
 			e.printStackTrace();
 		}
 		System.out.println("You've entered: " + name);
-		Gui window = new Gui(theBoard);
-		window.drawBoard(theBoard);
+		Gui window = new Gui(p.theBoard);
+		window.drawBoard(p.theBoard);
 		
 		//TODO: Wait until the server accepts client
 		
