@@ -31,6 +31,10 @@ public class Piece {
 		this.setPieceImage(pieceImage);
 	}
 
+	public Piece() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Position getPiecePosition() {
 		return piecePosition;
 	}

@@ -148,7 +148,7 @@ public class CheckersClient implements Remote, GameObserver, Player{
 		}
 		
 		
-		/*System.out.println("Welcome to Checkers! Choose your game type:");
+		System.out.println("Welcome to Checkers! Choose your game type:");
 		System.out.println("Currently Available:\n\t\"British\"");
 		System.out.println("\n");
 		Scanner scanner = new Scanner (System.in);  
@@ -161,7 +161,7 @@ public class CheckersClient implements Remote, GameObserver, Player{
 			e.printStackTrace();
 		}
 		System.out.println("You've entered: " + name);
-		*/
+		
 		
 		//TODO: Wait until the server accepts client
 		

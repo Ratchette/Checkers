@@ -20,12 +20,12 @@ public class Position implements Remote, Serializable{
 
 	
 	public Position(int xPos, int yPos) throws Exception {
-		if(xPos < 1) {
+		if(xPos < 0) {
 			throw new Exception("Ivalid position: The x position " + xPos + 
 					" is not a valid position.");
 		}
 
-		if(yPos < 1) {
+		if(yPos < 0) {
 			throw new Exception("Ivalid position: The y position " + yPos + 
 					" is not a valid position.");
 		}
