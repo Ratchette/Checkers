@@ -140,7 +140,7 @@ public class CheckersClient implements Remote, GameObserver, Player{
 		
 		try {
 			CheckersClient client = new CheckersClient(true);
-			
+			ServerOverlay s = new ServerOverlay();
 			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
