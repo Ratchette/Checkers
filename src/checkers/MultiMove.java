@@ -9,6 +9,7 @@
 package checkers;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
 
 public class MultiMove extends Move {
 	private static final long serialVersionUID = 1L;
@@ -26,6 +27,10 @@ public class MultiMove extends Move {
 		this.moveSequence = moveSequence;
 	}
 
+	public SingleMove[] getMoveSequence() {
+		return moveSequence;
+	}
+	
 	@Override
 	public int numberOfSteps() throws RemoteException{
 		return moveSequence.length;
@@ -43,6 +48,16 @@ public class MultiMove extends Move {
 	@Override
 	public SingleMove[] moveSequence() throws RemoteException{
 		return moveSequence;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof MultiMove)) {
+			return false;
+		}
+		MultiMove newObj = (MultiMove) obj;
+		
+		return Arrays.equals(newObj.getMoveSequence(),this.getMoveSequence());
 	}
 	
 }

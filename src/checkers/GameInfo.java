@@ -14,14 +14,14 @@ import java.rmi.RemoteException;
 
 public class GameInfo implements Remote, Serializable{
 	private static final long serialVersionUID = 1L;
-	
+
 	private GameDesign theGame;
 	private Board currentBoard;
 	private PlayerInfo player1;
 	private PlayerInfo player2;
 	private int playerTurn;
 	private int currentRound;
-	
+
 	public GameInfo(GameDesign theGame, Board currentBoard, PlayerInfo player1, PlayerInfo player2, int playerTurn, int currentRound) throws RemoteException{
 		this.theGame = theGame;
 		this.currentBoard = currentBoard;
@@ -30,7 +30,7 @@ public class GameInfo implements Remote, Serializable{
 		this.playerTurn = playerTurn;
 		this.currentRound = currentRound;
 	}
-	
+
 	public GameInfo(GameInfo copy) throws RemoteException{
 		this.theGame = new GameDesign(copy.theGame);
 		this.currentBoard = new Board(copy.currentBoard);
@@ -43,7 +43,7 @@ public class GameInfo implements Remote, Serializable{
 	public GameDesign getTheGame() throws RemoteException{
 		return theGame;
 	}
-	
+
 	public void setTheGame(GameDesign theGame) throws RemoteException{
 		this.theGame = theGame;
 	}
@@ -80,13 +80,31 @@ public class GameInfo implements Remote, Serializable{
 		this.playerTurn = playerTurn;
 	}
 
-	public int getCurrentRoud() throws RemoteException{
+	public int getCurrentRound() throws RemoteException{
 		return currentRound;
 	}
 
 	public void setCurrentRoud(int currentRound)throws RemoteException {
 		this.currentRound = currentRound;
 	}
-	
 
+	@Override
+	public boolean equals (Object other){
+		if(other == null){
+			return false;
+		}
+
+		if (!(other instanceof GameInfo)) {
+			return false;
+			
+		}
+		GameInfo otherGame = (GameInfo) other;
+		try {
+			return otherGame.getCurrentBoard().equals(this.getCurrentBoard()) && otherGame.getCurrentRound() == this.getCurrentRound()
+					&& otherGame.getPlayer1().equals(this.getPlayer1()) && otherGame.getPlayer2().equals(this.getPlayer2())
+					&& otherGame.getPlayerTurn() == this.getPlayerTurn();
+		} catch (RemoteException e1) {
+			return false;
+		}
+	}
 }

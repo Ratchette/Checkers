@@ -34,7 +34,7 @@ public class MoveController {
 		}
 
 		
-		if (manFirstJumpPositionValidation(endPosition, piecePosition,
+		if (manJumpPositionValidation(endPosition, piecePosition,
 				capturedPiecePosition)) {
 
 			currentPiece.setPiecePosition(endPosition);
@@ -50,7 +50,7 @@ public class MoveController {
 		
 	}
 
-	private Boolean manFirstJumpPositionValidation(Position endPosition,
+	private Boolean manJumpPositionValidation(Position endPosition,
 			Position piecePosition, Position capturedPiecePosition) {
 
 		if (Math.abs(endPosition.getX() - piecePosition.getX()) != 2) {

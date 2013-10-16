@@ -1,5 +1,7 @@
 package unitTests;
 
+import java.rmi.RemoteException;
+
 import junit.framework.TestCase;
 
 import org.junit.Before;
@@ -14,7 +16,11 @@ public class PositionTest {
 	
 	@Before
 	public void setup() {
-		position = new Position();
+		try {
+			position = new Position();
+		} catch (RemoteException e) {
+	
+		}
 	}
 	
 	@Test

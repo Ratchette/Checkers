@@ -32,5 +32,21 @@ public class PlayerInfo implements Remote, Serializable{
 		this.name = name;
 	}
 	
-	
+	public boolean equals(Object other){
+		if(other == null)
+			return false;
+		
+		if(! (other instanceof PlayerInfo))
+			return false;
+		
+		PlayerInfo otherPlayer = (PlayerInfo)other;
+		try{
+			return (otherPlayer.getName().equals(this.getName()));
+		}
+		catch(Exception e){
+			System.out.println("Exception Occured");
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

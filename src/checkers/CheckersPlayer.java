@@ -27,7 +27,6 @@ public class CheckersPlayer implements Player{
 	public void opponentResigned(PlayerInfo player, char code, String message)
 			throws RemoteException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

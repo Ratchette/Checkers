@@ -70,4 +70,26 @@ public class SingleMove extends Move{
 		moveSequence[0] = this;
 		return moveSequence;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof SingleMove) {
+			SingleMove newObj = (SingleMove) obj;
+			if(newObj.getCapturedPiece() == null) {
+				if (this.getCapturedPiece() != null ) {
+					return false;
+				}
+				return newObj.getEndPosition().equals(this.getEndPosition()) && 
+						newObj.getPieceBeignMoved().equals(this.getPieceBeignMoved());
+			}
+			else {
+				if (this.getCapturedPiece() == null ) {
+					return false;
+				}
+				return newObj.getCapturedPiece().equals(this.getCapturedPiece()) &&
+						newObj.getEndPosition().equals(this.getEndPosition()) && 
+						newObj.getPieceBeignMoved().equals(this.getCapturedPiece());		}
+		}
+		return false;
+	}
 }
