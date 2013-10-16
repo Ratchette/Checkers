@@ -19,10 +19,10 @@ public class CheckersClient implements Remote, GameObserver, Player{
 	private GameInfo myGame;
 	
 	
-	CheckersClient(boolean Player) throws RemoteException{
+	public CheckersClient(boolean isPlayer) throws RemoteException{
 		// TODO - bind this method to an action listener INSTEAD of taking a string as a parameter
 		// When client starts up, the GUI will have two buttons, one to be an observer, and one to be a client
-		if(Player){
+		if(isPlayer){
 			this.player = new CheckersPlayer();
 			this.observer = null;
 		}
@@ -31,7 +31,13 @@ public class CheckersClient implements Remote, GameObserver, Player{
 			this.observer = new CheckersObserver();
 		}
 		
+		
+		
 		this.myGame = null;
+	}
+	
+	public CheckersClient() {
+	
 	}
 
 
@@ -132,7 +138,17 @@ public class CheckersClient implements Remote, GameObserver, Player{
 
 		//TODO: Implement connection to server
 		
-		System.out.println("Welcome to Checkers! Choose your game type:");
+		try {
+			CheckersClient client = new CheckersClient(true);
+			
+			
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		/*System.out.println("Welcome to Checkers! Choose your game type:");
 		System.out.println("Currently Available:\n\t\"British\"");
 		System.out.println("\n");
 		Scanner scanner = new Scanner (System.in);  
@@ -145,6 +161,10 @@ public class CheckersClient implements Remote, GameObserver, Player{
 			e.printStackTrace();
 		}
 		System.out.println("You've entered: " + name);
-
+		*/
+		
+		//TODO: Wait until the server accepts client
+		
+		//TODO: When game approved, start game
 	}
 }

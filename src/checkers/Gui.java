@@ -52,7 +52,7 @@ public class Gui implements ActionListener
 
 
     /* Setup Window, Board and Menu */
-    window.setLayout(new BorderLayout());
+    window.setLayout(new BorderLayout())
     GridLayout grid = new GridLayout(gridSize,gridSize);
     GridLayout menu = new GridLayout(1,3);
     board = new JPanel(grid);
