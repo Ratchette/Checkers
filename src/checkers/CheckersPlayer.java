@@ -5,6 +5,12 @@ import java.rmi.RemoteException;
 public class CheckersPlayer implements Player{
 	private GameInfo myGame;
 
+	public CheckersPlayer()
+	{
+		
+		
+	}
+	
 	@Override
 	public Object considerGame(GameDesign aGame) throws RemoteException {
 		// TODO Auto-generated method stub
