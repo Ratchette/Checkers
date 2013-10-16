@@ -15,6 +15,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.rmi.RemoteException;
 
 public class Gui implements ActionListener 
 {
@@ -38,7 +39,12 @@ public class Gui implements ActionListener
   /* Init GUI */
   public Gui(Board theBoard)
   {
-    setBoardType(theBoard.getTheBoard());
+    try {
+		setBoardType(theBoard.getTheBoard());
+	} catch (RemoteException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
 
     /* Setup Window */
     window.setSize(600,650);
@@ -109,13 +115,18 @@ public class Gui implements ActionListener
 
   public void drawBoard(Board theBoard){
     clearGUI();
-    for (int i=0; i<theBoard.getPiecePlacement().length; i++){
-      try {
-        int pos = (theBoard.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (theBoard.getPiecePlacement()[i].getPiecePosition().getX());
-        square[pos].setIcon(new ImageIcon(theBoard.getPiecePlacement()[i].getPieceImage()));
-      } catch (Exception ex) {
-      }
-    }
+    try {
+		for (int i=0; i<theBoard.getPiecePlacement().length; i++){
+		  try {
+		    int pos = (theBoard.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (theBoard.getPiecePlacement()[i].getPiecePosition().getX());
+		    square[pos].setIcon(new ImageIcon(theBoard.getPiecePlacement()[i].getPieceImage()));
+		  } catch (Exception ex) {
+		  }
+		}
+	} catch (RemoteException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
   }
 
 
