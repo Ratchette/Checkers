@@ -40,7 +40,6 @@ public class Gui implements ActionListener
   private int gridSize = 0;
   private int type = 0;
 
-
   /* Init GUI */
   public Gui(Board theBoard)
   {
@@ -50,7 +49,8 @@ public class Gui implements ActionListener
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
-
+    player = p;
+    
     /* Setup Window */
     window.setSize(600,650);
     window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -151,10 +151,18 @@ public class Gui implements ActionListener
 
   public void actionPerformed(ActionEvent a) {
     JButton pressedButton = (JButton)a.getSource();
+    
+    // TODO get all valid moves, then highlight them
+	for (int i=0; i<boardInfo.getPiecePlacement().length; i++){
+		    int pos = (boardInfo.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (boardInfo.getPiecePlacement()[i].getPiecePosition().getX());
+		    if(pos == Integer.parseInt(pressedButton.getName())){
+		    	
+		    	if(boardInfo.getPiecePlacement()[i].getColour() == 'w'){
+		    		pressedButton.setBorder(new LineBorder(Color.GREEN, 2));
+		    	}
+		    }
+		}
     try {
-
-      // TODO get all valid moves, then highlight them
-    	if()
       //pressedButton.setBorder(new LineBorder(Color.GREEN, 2));
       if (turn.getText().equals("STOP")){
         turn.setText("GO");
@@ -162,12 +170,15 @@ public class Gui implements ActionListener
       }
       turn.setText("STOP");
       turn.setBackground(Color.red);
-
-
     } catch (Exception ex) {
+    	
     }
   }
 
+  
+ public void highlightSquare(int pos){
+	 this.square[pos].setBorder(new LineBorder(Color.GREEN, 2));
+ }
 
 
 
