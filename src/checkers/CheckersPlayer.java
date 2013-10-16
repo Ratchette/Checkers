@@ -30,17 +30,40 @@ public class CheckersPlayer implements Player{
 			Piece pieces[] = new Piece[24];
 			theBoard = new Board(new BoardDesign("British"), pieces );
 			Gui window = new Gui(theBoard);
+			int count = 0;
+			for (int i = 0; i< 3; i++) {
+				for (int j = 0; j < theBoard.getTheBoard().getGridSize(); j++) {
+					if ((i + j) % 2 == 0) {
+						try {
+							Piece piece = new Piece();
+							piece.setPiecePosition(new Position(j,i));
+							piece.setCrown(false);
+							piece.setPieceImage(window.scale(
+									ImageIO.read(getClass().getResource("peice8x8.png")), 73, 73));
+							pieces[count] = piece;
+							count ++;
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
 
-			for (int j = 0; j < pieces.length/2; j++) {
-				try {
-					Piece piece = new Piece();
-					piece.setPiecePosition(new Position(j,j));
-					piece.setCrown(false);
-					piece.setPieceImage(window.scale(
-							ImageIO.read(getClass().getResource("peice8x8K.png")), 73, 73));
-					pieces[j] = piece;
-				} catch (Exception e) {
-					e.printStackTrace();
+			for (int i = theBoard.getTheBoard().getGridSize()-1; i > theBoard.getTheBoard().getGridSize()-4; i--) {
+				for (int j = 0; j < theBoard.getTheBoard().getGridSize(); j++) {
+					if ((i + j) % 2 == 0) {
+						try {
+							Piece piece = new Piece();
+							piece.setPiecePosition(new Position(j,i));
+							piece.setCrown(false);
+							piece.setPieceImage(window.scale(
+									ImageIO.read(getClass().getResource("peice8x8w.png")), 73, 73));
+							pieces[count] = piece;
+							count ++;
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 
