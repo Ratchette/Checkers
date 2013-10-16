@@ -24,11 +24,11 @@ public class CheckersClient implements Remote, GameObserver, Player{
 		// When client starts up, the GUI will have two buttons, one to be an observer, and one to be a client
 		if(isPlayer){
 			this.player = new CheckersPlayer();
-			this.observer = null;
+			this.setObserver(null);
 		}
 		else{
 			this.player = null;
-			this.observer = new CheckersObserver();
+			this.setObserver(new CheckersObserver());
 		}
 		
 		
@@ -122,7 +122,7 @@ public class CheckersClient implements Remote, GameObserver, Player{
 		CheckersClient otherClient = (CheckersClient) other;
 		try{
 			return this.player.equals(otherClient.player)
-				&& this.observer.equals(otherClient.observer)
+				&& this.getObserver().equals(otherClient.getObserver())
 				&& this.myGame.equals(otherClient.getGame());
 		}
 		catch(Exception e){
@@ -167,5 +167,13 @@ public class CheckersClient implements Remote, GameObserver, Player{
 		//TODO: Wait until the server accepts client
 		
 		//TODO: When game approved, start game
+	}
+
+	public GameObserver getObserver() {
+		return observer;
+	}
+
+	public void setObserver(GameObserver observer) {
+		this.observer = observer;
 	}
 }

@@ -32,6 +32,9 @@ public class BoardDesignTest {
 		
 		TestCase.assertEquals(boardDesign.getBlackCorner(),'L');
 		TestCase.assertEquals(boardDesign.getGridSize(),8);
+		
+		TestCase.assertNotSame(boardDesign.getBlackCorner(), 'R');
+		
 	}
 
 }

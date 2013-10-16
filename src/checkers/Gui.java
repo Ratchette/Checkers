@@ -154,7 +154,7 @@ public class Gui implements ActionListener
     try {
 
       // TODO get all valid moves, then highlight them
-    	if()
+    	//if()
       //pressedButton.setBorder(new LineBorder(Color.GREEN, 2));
       if (turn.getText().equals("STOP")){
         turn.setText("GO");

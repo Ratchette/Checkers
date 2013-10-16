@@ -1,5 +1,5 @@
 package checkers;
-/*
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -16,4 +16,4 @@ public interface Server extends Remote{
     void move(Move playersMove) throws RemoteException;
     void resign(Player aPlayer, char code, String reason) throws RemoteException;
 }
-*/
+
