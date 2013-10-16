@@ -65,6 +65,7 @@ public class Gui implements ActionListener
     turn.setBackground(Color.gray);
     menuButtons.add(turn);
 
+    try {
     /*Add Buttons To The Board*/
     for(int i=0; i<=((gridSize*gridSize)-1); i++){      
         square[i] = new JButton();
@@ -93,6 +94,9 @@ public class Gui implements ActionListener
         board.add(square[i]);
         square[i].setName( Integer.toString(i) );
     }
+  } catch (Exception e) {
+    
+  }
 
     window.getContentPane().add(menuButtons,BorderLayout.NORTH);
     window.getContentPane().add(board,BorderLayout.CENTER);
@@ -106,16 +110,22 @@ public class Gui implements ActionListener
   public void drawBoard(Board theBoard){
     clearGUI();
     for (int i=0; i<theBoard.getPiecePlacement().length; i++){
-      int pos = (theBoard.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (theBoard.getPiecePlacement()[i].getPiecePosition().getX());
-      square[pos].setIcon(new ImageIcon(theBoard.getPiecePlacement()[i].getPieceImage()));
+      try {
+        int pos = (theBoard.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (theBoard.getPiecePlacement()[i].getPiecePosition().getX());
+        square[pos].setIcon(new ImageIcon(theBoard.getPiecePlacement()[i].getPieceImage()));
+      } catch (Exception ex) {
+      }
     }
   }
 
 
 
   public void clearGUI(){
-   for(int i=0; i<=((gridSize*gridSize)-1); i++){      
+   for(int i=0; i<=((gridSize*gridSize)-1); i++){ 
+      try {     
         square[i].setIcon(new ImageIcon(getClass().getResource("/resources/blank.png")));
+      }  catch (Exception ex) {
+      }
     }
   }
 
@@ -146,11 +156,15 @@ public class Gui implements ActionListener
 
   private void setBoardType(BoardDesign boardInfo){
     /* Check Board Type */
-    gridSize = boardInfo.getGridSize();
-    if(boardInfo.getBlackCorner() == 'L'){
-      type = 0;
-    } else {
-      type = 1;
+    try {
+      gridSize = boardInfo.getGridSize();
+      if(boardInfo.getBlackCorner() == 'L'){
+        type = 0;
+      } else {
+        type = 1;
+      }
+    } catch (Exception e) {
+
     }
   }
 
