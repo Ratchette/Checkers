@@ -52,7 +52,7 @@ public class BoardDesign implements Remote, Serializable{
 	public void setGameType(String gameType) {
 		this.gameType = gameType;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof BoardDesign)) {
