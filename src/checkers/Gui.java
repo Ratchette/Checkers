@@ -99,8 +99,9 @@ public class Gui implements ActionListener
           if(type == 1) {
             square[i].setBackground(Color.red);
           }
-          square[i].addActionListener(this);
+          //square[i].addActionListener(this);
         }
+        square[i].addActionListener(this);
         square[i].setFont(font);
         board.add(square[i]);
         square[i].setName( Integer.toString(i) );
@@ -152,8 +153,9 @@ public class Gui implements ActionListener
     JButton pressedButton = (JButton)a.getSource();
     try {
 
-      
-      pressedButton.setBorder(new LineBorder(Color.GREEN, 2));
+      // TODO get all valid moves, then highlight them
+    	if()
+      //pressedButton.setBorder(new LineBorder(Color.GREEN, 2));
       if (turn.getText().equals("STOP")){
         turn.setText("GO");
         turn.setBackground(Color.green);
