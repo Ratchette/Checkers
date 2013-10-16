@@ -38,6 +38,7 @@ public class CheckersPlayer implements Player{
 							Piece piece = new Piece();
 							piece.setPiecePosition(new Position(j,i));
 							piece.setCrown(false);
+							piece.setColour('b'); 
 							piece.setPieceImage(window.scale(
 									ImageIO.read(getClass().getResource("peice8x8.png")), 73, 73));
 							pieces[count] = piece;
@@ -56,6 +57,7 @@ public class CheckersPlayer implements Player{
 							Piece piece = new Piece();
 							piece.setPiecePosition(new Position(j,i));
 							piece.setCrown(false);
+							piece.setColour('w'); 
 							piece.setPieceImage(window.scale(
 									ImageIO.read(getClass().getResource("peice8x8w.png")), 73, 73));
 							pieces[count] = piece;
