@@ -54,7 +54,7 @@ public class CheckersClient implements Remote, GameObserver, Player{
 
 
 	@Override
-	public void startGame(PlayerInfo player) throws RemoteException {
+	public void startGame(PlayerInfo player, String gameType) throws RemoteException {
 		
 		
 	}
@@ -149,13 +149,14 @@ public class CheckersClient implements Remote, GameObserver, Player{
 		
 		
 		System.out.println("Welcome to Checkers! Choose your game type:");
-		System.out.println("Currently Available:\n\t\"British\"");
+		System.out.println("Currently Available:\n\t\"British\"\n\t\"American\"\n\t\"International\"\n\t\"Canadian\"");
 		System.out.println("\n");
 		Scanner scanner = new Scanner (System.in);  
 		String name = scanner.next();
+
 		CheckersPlayer p = new CheckersPlayer();
 		try {
-			p.startGame(new PlayerInfo("Player"));
+			p.startGame(new PlayerInfo("Player"), name);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -27,8 +27,16 @@ public class BoardDesign implements Remote, Serializable
 
 	public BoardDesign(String gameType) throws RemoteException {
 		this.gameType = gameType;
-		if(gameType.equalsIgnoreCase("British")) {
+		if(gameType.equalsIgnoreCase("British") || gameType.equalsIgnoreCase("American") ) {
 			this.gridSize = 8;
+			blackCorner = 'L';
+		}
+		if(gameType.equalsIgnoreCase("International")) {
+			this.gridSize = 10;
+			blackCorner = 'R';
+		}
+		if(gameType.equalsIgnoreCase("Canadian")) {
+			this.gridSize = 12;
 			blackCorner = 'L';
 		}
 	}
