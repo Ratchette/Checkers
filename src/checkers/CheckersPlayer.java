@@ -40,7 +40,7 @@ public class CheckersPlayer implements Player{
 							piece.setCrown(false);
 							piece.setColour('b'); 
 							piece.setPieceImage(window.scale(
-									ImageIO.read(getClass().getResource("peice8x8.png")), 600/theBoard.getTheBoard().getGridSize(), 600/theBoard.getTheBoard().getGridSize()));
+									ImageIO.read(getClass().getResource("/peice8x8.png")), 600/theBoard.getTheBoard().getGridSize(), 600/theBoard.getTheBoard().getGridSize()));
 							pieces[count] = piece;
 							count ++;
 						} catch (Exception e) {
@@ -59,7 +59,7 @@ public class CheckersPlayer implements Player{
 							piece.setCrown(false);
 							piece.setColour('w'); 
 							piece.setPieceImage(window.scale(
-									ImageIO.read(getClass().getResource("peice8x8w.png")), 600/theBoard.getTheBoard().getGridSize(), 600/theBoard.getTheBoard().getGridSize()));
+									ImageIO.read(getClass().getResource("/peice8x8w.png")), 600/theBoard.getTheBoard().getGridSize(), 600/theBoard.getTheBoard().getGridSize()));
 							pieces[count] = piece;
 							count ++;
 						} catch (Exception e) {
