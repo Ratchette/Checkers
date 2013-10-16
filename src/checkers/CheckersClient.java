@@ -8,7 +8,6 @@
 
 package checkers;
 
-import java.io.Console;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Scanner;
@@ -49,7 +48,7 @@ public class CheckersClient implements Remote, GameObserver, Player{
 
 
 	@Override
-	public void startGame() throws RemoteException {
+	public void startGame(PlayerInfo player) throws RemoteException {
 		
 		
 	}
@@ -138,7 +137,13 @@ public class CheckersClient implements Remote, GameObserver, Player{
 		System.out.println("\n");
 		Scanner scanner = new Scanner (System.in);  
 		String name = scanner.next();
-		
+		CheckersPlayer p = new CheckersPlayer();
+		try {
+			p.startGame(new PlayerInfo("Player"));
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("You've entered: " + name);
 
 	}

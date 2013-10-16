@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
 
 public interface Player extends Remote{
 	public Object considerGame (GameDesign aGame) throws RemoteException;
-	public void startGame () throws RemoteException;
+	public void startGame (PlayerInfo player) throws RemoteException;
 	
 	public String move (Move playersMove) throws RemoteException;
 	

@@ -20,8 +20,7 @@ public class GameDesign implements Remote, Serializable{
 	private BoardDesign gameBoardDesign;
 	private Board initialBoard;
 	
-	public GameDesign(int gameCode, BoardDesign gameBoardDesign, Board initialBoard) throws RemoteException{
-		this.gameCode = gameCode;
+	public GameDesign(BoardDesign gameBoardDesign, Board initialBoard) throws RemoteException{
 		this.gameBoardDesign = gameBoardDesign;
 		this.setInitialBoard(initialBoard);
 	}
@@ -31,7 +30,7 @@ public class GameDesign implements Remote, Serializable{
 		this.gameBoardDesign = new BoardDesign(copy.getGameBoardDesign());
 		this.setInitialBoard(new Board(copy.getInitialBoard()));
 	}
-	
+
 	public 	int getGameCode() throws RemoteException{
 		return gameCode;
 	}

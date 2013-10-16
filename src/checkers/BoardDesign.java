@@ -25,9 +25,12 @@ public class BoardDesign implements Remote, Serializable
 		this.blackCorner = copy.getBlackCorner();
 	}
 
-	public BoardDesign(int gridSize, char blackCorner) throws RemoteException {
-		this.gridSize = gridSize;
-		this.blackCorner = blackCorner;
+	public BoardDesign(String gameType) throws RemoteException {
+		this.gameType = gameType;
+		if(gameType.equalsIgnoreCase("British")) {
+			this.gridSize = 8;
+			blackCorner = 'L';
+		}
 	}
 	
 	public int getGridSize() throws RemoteException {

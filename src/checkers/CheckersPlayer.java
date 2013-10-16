@@ -1,3 +1,4 @@
+
 package checkers;
 
 import java.rmi.RemoteException;
@@ -12,8 +13,10 @@ public class CheckersPlayer implements Player{
 	}
 
 	@Override
-	public void startGame() throws RemoteException {
+	public void startGame(PlayerInfo player) throws RemoteException {
 		// Create a new board
+		Piece pieces[] = new Piece[24];
+		new Gui(new Board(new BoardDesign("British"), pieces ));
 		
 	}
 
