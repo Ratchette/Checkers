@@ -1,4 +1,13 @@
-<<<<<<< HEAD
+/**
+ * @author Rafael Aquino de Carvalho
+ * @author Danielle Fudger
+ * @author Ben Douek
+ * @author Jennifer Winer
+ *
+ */
+
+package checkers;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;  //notice javax
@@ -6,7 +15,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 
 public class Gui implements ActionListener 
 {
@@ -19,15 +27,12 @@ public class Gui implements ActionListener
   private JButton resign = new JButton();
   private JButton turn = new JButton();
   private JButton connect = new JButton();
-  private JPanel board = new JPanel(grid);
-  private JPanel menuButtons = new JPanel(menu);
+  private JPanel board;
+  private JPanel menuButtons;
 
   /*Board info */
   private int gridSize = 0;
   private int type = 0;
-
-
-
 
 
   /* Init GUI */
@@ -44,6 +49,8 @@ public class Gui implements ActionListener
     window.setLayout(new BorderLayout());
     GridLayout grid = new GridLayout(gridSize,gridSize);
     GridLayout menu = new GridLayout(1,3);
+    board = new JPanel(grid);
+    menuButtons = new JPanel(menu);
     board.setSize(600,600);
     menuButtons.setSize(600,50);
 
@@ -55,7 +62,7 @@ public class Gui implements ActionListener
     connect.setText("**CHECKERS**");
     menuButtons.add(connect);
     turn.setText("BEGIN");
-    turn.setBackground(Color.grey);
+    turn.setBackground(Color.gray);
     menuButtons.add(turn);
 
     /*Add Buttons To The Board*/
@@ -99,18 +106,18 @@ public class Gui implements ActionListener
   public void drawBoard(Board theBoard){
     clearGUI();
     for (int i=0; i<theBoard.getPiecePlacement().length; i++){
-      int pos = (theBoard.getPiecePlacement()[i].getPiecePosition().getY*gridSize) + (theBoard.getPiecePlacement()[i].getPiecePosition().getX);
-      square[pos].setIcon(theBoard.getPiecePlacement()[i].getPieceImage());
+      int pos = (theBoard.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (theBoard.getPiecePlacement()[i].getPiecePosition().getX());
+      square[pos].setIcon(new ImageIcon(theBoard.getPiecePlacement()[i].getPieceImage()));
     }
   }
 
 
 
- public void clearGUI(){
+  public void clearGUI(){
    for(int i=0; i<=((gridSize*gridSize)-1); i++){      
-        square[i].setIcon(getClass().getResource("/resources/blank.png"));
+        square[i].setIcon(new ImageIcon(getClass().getResource("/resources/blank.png")));
     }
- }
+  }
 
 
 
@@ -121,7 +128,7 @@ public class Gui implements ActionListener
 
       
       //pressedButton.setText(pressedButton.getName());
-      if (turn.getText.equals("STOP")){
+      if (turn.getText().equals("STOP")){
         turn.setText("GO");
         turn.setBackground(Color.green);
       }
@@ -146,19 +153,6 @@ public class Gui implements ActionListener
       type = 1;
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -216,4 +210,8 @@ public class Gui implements ActionListener
       return ret;
 
   }
+
+}
+
+
 

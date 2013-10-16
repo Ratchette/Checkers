@@ -48,7 +48,7 @@ public class CheckersClient implements Remote, GameObserver, Player{
 
 	@Override
 	public void startGame() throws RemoteException {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -127,11 +127,9 @@ public class CheckersClient implements Remote, GameObserver, Player{
 	}
 
 	
-//	public static void main(String[] args) {
-//	// TODO start GUI
-//	
-//	
-//	System.out.println("It works!");
-//
-//}
+	public static void main(String[] args) {
+
+		System.out.println("It works!");
+
+	}
 }

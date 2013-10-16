@@ -7,7 +7,7 @@
  */
 
 package checkers;
-
+/*
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -136,3 +136,4 @@ public class CheckersServer implements Server{
          // code = 'o' or 'O' for "other reason
          //     - e.g. has to stop playing to get an assignment finished  
 }
+*/
