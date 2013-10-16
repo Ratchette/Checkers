@@ -103,8 +103,6 @@ public class CheckersPlayer implements Player{
 
 	}
 
-
-
 	public BufferedImage scale(BufferedImage img, int targetWidth, int targetHeight) {
 
       int type = (img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
