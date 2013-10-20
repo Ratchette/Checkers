@@ -8,45 +8,50 @@
 
 package checkers;
 
+import java.io.Serializable;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public class SingleMove extends Move{
+public class SingleMove extends Move implements Remote, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Piece pieceBeignMoved;
     private Piece capturedPiece;
     private Position endPosition;
     
-    public SingleMove() {
-    	
-	}
-    
+    // constructor
     public SingleMove(Piece pieceBeingMoved, Piece capturedPiece, Position endPosition) {
     	this.pieceBeignMoved = pieceBeingMoved;
     	this.capturedPiece = capturedPiece;
     	this.endPosition = endPosition;
     }
     
+    // getter for pieceBeignMoved
 	public Piece getPieceBeignMoved() {
 		return pieceBeignMoved;
 	}
 	
+	// setter for pieceBeignMoved
 	public void setPieceBeignMoved(Piece pieceBeignMoved) {
 		this.pieceBeignMoved = pieceBeignMoved;
 	}
 	
+	// getter for capturedPiece
 	public Piece getCapturedPiece() {
 		return capturedPiece;
 	}
 	
+	// setter for capturedPiece
 	public void setCapturedPiece(Piece capturedPiece) {
 		this.capturedPiece = capturedPiece;
 	}
 	
+	// getter for endPosition
 	public Position getEndPosition() {
 		return endPosition;
 	}
 	
+	// setter for endPosition
 	public void setEndPosition(Position endPosition) {
 		this.endPosition = endPosition;
 	

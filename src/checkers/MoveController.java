@@ -2,44 +2,46 @@ package checkers;
 
 public class MoveController {
 
-	public SingleMove manSimpleMove(Piece currentPiece, 
-			Position endPosition) throws Exception {
-
+	public SingleMove manSimpleMove(Piece currentPiece, Position endPosition) throws Exception {
 		Position piecePosition = currentPiece.getPiecePosition();
-		SingleMove singleMove = new SingleMove();
-
-		if (Math.abs(endPosition.getX() - piecePosition.getX()) != 1) {
-			throw new Exception("Invalid move.");
-		}
-
-		if (endPosition.getY() - piecePosition.getY() != 1) {
-			throw new Exception("Invalid move.");
-		}
+		
+		System.out.println("WARNING: manSimpleMove has not been implemented yet");
+		
+		// FIXME - this logic is pretty bad
+		if (Math.abs(endPosition.getX() - piecePosition.getX()) != 1) 
+			throw new Exception("Invalid Move: You did not move one square left or right");
+		// FIXME - this logic is pretty bad
+		if (endPosition.getY() - piecePosition.getY() != 1)
+			throw new Exception("Invalid Move: You did not move one square forward or backwards");
+		
 		currentPiece.setPiecePosition(endPosition);
-		singleMove.setEndPosition(endPosition);
-		singleMove.setPieceBeignMoved(currentPiece);
-
-		return singleMove;
+		
+//		// FIXME - this line is incorrect
+//		SingleMove singleMove = new SingleMove(currentPiece, null, endPosition);
+//		return singleMove;
+		
+		return null;
 	}
 	
-	public SingleMove kingSimpleMove(Piece currentPiece, 
-			Position endPosition) throws Exception {
-
+	public SingleMove kingSimpleMove(Piece currentPiece, Position endPosition) throws Exception {
 		Position piecePosition = currentPiece.getPiecePosition();
-		SingleMove singleMove = new SingleMove();
-
-		if (Math.abs(endPosition.getX() - piecePosition.getX()) != 1) {
-			throw new Exception("Invalid move.");
-		}
-
-		if (Math.abs(endPosition.getY() - piecePosition.getY()) != 1) {
-			throw new Exception("Invalid move.");
-		}
+		
+		System.out.println("WARNING: kingSimpleMove has not been implemented yet");
+		
+		// FIXME - this logic is pretty bad
+		if (Math.abs(endPosition.getX() - piecePosition.getX()) != 1) 
+			throw new Exception("Invalid Move: You did not move one square left or right");
+		// FIXME - this logic is pretty bad
+		if (endPosition.getY() - piecePosition.getY() != 1)
+			throw new Exception("Invalid Move: You did not move one square forward or backwards");
+		
 		currentPiece.setPiecePosition(endPosition);
-		singleMove.setEndPosition(endPosition);
-		singleMove.setPieceBeignMoved(currentPiece);
-
-		return singleMove;
+		
+//		// FIXME - this line is incorrect
+//		SingleMove singleMove = new SingleMove(currentPiece, null, endPosition);
+//		return singleMove;
+		
+		return null;
 	}
 
 	public SingleMove manFirstJumpMove(Piece currentPiece, 
@@ -47,25 +49,17 @@ public class MoveController {
 
 		Position piecePosition = currentPiece.getPiecePosition();
 		Position capturedPiecePosition = capturedPiece.getPiecePosition();
-		SingleMove singleMove = new SingleMove();
 		
-		if(currentPiece.getColour() == capturedPiece.getColour()) {
-			throw new Exception("Invalid move.");
-		}
-
+		if(currentPiece.getColour() == capturedPiece.getColour())
+			throw new Exception("Invalid Move: You have tried to capture your own piece");
 		
-		if (manJumpPositionValidation(endPosition, piecePosition,
-				capturedPiecePosition)) {
-
+		if (manJumpPositionValidation(endPosition, piecePosition, capturedPiecePosition)) {
 			currentPiece.setPiecePosition(endPosition);
-			singleMove.setCapturedPiece(capturedPiece);
-			singleMove.setPieceBeignMoved(currentPiece);
-			singleMove.setEndPosition(endPosition);
-			return singleMove;
+			return new SingleMove(currentPiece, capturedPiece, endPosition);
 		}
 		
 		else {
-			throw new Exception("Invalid move.");
+			throw new Exception("Invalid Move: man jump position validation failed");
 		}
 		
 	}
@@ -73,6 +67,7 @@ public class MoveController {
 	private Boolean manJumpPositionValidation(Position endPosition,
 			Position piecePosition, Position capturedPiecePosition) {
 
+		// FIXME Implement this function properly 
 		if (Math.abs(endPosition.getX() - piecePosition.getX()) != 2) {
 			return false;
 		}
@@ -97,25 +92,18 @@ public class MoveController {
 
 		Position piecePosition = currentPiece.getPiecePosition();
 		Position capturedPiecePosition = capturedPiece.getPiecePosition();
-		SingleMove singleMove = new SingleMove();
 		
-		if(currentPiece.getColour() == capturedPiece.getColour()) {
-			throw new Exception("Invalid move.");
-		}
+		if(currentPiece.getColour() == capturedPiece.getColour())
+			throw new Exception("Invalid Move: You have tried to capture your own piece");
 
 		
-		if (kingJumpPositionValidation(endPosition, piecePosition,
-				capturedPiecePosition)) {
-
+		if (kingJumpPositionValidation(endPosition, piecePosition, capturedPiecePosition)) {
 			currentPiece.setPiecePosition(endPosition);
-			singleMove.setCapturedPiece(capturedPiece);
-			singleMove.setPieceBeignMoved(currentPiece);
-			singleMove.setEndPosition(endPosition);
-			return singleMove;
+			return new SingleMove(currentPiece, capturedPiece, endPosition);
 		}
 		
 		else {
-			throw new Exception("Invalid move.");
+			throw new Exception("Invalid Move: king jump validation failed");
 		}
 		
 	}
@@ -123,6 +111,7 @@ public class MoveController {
 	private Boolean kingJumpPositionValidation(Position endPosition,
 			Position piecePosition, Position capturedPiecePosition) {
 
+		// FIXME Implement this function properly 
 		if (Math.abs(endPosition.getX() - piecePosition.getX()) != 2) {
 			return false;
 		}

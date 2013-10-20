@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import checkers.BoardDesign;
+import checkers.Piece;
 
 public class BoardDesignTest {
 
@@ -17,7 +18,7 @@ public class BoardDesignTest {
 	public void setup() {
 		try {
 			boardDesign = new BoardDesign("British");
-		} catch (RemoteException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -25,15 +26,20 @@ public class BoardDesignTest {
 	
 	@Test
 	public void testInvalidGameTypeValue() throws RemoteException {
-		TestCase.assertEquals(boardDesign.getBlackCorner(),'L');
+		TestCase.assertEquals(boardDesign.getBlackCorner(), Piece.WHITE);
 		TestCase.assertEquals(boardDesign.getGridSize(),8);
 		
+		try{
 		boardDesign = new BoardDesign("American");
+		}
+		catch(Exception e){
+			System.out.println("Could not create an american board");
+		}
 		
-		TestCase.assertEquals(boardDesign.getBlackCorner(),'L');
+		TestCase.assertEquals(boardDesign.getBlackCorner(), Piece.WHITE);
 		TestCase.assertEquals(boardDesign.getGridSize(),8);
 		
-		TestCase.assertNotSame(boardDesign.getBlackCorner(), 'R');
+		TestCase.assertNotSame(boardDesign.getBlackCorner(), Piece.BLACK);
 		
 	}
 

@@ -13,7 +13,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public class GameDesign implements Remote, Serializable{
-	
 	private static final long serialVersionUID = 1L;
 	
 	private int gameCode;
@@ -23,6 +22,7 @@ public class GameDesign implements Remote, Serializable{
 	public GameDesign(BoardDesign gameBoardDesign, Board initialBoard) throws RemoteException{
 		this.gameBoardDesign = gameBoardDesign;
 		this.setInitialBoard(initialBoard);
+		this.gameCode = -1;
 	}
 	
 	public GameDesign(GameDesign copy) throws RemoteException{

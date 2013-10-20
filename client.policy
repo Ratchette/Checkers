@@ -1,3 +1,0 @@
-grant codeBase "file:/home/jennifer/University/CIS4150/project1/Checkers/" {
-    permission java.security.AllPermission;
-};

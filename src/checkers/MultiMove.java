@@ -8,16 +8,14 @@
 
 package checkers;
 
+import java.io.Serializable;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 
-public class MultiMove extends Move {
+public class MultiMove extends Move implements Remote, Serializable {
 	private static final long serialVersionUID = 1L;
 	private SingleMove[] moveSequence;
-	
-	public MultiMove() {
-
-	}
 	
 	public MultiMove(SingleMove[] moveSequence) {
 		this.setMoveSequence(moveSequence);

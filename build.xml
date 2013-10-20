@@ -1,45 +1,102 @@
-<project name="Checkers" basedir="." default="all" >
+<project name="checkers" basedir="." default="both" >
 	<description>
         The buildfile for our game of Checkers
     </description>
 
     <property name="src"            value="src"/>
+	<property name="package"		value="checkers"/>
+	
     <property name="libs"           value="libs"/>
     <property name="bin"            value="bin"/>
     <property name="dist"           value="dist"/>
     <property name="docs"           value="docs"/>
+	<property name="images"			value="resources"/>
 	
-    <property name="main-class"     value="checkers.CheckersClient"/>
-    <property name="arg0"           value="true"/>
+	
+	<property name="client_prog" value="CheckersClient"/>
+	<property name="server_prog" value="CheckersServer"/>
+	<property name="client_mainClass" value="${package}.${client_prog}"/>
+	<property name="server_mainClass" value="${package}.${server_prog}"/>
+	
+	<property name="serverHostname" value="localhost"/>
 	
     <!--**************************************************************-->
     <!--*************** DONT TOUCH BELLOW THIS LINE ******************-->
     <!--**************************************************************-->
 
-	<target name="all" depends="build"/>
-    <target name="build" depends="javadoc, jar"/>
-
-    <target name="class">
-        <mkdir dir="${bin}"/>
-        <javac includeantruntime="false" source="1.6" target="1.6" srcdir="${src}" destdir="${bin}" />
+	<target name="both" depends="javadoc, client_jar, server_jar" />
+    <target name="client" depends="javadoc, client_jar"/>
+	<target name="server" depends="javadoc, server_jar"/>
+		
+		
+	<!-- Common Build -->
+	<target name="common_class">
+		<mkdir dir="${bin}"/>
+        <javac includeantruntime="false" source="1.6" target="1.6" srcdir="${src}/${package}" destdir="${bin}" />
     </target>
-
-    <target name="jar" depends="class">
-        <mkdir dir="${dist}"/>
-        <jar destfile="${dist}/${ant.project.name}.jar" basedir="${bin}">
+		
+	<target name="common_jar" depends="common_class">
+		<mkdir dir="${libs}"/>
+		<jar destfile="${libs}/${ant.project.name}.jar" basedir="${bin}"/>
+	</target>
+		
+	<!-- Client Build -->
+	<target name="client_class" depends="common_jar">
+		<javac includeantruntime="false" source="1.6" target="1.6" srcdir="${src}/${package}" destdir="${bin}">
+			<classpath>  
+	            <fileset dir="${libs}">  
+	                <include name="**/*.jar" />  
+	            </fileset>
+        	</classpath>  
+		</javac>
+	</target>
+	
+	<target name="client_jar" depends="client_class">
+		<mkdir dir="${dist}"/>
+        <jar destfile="${dist}/${client_prog}.jar" basedir="${bin}">
             <manifest>
-                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Main-Class" value="${client_mainClass}"/>
             </manifest>
-            <fileset dir="resources"/>
+        	<fileset dir="${images}"/>
         </jar>
-    </target>
+	</target>
+			
+	<!-- Server Build -->
+	<target name="server_class" depends="common_jar">
+		<javac includeantruntime="false" source="1.6" target="1.6" srcdir="${src}/${package}" destdir="${bin}">
+			<classpath>  
+	            <fileset dir="${libs}">  
+	                <include name="**/*.jar" />  
+	            </fileset> 
+        	</classpath>  
+		</javac>
+	</target>
+		
+	
+	<target name="server_jar" depends="server_class">
+		<mkdir dir="${dist}"/>
+        <jar destfile="${dist}/${server_prog}.jar" basedir="${bin}">
+            <manifest>
+                <attribute name="Main-Class" value="${server_mainClass}"/>
+            </manifest>
+        </jar>
+	</target>
 
-    <target name="run" depends="jar">
-        <java jar="${dist}/${ant.project.name}.jar" fork="true">
-            <arg value="${arg0}"/>
+
+	<!-- Running the programs -->
+	<target name="client_run">
+        <java jar="${dist}/${client_prog}.jar" fork="true">
+            <arg value="${serverHostname}"/>
         </java>
     </target>
+   
 	
+    <target name="server_run">
+        <java jar="${dist}/${server_prog}.jar" fork="true" />
+    </target>
+	
+		
+	<!-- Clean + Javadocs -->		
     <target name="clean" description="Removes all .class and .jar files">
         <delete dir="${bin}"/>
         <delete dir="${dist}"/>
@@ -47,6 +104,6 @@
 	    
     <target name="javadoc">
         <delete dir="${docs}"/>
-        <javadoc sourcepath="${src}" destdir="${docs}" private="true" use="true" header="true" footer="true" windowtitle="Documentation"/>
+        <javadoc sourcepath="${src}" destdir="${docs}" private="true" use="true" header="true" footer="true" windowtitle="Checkers Documentation"/>
     </target>
 </project>

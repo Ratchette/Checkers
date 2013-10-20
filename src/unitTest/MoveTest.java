@@ -24,8 +24,8 @@ public class MoveTest {
 	public void setup() {
 		
 		try {
-			pieceToBeMoved = new Piece(new Position(1,1), false, 'D', null);
-			capturedPiece = new Piece(new Position(1,3), false, 'L', null);
+			pieceToBeMoved = new Piece(new Position(1,1), false, 'b');
+			capturedPiece = new Piece(new Position(1,3), false, 'w');
 			endPosition = new Position();
 			capturedPiecePosition = new Position();
 			pieceToBeMovedPosition = new Position();

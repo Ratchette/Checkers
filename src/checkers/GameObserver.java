@@ -12,8 +12,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface GameObserver extends Remote{
-	
-    public String move(Move playerMove)throws RemoteException;
-	public String playerResigned(PlayerInfo aPlayer, char code, String aMessage)throws RemoteException;
-	public void gameOver (PlayerInfo winner)throws RemoteException;
+	void receiveMove(Move playersMove) throws RemoteException;
+
+	void playerResigned(PlayerInfo aPlayer, char code, String aMessage) throws RemoteException;
+
+	void gameOver(PlayerInfo winner) throws RemoteException;
 }

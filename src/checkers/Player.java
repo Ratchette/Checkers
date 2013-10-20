@@ -12,12 +12,18 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface Player extends Remote{
-	public Object considerGame (GameDesign aGame) throws RemoteException;
-	public void startGame (PlayerInfo player,  String gameType) throws RemoteException;
-	
-	public String move (Move playersMove) throws RemoteException;
-	
-	public void opponentResigned (PlayerInfo player, char code, String message) throws RemoteException;
-	public String resign () throws RemoteException;
-	public void youWin () throws RemoteException;
+	Object considerGame(GameDesign aGame) throws RemoteException; 
+	//The return Object = {String, GameDesign}
+
+void startGame() throws RemoteException;
+
+String move(Move playersMove) throws RemoteException;
+    //The return String = (“Accept”, “Invalid”);
+
+void playerResigned(PlayerInfo aPlayer, char code, String aMessage) throws RemoteException;
+     //  for code values, see resign() under class CheckersServer)
+
+void youWin() throws RemoteException;
+     // now redundant since the winning player will get the message 
+     // playerResigned with an 'l' or 'L' code
 }

@@ -21,7 +21,7 @@ public class BoardTest {
 		try {
 			boardDesign = new BoardDesign("British");
 			board = new Board(boardDesign, new Piece[23]);
-		} catch (RemoteException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

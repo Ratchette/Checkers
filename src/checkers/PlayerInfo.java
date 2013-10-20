@@ -24,7 +24,6 @@ public class PlayerInfo implements Remote, Serializable{
 	}
 	
 	public String getName() throws RemoteException{
-
 		return name;
 	}
 	
