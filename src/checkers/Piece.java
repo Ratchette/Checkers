@@ -40,10 +40,10 @@ public class Piece {
 
 		if (colour == Piece.WHITE)
 			this.pieceImage = ImageIO.read(getClass().getResource(
-					"/resources/peice8x8w.png"));
+					"/peice8x8w.png"));
 		else
 			this.pieceImage = ImageIO.read(getClass().getResource(
-					"/resources/peice8x8.png"));
+					"/peice8x8.png"));
 	}
 
 	public Position getPiecePosition() {
