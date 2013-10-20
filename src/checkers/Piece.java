@@ -24,16 +24,19 @@ public class Piece {
 	private Position piecePosition;
 	private Boolean crown;
 	private char colour;
+	
 	private BufferedImage pieceImage;
 
 	public Piece(Piece copy) throws RemoteException {
-		this.piecePosition = new Position(copy.getPiecePosition());
-		this.crown = new Boolean(copy.isCrown());
-		this.colour = copy.getColour();
+		piecePosition = new Position(copy.getPiecePosition());
+		crown = new Boolean(copy.isCrown());
+		colour = copy.getColour();
+		
+		// This needs to be fixed! need to find a way to copy the images
+		pieceImage = copy.getPieceImage();
 	}
 
-	public Piece(Position piecePosition, Boolean crown, char colour)
-			throws IOException {
+	public Piece(Position piecePosition, Boolean crown, char colour) throws IOException {
 		this.piecePosition = piecePosition;
 		this.crown = crown;
 		this.colour = colour;
@@ -49,9 +52,7 @@ public class Piece {
 	public Position getPiecePosition() {
 		try {
 			return new Position(piecePosition);
-		} catch (Exception e) {
-		}
-		;
+		} catch (Exception e) {};
 		// TODO Implement the catch block?
 
 		return null;

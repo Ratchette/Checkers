@@ -33,6 +33,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		this.players = new ArrayList<CheckersClient>();
 		this.observers = new ArrayList<CheckersClient>();
 		this.suggestions = new ArrayList<GameDesign>();
+		
 		this.gameInProgress = false;
 		
 		// TODO FIXTHIS
@@ -72,11 +73,27 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
     	return new GameInfo(currentGame);
     }
 
-	@Override
-	public Object playGame(CheckersClient requestingClient)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+    @Override
+    public Object playGame(CheckersClient requestingClient){
+		if(gameInProgress){
+			// A game is already being played, so reject all clients until the game ends
+			return "Reject:Game in Progress";
+		}
+		
+		else if(suggestions.size() == 0){
+			// add the first client to the clients list. Wineberg's use case [Scenario 1] 
+			players.add(requestingClient);
+			return "No Players";
+		}
+		
+		else{
+			// TODO requires some complex logic
+			// One client has already suggested a game. Wineberg's use case [Scenario 2] 
+			players.add(requestingClient);
+			
+		}
+		
+		return null; //FIXME Complete this function
 	}
 
 	@Override
@@ -118,24 +135,6 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 
 	}
     
-//    public Object playGame(Client requestingClient){
-////        if(gameInProgress){
-////        	// A game is already being played, so reject all clients until the game ends
-////        	return "Reject:Game in Progress";
-////        }
-////        else if(this.suggestions.size() == 0){
-////        	// add the first client to the clients list. Wineberg's use case [Scenario 1] 
-////        	players.add(requestingClient);
-////        	return "No Players";
-////        }
-////        else{
-////        	// One client has already suggested a game. Wineberg's use case [Scenario 2] 
-////        	players.add(requestingClient);
-////        	// TODO requires some complex logic
-////        }
-//        
-//        return null; //FIXME Complete this function
-//    }
 //
 //    public Object watch(Client requestingClient) throws RemoteException{
 ////    	// See Wineberg Use Case [Scenario 0.2]
@@ -216,6 +215,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			
 			Scanner reader = new Scanner(System.in);
 			reader.nextLine();
+			reader.close();
 			
 			server.shutdown();
 		}

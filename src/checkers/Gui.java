@@ -175,7 +175,7 @@ public class Gui implements ActionListener {
 	private void setBoardType(BoardDesign boardInfo) {
 		/* Check Board Type */
 		try {
-			gridSize = boardInfo.getGridSize();
+			gridSize = boardInfo.gridSize;
 			if (boardInfo.getBlackCorner() == Piece.WHITE) {
 				type = 0;
 			} else {

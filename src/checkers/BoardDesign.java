@@ -14,30 +14,36 @@ import java.rmi.RemoteException;
 
 public class BoardDesign implements Remote, Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public static final int BRITISH 		= 0;
+	public static final int AMERICAN	 	= 1;
+	public static final int INTERNATIONAL 	= 2;
+	public static final int CANADIAN 		= 3;
+	public static final int ANTICHECKERS 	= 4;
 
 	public final int gridSize;
 	private char blackCorner;
-	private String gameType;
+	private int gameType;
 
 	// copy constructor
 	public BoardDesign(BoardDesign copy) throws RemoteException {
-		this.gridSize = copy.getGridSize();
+		this.gridSize = copy.gridSize;
 		this.blackCorner = copy.getBlackCorner();
 	}
 
 	// regular constructor
-	public BoardDesign(String gameType) throws Exception {
-		this.gameType = gameType;
-		if (gameType.equalsIgnoreCase("British")
-				|| gameType.equalsIgnoreCase("American")) {
-			this.gridSize = 8;
+	public BoardDesign(int game) throws Exception {
+		gameType = game;
+		
+		if (game == BRITISH || game == AMERICAN || game == ANTICHECKERS){
+			gridSize = 8;
 			blackCorner = Piece.WHITE;
 		}
-		else if (gameType.equalsIgnoreCase("International")) {
+		else if (game == INTERNATIONAL) {
 			this.gridSize = 10;
 			blackCorner = Piece.BLACK;
 		}
-		else if (gameType.equalsIgnoreCase("Canadian")) {
+		else if (game == CANADIAN) {
 			this.gridSize = 12;
 			blackCorner = Piece.WHITE;
 		}
@@ -45,12 +51,6 @@ public class BoardDesign implements Remote, Serializable {
 			throw new Exception("Unkonwn Game type!");
 		}
 	}
-
-	// getter for grid size
-	public int getGridSize() throws RemoteException {
-		return gridSize;
-	}
-
 
 	// getter for black corner
 	public char getBlackCorner() throws RemoteException {
@@ -63,13 +63,13 @@ public class BoardDesign implements Remote, Serializable {
 	}
 
 	// getter for game type
-	public String getGameType() {
+	public int getGameType() {
 		return gameType;
 	}
 
 	// setter for game type
-	public void setGameType(String gameType) {
-		this.gameType = gameType;
+	public void setGameType(int game) {
+		this.gameType = game;
 	}
 
 	@Override
@@ -80,8 +80,8 @@ public class BoardDesign implements Remote, Serializable {
 		BoardDesign newObj = (BoardDesign) obj;
 		try {
 			return newObj.getBlackCorner() == this.getBlackCorner()
-					&& newObj.getGameType().equals(this.getGameType())
-					&& newObj.getGridSize() == this.getGridSize();
+					&& newObj.getGameType() == this.getGameType()
+					&& newObj.gridSize == this.gridSize;
 		} catch (RemoteException e) {
 			return false;
 		}

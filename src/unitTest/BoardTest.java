@@ -20,7 +20,7 @@ public class BoardTest {
 	public void setup() {
 		try {
 			boardDesign = new BoardDesign("British");
-			board = new Board(boardDesign, new Piece[23]);
+			board = new Board(boardDesign);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

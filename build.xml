@@ -32,7 +32,9 @@
 	<!-- Common Build -->
 	<target name="common_class">
 		<mkdir dir="${bin}"/>
-        <javac includeantruntime="false" source="1.6" target="1.6" srcdir="${src}/${package}" destdir="${bin}" />
+        <javac includeantruntime="false" source="1.6" target="1.6" 
+        	srcdir="${src}/${package}" destdir="${bin}" 
+        	debug="true" debuglevel="lines,vars,source" />
     </target>
 		
 	<target name="common_jar" depends="common_class">
@@ -42,7 +44,9 @@
 		
 	<!-- Client Build -->
 	<target name="client_class" depends="common_jar">
-		<javac includeantruntime="false" source="1.6" target="1.6" srcdir="${src}/${package}" destdir="${bin}">
+		<javac includeantruntime="false" source="1.6" target="1.6" 
+			srcdir="${src}/${package}" destdir="${bin}"
+			debug="true" debuglevel="lines,vars,source">
 			<classpath>  
 	            <fileset dir="${libs}">  
 	                <include name="**/*.jar" />  
@@ -63,7 +67,9 @@
 			
 	<!-- Server Build -->
 	<target name="server_class" depends="common_jar">
-		<javac includeantruntime="false" source="1.6" target="1.6" srcdir="${src}/${package}" destdir="${bin}">
+		<javac includeantruntime="false" source="1.6" target="1.6" 
+			srcdir="${src}/${package}" destdir="${bin}"
+			debug="true" debuglevel="lines,vars,source">
 			<classpath>  
 	            <fileset dir="${libs}">  
 	                <include name="**/*.jar" />  

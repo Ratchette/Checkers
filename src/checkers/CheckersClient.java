@@ -10,26 +10,78 @@ package checkers;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 public class CheckersClient implements GameObserver, Player{
-	private GameObserver observer;
-	private Player player;
+	public static final int PLAYER 		= 0;
+	public static final int OBSERVER 	= 1;
+	
+	private CheckersObserver observer;
+	private CheckersPlayer player;
 	
 	private GameInfo myGame;
 	
 	// constructor
-	public CheckersClient(boolean isPlayer) throws RemoteException{
-		if(isPlayer){
-			this.player = new CheckersPlayer();
-			this.setObserver(null);
+	public CheckersClient() throws Exception{
+		int isPlayer = choosePlayStyle();
+		
+		if(isPlayer == 0){
+			setObserver(null);
+			
+			int gameType = chooseGameType();
+			player = new CheckersPlayer(gameType);
+			//player.startGame();
+			
+			Gui window = new Gui(player.getBoard());
+			window.drawBoard(player.getBoard());
+			
 		}
 		else{
-			this.player = null;
-			this.setObserver(new CheckersObserver());
+			player = null;
+			setObserver(new CheckersObserver());
 		}
 		
 		this.myGame = null;
+	}
+	
+	private int choosePlayStyle(){
+		Object[] options = {"Play", "Observe", "Quit"};
+		int answer;
+		
+		answer = JOptionPane.showOptionDialog(null,
+				"Welcome to Checkers!\nWould you like to play or observe a game?",
+				"CIS 4150 - Checkers Clinet",
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				options,
+				options[2]);
+		
+		if(answer == 2)
+			System.exit(0);
+		
+		return answer;
+	}
+	
+	private int chooseGameType(){
+		// ensure that the order the game types are displayed in matches their declarations above
+		Object[] options = {"British", "American", "International", "Canadian", "Anti-Checkers", "Quit"};
+		int answer;
+		
+		answer = JOptionPane.showOptionDialog(null,
+				"Please choose a game style",
+				"CIS 4150 - Checkers Clinet",
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				options,
+				options[0]);
+		
+		if(answer == 5)
+			System.exit(0);
+		
+		return answer;
 	}
 	
 	// getter for game observer
@@ -38,7 +90,7 @@ public class CheckersClient implements GameObserver, Player{
 	}
 
 	// setter for game observer
-	public void setObserver(GameObserver observer) {
+	public void setObserver(CheckersObserver observer) {
 		this.observer = observer;
 	}
 
@@ -114,36 +166,23 @@ public class CheckersClient implements GameObserver, Player{
 
 	
 	public static void main(String[] args) {
-		// setup connection to server
-		String hostname = Server.granger;
-		
-		if(args.length > 0)
-			hostname = args[0];
-		
-		// choose a game type
-		System.out.println("Welcome to Checkers! Choose your game type:");
-		System.out.println("Currently Available:\n\t\"British\"\n\t\"American\"\n\t\"International\"\n\t\"Canadian\"");
-		System.out.println("\n");
-		Scanner scanner = new Scanner (System.in);  
-		String name = scanner.next();
-		System.out.println("You've entered: " + name);
+		Server server;		// The client does not need to know the name of the class that imeplements the server interface
+		CheckersClient client;
 		
 		//TODO: Implement connection to server
 		try {
-			Server server = (Server) Naming.lookup("//" + hostname + "/" + Server.serverName);
-			// ensure that you have connected to the server
+			// setup connection to server
+			String hostname = Server.granger;
 			
-			CheckersPlayer p = new CheckersPlayer();
-			p.startGame();
+			if(args.length > 0)
+				hostname = args[0];
 			
-			Gui window = new Gui(p.theBoard);
-			window.drawBoard(p.theBoard);
+			server = (Server) Naming.lookup("//" + hostname + "/" + Server.serverName);
+			client = new CheckersClient();
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		scanner.close();
 	}
 }
