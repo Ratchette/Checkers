@@ -11,6 +11,9 @@ import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
@@ -29,8 +32,10 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	// constructor
 	public CheckersClient() throws Exception{
 		int isPlayer = choosePlayStyle();
+		
 		// FIXME - come up with a better way to create the PlayerIDs
-		myID = new PlayerInfo(InetAddress.getLocalHost().getHostName() + "-0");
+		String date = new SimpleDateFormat("HH-mm-ss").format(new Date());
+		myID = new PlayerInfo(InetAddress.getLocalHost().getHostName() + "@" + date);
 		
 		if(isPlayer == 0){
 			observer = null;
@@ -218,6 +223,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 
 	
 	public static void main(String[] args) {
+		Scanner keyboard = new Scanner(System.in);	// testing feature that waits for user input
 		Server server;		// The client does not need to know the name of the class that imeplements the server interface
 		CheckersClient client;
 		
@@ -235,7 +241,14 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 			
 			client = new CheckersClient();
 			if(client.observer == null){
-				server.considerGame(client, new GameDesign(BoardDesign.BRITISH));
+				Object response = server.considerGame(client, new GameDesign(BoardDesign.BRITISH));
+				if(response != null && response.getClass().equals(String.class)){
+					System.out.println(response);
+				}
+				
+				keyboard.next();
+				
+				server.acceptGame(client);
 			}
 			else
 				client.watchGame(server);

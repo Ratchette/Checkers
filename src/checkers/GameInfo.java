@@ -23,7 +23,8 @@ public class GameInfo implements Remote, Serializable{
 	private int currentRound;
 
 	public GameInfo(GameDesign gameDesign, PlayerInfo player1, PlayerInfo player2) throws RemoteException {
-		this.currentBoard = gameDesign.getInitialBoard();
+		this.theGame = gameDesign;
+		this.currentBoard = new Board(gameDesign.getInitialBoard());
 		this.player1 = new PlayerInfo(player1);
 		this.player2 = new PlayerInfo(player2);
 		this.playerTurn = 0;

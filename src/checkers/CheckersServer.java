@@ -187,23 +187,44 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		
 		if(suggestions.size() == 0){
 			players.add(requestingClient);
-			suggestions.add(new GameInfo (new GameDesign(aGame), requestingClient.getPlayerInfo(), new PlayerInfo("None")));
+			suggestions.add(new GameInfo (aGame, requestingClient.getPlayerInfo(), new PlayerInfo("None")));
 			
 			printStatus(playerName, "Accepted suggestion: Waiting for an opponent to agree\n");
 			return "Accept";
 		}
 		
-		GameInfo currentSuggestion = suggestions.get(0);
 		
-		printStatus(playerName, "Counter Suggestion: Sending " + currentSuggestion.getCurrentBoard().getTheBoard().getGameType()
-				+ " (the first Game Design in the queue)\n");
+		GameInfo currentSuggestion = suggestions.get(0);
+		printStatus(playerName, "Counter Suggestion: Sending " + currentSuggestion.getCurrentBoard().getTheBoard().getGameType() + "\n");
+
 		return new GameDesign(currentSuggestion.getTheGame());
 	}
 
 	@Override
 	public void acceptGame(Player aPlayer) throws RemoteException {
-		// TODO Auto-generated method stub
-
+		GameInfo acceptedGame = suggestions.get(0);
+		PlayerInfo p1 = acceptedGame.getPlayer1();
+		PlayerInfo p2 = aPlayer.getPlayerInfo();
+		printStatus(p2.getName(), "Accepted Game: " + acceptedGame.getCurrentBoard().getTheBoard().getGameType()
+				+ " between [ " + p1.getName() + " ] and [ " + p2.getName() + " ]");
+		
+		acceptedGame.setPlayer2(aPlayer.getPlayerInfo());
+		
+		for(Player p : players){
+			// tell p1 that it is their turn
+			if(p.getPlayerInfo().equals(acceptedGame.getPlayer1())){
+				p.startGame();
+				printStatus("Server", "Start Game: [ " + p1.getName() + " ] informed to make first move");
+			}
+			
+			// remove any players that are not part of the current game
+			else if(!p.getPlayerInfo().equals(acceptedGame.getPlayer2())){
+				players.remove(p);
+				printStatus("Server", "Removed Inactive Player: [ " + p.getPlayerInfo().getName() + " ] is not playing this round");
+			}
+		}
+		
+		System.out.println();
 	}
 
 	@Override

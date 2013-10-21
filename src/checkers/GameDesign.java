@@ -32,9 +32,10 @@ public class GameDesign implements Remote, Serializable{
 //	}
 	
 	public GameDesign(GameDesign copy) throws RemoteException{
-		this.gameCode = copy.getGameCode();
-		this.gameBoardDesign = new BoardDesign(copy.getGameBoardDesign());
-		this.setInitialBoard(new Board(copy.getInitialBoard()));
+		initialBoard = new Board(copy.getInitialBoard());
+		gameBoardDesign = initialBoard.getTheBoard();
+		
+		gameCode = copy.getGameCode();
 	}
 
 	public 	int getGameCode() throws RemoteException{

@@ -26,9 +26,10 @@ public class BoardDesign implements Remote, Serializable {
 	private int gameType;
 
 	// copy constructor
-	public BoardDesign(BoardDesign copy) throws RemoteException {
+	public BoardDesign(BoardDesign copy) {
 		this.gridSize = copy.gridSize;
 		this.blackCorner = copy.getBlackCorner();
+		this.gameType = copy.getGameEncoding();
 	}
 
 	// regular constructor
@@ -61,9 +62,13 @@ public class BoardDesign implements Remote, Serializable {
 			default: return "Anti-Checkers";
 		}
 	}
+	
+	public int getGameEncoding(){
+		return this.gameType;
+	}
 
 	// getter for black corner
-	public char getBlackCorner() throws RemoteException {
+	public char getBlackCorner() {
 		return blackCorner;
 	}
 
@@ -83,13 +88,9 @@ public class BoardDesign implements Remote, Serializable {
 			return false;
 		}
 		BoardDesign newObj = (BoardDesign) obj;
-		try {
-			return newObj.getBlackCorner() == this.getBlackCorner()
-					&& newObj.getGameType() == this.getGameType()
-					&& newObj.gridSize == this.gridSize;
-		} catch (RemoteException e) {
-			return false;
-		}
+		return newObj.getBlackCorner() == this.getBlackCorner()
+				&& newObj.getGameType() == this.getGameType()
+				&& newObj.gridSize == this.gridSize;
 	}
 
 }
