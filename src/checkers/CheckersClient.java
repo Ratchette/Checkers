@@ -3,7 +3,6 @@
  * @author Danielle Fudger
  * @author Ben Douek
  * @author Jennifer Winer
- *
  */
 
 package checkers;
@@ -145,7 +144,6 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		}
 		
 		response = server.watch(this);
-		System.out.println("No error yet");
 		
 		if(response != null && response.getClass().equals(String.class)){
 			// Dislpay message on GUI
@@ -158,6 +156,27 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		Thread.sleep(2000);
 		
 		response = server.doNotWatch(this);
+		if(response != null && response.getClass().equals(String.class)){
+			// Dislpay message on GUI
+			System.out.println(response);
+		}
+		else{
+			// Display gameInfo on the GUI
+		}
+	}
+	
+	private void playGame(Server server) throws RemoteException{
+		Object response;
+		
+		if(player == null){
+			// TODO ERROR - you tried to watch game after selecting player! 
+			// exit the client
+			System.out.println("You cannot play a game if you are an observer.");
+			System.exit(0);
+		}
+		
+		response = server.playGame(this);
+		
 		if(response != null && response.getClass().equals(String.class)){
 			// Dislpay message on GUI
 			System.out.println(response);
@@ -215,7 +234,11 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 			server = (Server) Naming.lookup("//" + hostname + ":4150/" + Server.serverName);
 			
 			client = new CheckersClient();
-			client.watchGame(server);
+			if(client.observer == null)
+				client.playGame(server);
+			else
+				client.watchGame(server);
+			
 			
 			// TODO create a shutdown method
 			System.exit(0);

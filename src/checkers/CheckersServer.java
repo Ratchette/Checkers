@@ -33,34 +33,46 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		this.observers = new ArrayList<GameObserver>();
 		this.suggestions = new ArrayList<GameDesign>();
 		
-		this.gameInProgress = true;
+		this.gameInProgress = false;
 		
 		// TODO FIXTHIS
 	}
 	
+	/*************************************************************************
+	 * 						SERVER STARTUP AND SHUTDOWN
+	 *************************************************************************/
+	
 	// initialize the server
-	public void startup() throws Exception{
-	// THIS WAS THE SOURCE OF ALL OF MY PROBLEMS!
-	//		if (System.getSecurityManager() == null) 
-	//		System.setSecurityManager(new SecurityManager());
+	private void startup() throws Exception{
+		printStatus("Server", "Startup initiated");
 		
 		try{
 			LocateRegistry.createRegistry(4150);
 			Naming.rebind("//localhost:4150/" + Server.serverName, this);
 			
-			System.out.println("Checkers Server Ready");
+			printStatus("Server", "bound to port 4150 on localhost\n"); // FIXME - print your local IP address
 		}
 		
 		catch(Exception e){
-			System.err.println("Checkers server startup exception:");
+			printStatus("Server", "CRITICAL ERROR : unable to startup rmi server\n");
 			e.printStackTrace();
+			shutdown();
 		}
 	}
 
+	private void restart(){
+		this.players = new ArrayList<Player>();
+		this.observers = new ArrayList<GameObserver>();
+		this.suggestions = new ArrayList<GameDesign>();
+		
+		this.gameInProgress = false;
+		
+		printStatus("Server", "Server reset: Now accepting new players and clients\n");
+	}
+	
 	// stop the server
-    void shutdown() throws Exception{
-    	//Naming.unbind("//localhost:4150/" + Server.serverName);
-    	System.out.println("Checkers server has shutdown");
+    private void shutdown() throws Exception{
+    	printStatus("Server", "Shutdown initiated\n");
     	
     	// FIXME - the server does not shut down yet XP (I implemented the below stupidity to compensate for it)
     	System.exit(0);
@@ -68,83 +80,102 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 
     // getter for gameInfo
     public GameInfo gameInfo() throws RemoteException{
-    	// TODO INCOMPLETE METHOD
+		printStatus("UNKNOWN", "Request to view Game Info\n");
+		System.out.println();
+		
     	return new GameInfo(currentGame);
     }
 
-    @Override
-    public Object playGame(Player requestingClient){
-		if(gameInProgress){
-			// A game is already being played, so reject all clients until the game ends
-			return "Reject:Game in Progress";
-		}
-		
-		else if(suggestions.size() == 0){
-			// add the first client to the clients list. Wineberg's use case [Scenario 1] 
-			players.add(requestingClient);
-			return "No Players";
-		}
-		
-		else{
-			// TODO requires some complex logic
-			// One client has already suggested a game. Wineberg's use case [Scenario 2] 
-			players.add(requestingClient);
-			
-		}
-		
-		return null; //FIXME Complete this function
-	}
-
+    
+	/*************************************************************************
+	 * 								OBSERVERS
+	 *************************************************************************/
+    
 	@Override
 	public Object watch(GameObserver requestingClient) throws RemoteException {	
 		String playerName = requestingClient.getPlayerInfo().getName();
-		printStatus("Request to watch", playerName);
+		printStatus(playerName, "Request to watch");
 		
 		if(!gameInProgress){
 			if(suggestions.size() == 0){
-				printStatus("Reject watch request: No game in progress", playerName);
+				printStatus(playerName, "Reject watch request: No game in progress\n");
 				return "No Game Being Played: No Players";
 			}
 			else{
-				printStatus("Reject watch request: Waiting for another player", playerName);
+				printStatus(playerName, "Reject watch request: Waiting for another player\n");
+				System.out.println();
 				return "No Game Being Played: Waiting for Second Player";
 			}
 		}
 		
 		if(players.contains(requestingClient)){
-			printStatus("Reject watch request: Player is already on observer list", playerName);
+			printStatus(playerName, "Reject watch request: Player is already on observer list\n");
 			return "Player: Already Observing Game";
 		}
 		
 		if(!observers.contains(requestingClient))
 			observers.add(requestingClient);
 		
-		printStatus("Successfully watching", playerName);
-		System.out.println();
+		printStatus(playerName, "Successfully watching\n");
+		
 		return currentGame;
 	}
 
 	@Override
 	public String doNotWatch(GameObserver requestingClient) throws RemoteException {
 		String playerName = requestingClient.getPlayerInfo().getName();
-		printStatus("Request to stop watching", requestingClient.getPlayerInfo().getName());
+		printStatus(playerName, "Request to stop watching");
 		
 		if(players.contains(requestingClient)){
-			printStatus("Reject stop watching request: Players must watch the game", playerName);
+			printStatus(playerName, "Reject stop watching request: Players must watch the game\n");
 			return "Rejected: Players Must Watch";
 		}
 		
 		if(!observers.contains(requestingClient)){
-			printStatus("Reject stop watching request: Client did not previously request to watch game", playerName);
+			printStatus(playerName, "Reject stop watching request: Client did not previously request to watch game\n");
 			return  "Rejected: Already Not Watching";
 		}
 		
 		observers.remove(requestingClient);
-		printStatus("Successfully stopped watching", playerName);
-		System.out.println();
+		printStatus(playerName, "Successfully stopped watching\n");
 		return "Success";
 	}
 
+	
+	/*************************************************************************
+	 * 								PLAYERS
+	 *************************************************************************/
+	
+	@Override
+    public Object playGame(Player requestingClient) throws RemoteException{
+    	String playerName = requestingClient.getPlayerInfo().getName();
+		printStatus(playerName, "Request to play game");
+    	
+		if(gameInProgress){
+			// A game is already being played, so reject all clients until the game ends
+			printStatus(playerName, "Reject play request: A game is already in progress");
+			System.out.println();
+			
+			return "Reject:Game in Progress";
+		}
+		
+		if(suggestions.size() == 0){
+			// add the first client to the clients list. Wineberg's use case [Scenario 1] 
+			// TODO - implement this part
+			printStatus(playerName, "Reject play request: First client added to players queue");
+			System.out.println();
+			
+			players.add(requestingClient);
+			return "No Players";
+		}
+
+		// One client has already suggested a game. Wineberg's use case [Scenario 2] 
+		// TODO - implement this part
+		players.add(requestingClient);
+		
+		return null; //FIXME Complete this function
+	}
+	
 	@Override
 	public Object considerGame(Player requestingClient, GameDesign aGame)
 			throws RemoteException {
@@ -161,84 +192,46 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	@Override
 	public void move(Move playersMove) throws RemoteException {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public void resign(Player aPlayer, char code, String reason)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-
+	public void resign(Player aPlayer, char code, String reason) throws RemoteException {
+		String playerName = aPlayer.getPlayerInfo().getName();
+		printStatus(playerName, "Resignation request");
+		
+		if(!players.contains(aPlayer)){
+			printStatus(playerName, "Rejected Resignation: The requester is not a player");
+			return;
+		}
+		
+		printStatus(playerName, "Resignation Accepted: [ " + playerName + "] has lost." );
+		
+		for(Player p : players){
+			p.playerResigned(aPlayer.getPlayerInfo(), code, reason);
+			
+			if(!p.equals(aPlayer))	// FIXME - this line may be redundant
+				p.youWin();
+		}
+		
+		for(GameObserver o : observers){
+			o.playerResigned(aPlayer.getPlayerInfo(), code, reason);
+			o.gameOver(aPlayer.getPlayerInfo());	// FIXME - this line may be redundant
+		}
+		
+		this.restart();
 	}
 	
-	public void printStatus(String message, String requester){
+	
+	/*************************************************************************
+	 * 							CUSTOM METHODS
+	 *************************************************************************/
+	
+	public void printStatus( String requester, String message){
 		String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-		System.out.println("\t" + date + " >> " + message + " by [ " + requester + " ]");
+		System.out.println("\t" + date + " >> [ " + requester + " ] " + message);
 	}
-    
-//
-//    public Object watch(Client requestingClient) throws RemoteException{
-////    	// See Wineberg Use Case [Scenario 0.2]
-////        if(!gameInProgress && suggestions.size() == 0){
-////        	return "No Game Being Played: No Players";
-////        }
-////        
-////        else if(suggestions.size() > 0){
-////        	return "No Game Being Played: Waiting for Second Player";
-////        }
-////        
-////        // Below here means that there is a game in progress
-////        else if(players.contains(requestingClient)){
-////        	return "Player: Already Observing Game";
-////        }
-////        
-////        else { 
-////        	observers.add(requestingClient);
-////        	return new GameInfo(currentGame);
-////        }
-//    	
-//    	return null;
-//    }
-//
-//    public String doNotWatch(Client requestingClient){
-////    	if(players.contains(requestingClient)){
-////    		return "Rejected: Players Must Watch";
-////    	}
-//////    	else if(!observers.contains(requestingClient)){
-//////    		
-//////    	}
-//    	return null; // FIXME Implement this function
-//    }
-////        returns "Accept" if success or an error message such as
-////                "Cannot be removed: not on Observers list" 
-//
-//    
-//    public Object considerGame(Client requestingClient, GameDesign aGame){
-////      Object could be String or GameDesign
-//		return null;
-//	}
-//
-//
-//    public void acceptGame(Player aPlayer){
-//    	
-//    }
-//
-//    public void move(Move playersMove){
-//    	
-//    }
-//
-//    public void resign(Player aPlayer, char code, String reason){
-//    	
-//    }
-//         // code = 'l' or 'L' for "lose"
-//         //     - i.e. player either:
-//         //           1) agrees that move that took the player's last piece was legal
-//         //           2) believes that they have no moves available
-//         // code = 'r' or 'R' for "rules disagreement" 
-//         //     - i.e. "move not legal by my rules"
-//         // code = 'o' or 'O' for "other reason
-//         //     - e.g. has to stop playing to get an assignment finished  
-    
+   
+    // For making sure that RMI was implemented correctly. PLO!
     public String testMethod(String message) throws RemoteException{
     	System.out.println("I got the message [ " + message + " ]");
     	return "Server says HEY THERE ";
