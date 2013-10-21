@@ -8,16 +8,28 @@
 
 package checkers;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
-public class Piece {
+/**
+ * ATTENTION BEN!!!!
+ * 
+ * I needed to change the images from BufferedImages to ImageIcons so that they could be sent over the network
+ *     - Would it be possible to remove all BufferedImages stuff and only deal with imageIcon objects?
+ */
+
+
+public class Piece implements Remote, Serializable{
 	public static final char BLACK = 'b';
 	public static final char WHITE = 'w';
 
@@ -25,7 +37,7 @@ public class Piece {
 	private Boolean crown;
 	private char colour;
 	
-	private BufferedImage pieceImage;
+	private ImageIcon pieceImage;
 
 	public Piece(Piece copy) throws RemoteException {
 		piecePosition = new Position(copy.getPiecePosition());
@@ -33,7 +45,7 @@ public class Piece {
 		colour = copy.getColour();
 		
 		// This needs to be fixed! need to find a way to copy the images
-		pieceImage = copy.getPieceImage();
+		pieceImage = new ImageIcon(copy.getPieceImage());
 	}
 
 	public Piece(Position piecePosition, Boolean crown, char colour) throws IOException {
@@ -42,11 +54,11 @@ public class Piece {
 		this.colour = colour;
 
 		if (colour == Piece.WHITE)
-			this.pieceImage = ImageIO.read(getClass().getResource(
-					"/peice8x8w.png"));
+			this.pieceImage = new ImageIcon(ImageIO.read(getClass().getResource(
+					"/peice8x8w.png")));
 		else
-			this.pieceImage = ImageIO.read(getClass().getResource(
-					"/peice8x8.png"));
+			this.pieceImage = new ImageIcon(ImageIO.read(getClass().getResource(
+					"/peice8x8.png")));
 	}
 
 	public Position getPiecePosition() {
@@ -92,11 +104,26 @@ public class Piece {
 	}
 
 	public BufferedImage getPieceImage() {
-		return pieceImage;
+		return IconToBuffer(pieceImage);
+	}
+	
+	/**
+	 * Author Werner Vesterås
+	 * Taken from http://stackoverflow.com/questions/15053214/converting-an-imageicon-to-a-bufferedimage
+	 * 
+	 * @param image
+	 * @return
+	 */
+	private BufferedImage IconToBuffer(ImageIcon image){
+		BufferedImage bufferedPiece = new BufferedImage(image.getIconWidth(),
+				image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics g = bufferedPiece.createGraphics();
+		image.paintIcon(null, g, 0,0);
+		return bufferedPiece;
 	}
 
 	public void setPieceImage(BufferedImage pieceImage, int size) {
-		this.pieceImage = scale(pieceImage, size, size);
+		this.pieceImage = new ImageIcon(scale(pieceImage, size, size));
 	}
 
 	// Ben's scaling function

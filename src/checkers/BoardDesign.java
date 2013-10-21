@@ -51,6 +51,16 @@ public class BoardDesign implements Remote, Serializable {
 			throw new Exception("Unkonwn Game type!");
 		}
 	}
+	
+	public String getGameType(){
+		switch(this.gameType){
+			case 0: return "British";
+			case 1: return "American";
+			case 2: return "International";
+			case 3: return "Canadian";
+			default: return "Anti-Checkers";
+		}
+	}
 
 	// getter for black corner
 	public char getBlackCorner() throws RemoteException {
@@ -60,11 +70,6 @@ public class BoardDesign implements Remote, Serializable {
 	// setter for black corner
 	public void setBlackCorner(char blackCorner) throws RemoteException {
 		this.blackCorner = blackCorner;
-	}
-
-	// getter for game type
-	public int getGameType() {
-		return gameType;
 	}
 
 	// setter for game type

@@ -19,11 +19,17 @@ public class GameDesign implements Remote, Serializable{
 	private BoardDesign gameBoardDesign;
 	private Board initialBoard;
 	
-	public GameDesign(BoardDesign gameBoardDesign, Board initialBoard) throws RemoteException{
-		this.gameBoardDesign = gameBoardDesign;
-		this.setInitialBoard(initialBoard);
-		this.gameCode = -1;
+	public GameDesign(int gameType) throws Exception{
+		initialBoard = new Board(gameType);
+		gameBoardDesign = initialBoard.getTheBoard();
+		gameCode = -1; // FIXME - I have no idea what to do with this ...
 	}
+	
+//	public GameDesign(BoardDesign gameBoardDesign, Board initialBoard) throws RemoteException{
+//		this.gameBoardDesign = gameBoardDesign;
+//		this.setInitialBoard(initialBoard);
+//		this.gameCode = -1;
+//	}
 	
 	public GameDesign(GameDesign copy) throws RemoteException{
 		this.gameCode = copy.getGameCode();

@@ -7,7 +7,7 @@ public interface Server extends Remote{
 	public static final String serverName = "CheckersServer";
 	public static final String granger = "131.104.48.15";
 	
-	GameInfo gameInfo() throws RemoteException;
+	Object gameInfo() throws RemoteException;
 
     Object playGame(Player requestingClient) throws RemoteException;
         //return Object could be String or GameDesign

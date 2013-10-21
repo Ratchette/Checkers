@@ -234,14 +234,15 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 			server = (Server) Naming.lookup("//" + hostname + ":4150/" + Server.serverName);
 			
 			client = new CheckersClient();
-			if(client.observer == null)
-				client.playGame(server);
+			if(client.observer == null){
+				server.considerGame(client, new GameDesign(BoardDesign.BRITISH));
+			}
 			else
 				client.watchGame(server);
 			
 			
 			// TODO create a shutdown method
-			System.exit(0);
+			//System.exit(0);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

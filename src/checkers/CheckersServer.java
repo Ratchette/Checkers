@@ -22,7 +22,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	
 	private ArrayList<Player> players;
 	private ArrayList<GameObserver> observers;
-	private ArrayList<GameDesign> suggestions;
+	private ArrayList<GameInfo> suggestions;
 	
 	private Boolean gameInProgress;
 	private GameInfo currentGame;
@@ -31,7 +31,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	CheckersServer() throws RemoteException{
 		this.players = new ArrayList<Player>();
 		this.observers = new ArrayList<GameObserver>();
-		this.suggestions = new ArrayList<GameDesign>();
+		this.suggestions = new ArrayList<GameInfo>();
 		
 		this.gameInProgress = false;
 		
@@ -60,10 +60,11 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		}
 	}
 
+	// End current game of checkers 
 	private void restart(){
 		this.players = new ArrayList<Player>();
 		this.observers = new ArrayList<GameObserver>();
-		this.suggestions = new ArrayList<GameDesign>();
+		this.suggestions = new ArrayList<GameInfo>();
 		
 		this.gameInProgress = false;
 		
@@ -77,15 +78,6 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
     	// FIXME - the server does not shut down yet XP (I implemented the below stupidity to compensate for it)
     	System.exit(0);
     }
-
-    // getter for gameInfo
-    public GameInfo gameInfo() throws RemoteException{
-		printStatus("UNKNOWN", "Request to view Game Info\n");
-		System.out.println();
-		
-    	return new GameInfo(currentGame);
-    }
-
     
 	/*************************************************************************
 	 * 								OBSERVERS
@@ -141,7 +133,27 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		return "Success";
 	}
 
+    public Object gameInfo() throws RemoteException{
+		printStatus("UNKNOWN", "Request to view Game Info");
+		
+		if(gameInProgress){
+			printStatus("UNKNOWN", "Sent current game information\n");
+			return new GameInfo(currentGame);
+		}
+		
+		if(suggestions.size() == 0){
+			printStatus("UNKNOWN", "No game suggestions yet\n");
+			return "No Game Being Played: No Players";
+		}
+		
+		printStatus("UNKNOWN", "Returned first suggestion: game " + currentGame.getCurrentBoard().getTheBoard().getGameType()
+				+ " suggested by [ " + currentGame.getPlayer1().getName()+ "\n");
+		
+    	return new GameInfo(suggestions.get(0));
+    }
 	
+    
+ // Create GameInfo object that contains GameBoard, PlayerInfo p1, PlayerInfo p2, current turn and current round
 	/*************************************************************************
 	 * 								PLAYERS
 	 *************************************************************************/
@@ -152,20 +164,12 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		printStatus(playerName, "Request to play game");
     	
 		if(gameInProgress){
-			// A game is already being played, so reject all clients until the game ends
-			printStatus(playerName, "Reject play request: A game is already in progress");
-			System.out.println();
-			
+			printStatus(playerName, "Reject play request: A game is already in progress\n");
 			return "Reject:Game in Progress";
 		}
 		
 		if(suggestions.size() == 0){
-			// add the first client to the clients list. Wineberg's use case [Scenario 1] 
-			// TODO - implement this part
-			printStatus(playerName, "Reject play request: First client added to players queue");
-			System.out.println();
-			
-			players.add(requestingClient);
+			printStatus(playerName, "Reject play request: There has been no suggested game yet\n");
 			return "No Players";
 		}
 
@@ -177,10 +181,23 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	}
 	
 	@Override
-	public Object considerGame(Player requestingClient, GameDesign aGame)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public Object considerGame(Player requestingClient, GameDesign aGame) throws RemoteException {
+		String playerName = requestingClient.getPlayerInfo().getName();
+		printStatus(playerName, "Suggested game: " + aGame.getGameBoardDesign().getGameType());
+		
+		if(suggestions.size() == 0){
+			players.add(requestingClient);
+			suggestions.add(new GameInfo (new GameDesign(aGame), requestingClient.getPlayerInfo(), new PlayerInfo("None")));
+			
+			printStatus(playerName, "Accepted suggestion: Waiting for an opponent to agree\n");
+			return "Accept";
+		}
+		
+		GameInfo currentSuggestion = suggestions.get(0);
+		
+		printStatus(playerName, "Counter Suggestion: Sending " + currentSuggestion.getCurrentBoard().getTheBoard().getGameType()
+				+ " (the first Game Design in the queue)\n");
+		return new GameDesign(currentSuggestion.getTheGame());
 	}
 
 	@Override
