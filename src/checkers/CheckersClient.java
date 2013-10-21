@@ -8,12 +8,17 @@
 
 package checkers;
 
+import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 import javax.swing.JOptionPane;
 
-public class CheckersClient implements GameObserver, Player{
+public class CheckersClient extends UnicastRemoteObject implements GameObserver, Player{
+	private static final long serialVersionUID = 1L;
+	public final PlayerInfo myID;
+	
 	public static final int PLAYER 		= 0;
 	public static final int OBSERVER 	= 1;
 	
@@ -25,13 +30,14 @@ public class CheckersClient implements GameObserver, Player{
 	// constructor
 	public CheckersClient() throws Exception{
 		int isPlayer = choosePlayStyle();
+		// FIXME - come up with a better way to create the PlayerIDs
+		myID = new PlayerInfo(InetAddress.getLocalHost().getHostName() + "-0");
 		
 		if(isPlayer == 0){
-			setObserver(null);
+			observer = null;
 			
 			int gameType = chooseGameType();
-			player = new CheckersPlayer(gameType);
-			//player.startGame();
+			player = new CheckersPlayer(gameType, myID);
 			
 			Gui window = new Gui(player.getBoard());
 			window.drawBoard(player.getBoard());
@@ -39,7 +45,7 @@ public class CheckersClient implements GameObserver, Player{
 		}
 		else{
 			player = null;
-			setObserver(new CheckersObserver());
+			observer = new CheckersObserver(myID);
 		}
 		
 		this.myGame = null;
@@ -84,16 +90,6 @@ public class CheckersClient implements GameObserver, Player{
 		return answer;
 	}
 	
-	// getter for game observer
-	public GameObserver getObserver() {
-		return observer;
-	}
-
-	// setter for game observer
-	public void setObserver(CheckersObserver observer) {
-		this.observer = observer;
-	}
-
 	// getter for gameInfo
 	public GameInfo getGame() throws RemoteException{
 		return new GameInfo(myGame);
@@ -113,6 +109,7 @@ public class CheckersClient implements GameObserver, Player{
 
 	@Override
 	public void youWin() {
+		System.out.println("You Win!");
 		// TODO Auto-generated method stub
 		
 	}
@@ -130,8 +127,44 @@ public class CheckersClient implements GameObserver, Player{
 	}
 
 	@Override
-	public void gameOver(PlayerInfo winner) {
-		// TODO Auto-generated method stub
+	public void gameOver(PlayerInfo winner) throws RemoteException{
+		if(player == null)
+			observer.gameOver(winner);
+		else
+			player.youWin();
+	}
+	
+	private void watchGame(Server server) throws RemoteException, InterruptedException{
+		Object response;
+		
+		if(observer == null){
+			// TODO ERROR - you tried to watch game after selecting player! 
+			// exit the client
+			System.out.println("You cannot watch a game if you are a player.");
+			System.exit(0);
+		}
+		
+		response = server.watch(this);
+		System.out.println("No error yet");
+		
+		if(response != null && response.getClass().equals(String.class)){
+			// Dislpay message on GUI
+			System.out.println(response);
+		}
+		else{
+			// Display gameInfo on the GUI
+		}
+		
+		Thread.sleep(2000);
+		
+		response = server.doNotWatch(this);
+		if(response != null && response.getClass().equals(String.class)){
+			// Dislpay message on GUI
+			System.out.println(response);
+		}
+		else{
+			// Display gameInfo on the GUI
+		}
 	}
 
 	@Override
@@ -153,7 +186,7 @@ public class CheckersClient implements GameObserver, Player{
 		CheckersClient otherClient = (CheckersClient) other;
 		try{
 			return this.player.equals(otherClient.player)
-				&& this.getObserver().equals(otherClient.getObserver())
+				&& this.observer.equals(otherClient.observer)
 				&& this.myGame.equals(otherClient.getGame());
 		}
 		catch(Exception e){
@@ -177,12 +210,27 @@ public class CheckersClient implements GameObserver, Player{
 			if(args.length > 0)
 				hostname = args[0];
 			
-			server = (Server) Naming.lookup("//" + hostname + "/" + Server.serverName);
+			System.out.println("Connecting to " + hostname);
+			
+			server = (Server) Naming.lookup("//" + hostname + ":4150/" + Server.serverName);
+			
 			client = new CheckersClient();
+			client.watchGame(server);
+			
+			// TODO create a shutdown method
+			System.exit(0);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public PlayerInfo getPlayerInfo() throws RemoteException {
+		if(player == null)
+			return observer.getPlayerInfo();
+		else
+			return player.getPlayerInfo();
 	}
 }

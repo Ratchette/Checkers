@@ -11,18 +11,17 @@ package checkers;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class CheckersServer extends UnicastRemoteObject implements Server{
 	private static final long serialVersionUID = 1L;
 	
-	private Registry registry;
-	
-	private ArrayList<CheckersClient> players;
-	private ArrayList<CheckersClient> observers;
+	private ArrayList<Player> players;
+	private ArrayList<GameObserver> observers;
 	private ArrayList<GameDesign> suggestions;
 	
 	private Boolean gameInProgress;
@@ -30,11 +29,11 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	
 	// constructor
 	CheckersServer() throws RemoteException{
-		this.players = new ArrayList<CheckersClient>();
-		this.observers = new ArrayList<CheckersClient>();
+		this.players = new ArrayList<Player>();
+		this.observers = new ArrayList<GameObserver>();
 		this.suggestions = new ArrayList<GameDesign>();
 		
-		this.gameInProgress = false;
+		this.gameInProgress = true;
 		
 		// TODO FIXTHIS
 	}
@@ -46,8 +45,8 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	//		System.setSecurityManager(new SecurityManager());
 		
 		try{
-			LocateRegistry.createRegistry(1099);
-			Naming.rebind("//localhost/" + Server.serverName, this);
+			LocateRegistry.createRegistry(4150);
+			Naming.rebind("//localhost:4150/" + Server.serverName, this);
 			
 			System.out.println("Checkers Server Ready");
 		}
@@ -60,7 +59,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 
 	// stop the server
     void shutdown() throws Exception{
-    	Naming.unbind(Server.serverName);
+    	//Naming.unbind("//localhost:4150/" + Server.serverName);
     	System.out.println("Checkers server has shutdown");
     	
     	// FIXME - the server does not shut down yet XP (I implemented the below stupidity to compensate for it)
@@ -74,7 +73,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
     }
 
     @Override
-    public Object playGame(CheckersClient requestingClient){
+    public Object playGame(Player requestingClient){
 		if(gameInProgress){
 			// A game is already being played, so reject all clients until the game ends
 			return "Reject:Game in Progress";
@@ -97,20 +96,57 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	}
 
 	@Override
-	public Object watch(CheckersClient requestingClient) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public Object watch(GameObserver requestingClient) throws RemoteException {	
+		String playerName = requestingClient.getPlayerInfo().getName();
+		printStatus("Request to watch", playerName);
+		
+		if(!gameInProgress){
+			if(suggestions.size() == 0){
+				printStatus("Reject watch request: No game in progress", playerName);
+				return "No Game Being Played: No Players";
+			}
+			else{
+				printStatus("Reject watch request: Waiting for another player", playerName);
+				return "No Game Being Played: Waiting for Second Player";
+			}
+		}
+		
+		if(players.contains(requestingClient)){
+			printStatus("Reject watch request: Player is already on observer list", playerName);
+			return "Player: Already Observing Game";
+		}
+		
+		if(!observers.contains(requestingClient))
+			observers.add(requestingClient);
+		
+		printStatus("Successfully watching", playerName);
+		System.out.println();
+		return currentGame;
 	}
 
 	@Override
-	public String doNotWatch(CheckersClient requestingClient)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public String doNotWatch(GameObserver requestingClient) throws RemoteException {
+		String playerName = requestingClient.getPlayerInfo().getName();
+		printStatus("Request to stop watching", requestingClient.getPlayerInfo().getName());
+		
+		if(players.contains(requestingClient)){
+			printStatus("Reject stop watching request: Players must watch the game", playerName);
+			return "Rejected: Players Must Watch";
+		}
+		
+		if(!observers.contains(requestingClient)){
+			printStatus("Reject stop watching request: Client did not previously request to watch game", playerName);
+			return  "Rejected: Already Not Watching";
+		}
+		
+		observers.remove(requestingClient);
+		printStatus("Successfully stopped watching", playerName);
+		System.out.println();
+		return "Success";
 	}
 
 	@Override
-	public Object considerGame(CheckersClient requestingClient, GameDesign aGame)
+	public Object considerGame(Player requestingClient, GameDesign aGame)
 			throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
@@ -133,6 +169,11 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			throws RemoteException {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public void printStatus(String message, String requester){
+		String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		System.out.println("\t" + date + " >> " + message + " by [ " + requester + " ]");
 	}
     
 //
@@ -202,7 +243,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
     	System.out.println("I got the message [ " + message + " ]");
     	return "Server says HEY THERE ";
     }
-    
+	
     public static void main(String[] args){
 		CheckersServer server;
 		
@@ -215,7 +256,13 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			
 			Scanner reader = new Scanner(System.in);
 			reader.nextLine();
-			reader.close();
+//			
+//			// FIXME
+//			GameObserver client = server.observers.get(0);
+//			client.gameOver(new PlayerInfo("Player2"));
+//			
+//			reader.nextLine();
+//			reader.close();
 			
 			server.shutdown();
 		}

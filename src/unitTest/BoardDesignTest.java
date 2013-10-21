@@ -17,7 +17,7 @@ public class BoardDesignTest {
 	@Before
 	public void setup() {
 		try {
-			boardDesign = new BoardDesign("British");
+			boardDesign = new BoardDesign(BoardDesign.BRITISH);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -27,17 +27,17 @@ public class BoardDesignTest {
 	@Test
 	public void testInvalidGameTypeValue() throws RemoteException {
 		TestCase.assertEquals(boardDesign.getBlackCorner(), Piece.WHITE);
-		TestCase.assertEquals(boardDesign.getGridSize(),8);
+		TestCase.assertEquals(boardDesign.gridSize, 8);
 		
 		try{
-		boardDesign = new BoardDesign("American");
+		boardDesign = new BoardDesign(BoardDesign.AMERICAN);
 		}
 		catch(Exception e){
 			System.out.println("Could not create an american board");
 		}
 		
 		TestCase.assertEquals(boardDesign.getBlackCorner(), Piece.WHITE);
-		TestCase.assertEquals(boardDesign.getGridSize(),8);
+		TestCase.assertEquals(boardDesign.gridSize, 8);
 		
 		TestCase.assertNotSame(boardDesign.getBlackCorner(), Piece.BLACK);
 		

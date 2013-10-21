@@ -4,7 +4,12 @@ import java.rmi.RemoteException;
 
 public class CheckersObserver implements GameObserver{
 	private GameInfo myGame;
-
+	private PlayerInfo myID;
+	
+	CheckersObserver(PlayerInfo myName){
+		myID = myName;
+	}
+	
 	@Override
 	public void receiveMove(Move playerMove) throws RemoteException {
 		// TODO Render the move on the board WITHOUT making it this client's turn (this code should be ripped from player)
@@ -25,5 +30,10 @@ public class CheckersObserver implements GameObserver{
 		
 		System.out.println("*** GAME OVER ***");
 		System.out.println("Player [ " + winner.getName() + " ] has won!");
+	}
+
+	@Override
+	public PlayerInfo getPlayerInfo() throws RemoteException{
+		return new PlayerInfo(myID);
 	}
 }

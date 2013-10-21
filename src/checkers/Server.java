@@ -9,17 +9,17 @@ public interface Server extends Remote{
 	
 	GameInfo gameInfo() throws RemoteException;
 
-    Object playGame(CheckersClient requestingClient) throws RemoteException;
+    Object playGame(Player requestingClient) throws RemoteException;
         //return Object could be String or GameDesign
 
-    Object watch(CheckersClient requestingClient) throws RemoteException;
+    Object watch(GameObserver requestingClient) throws RemoteException;
         //return Object could be String or GameInfo 
 
-    String doNotWatch(CheckersClient requestingClient) throws RemoteException;
+    String doNotWatch(GameObserver requestingClient) throws RemoteException;
         //returns "Accept" if success or an error message such as
                 //"Cannot be removed: not on Observers list" 
 
-    Object considerGame(CheckersClient requestingClient, GameDesign aGame) throws RemoteException;
+    Object considerGame(Player requestingClient, GameDesign aGame) throws RemoteException;
         //Object could be String or GameDesign
 
     void acceptGame(Player aPlayer) throws RemoteException;
@@ -35,7 +35,6 @@ public interface Server extends Remote{
          //     - i.e. "move not legal by my rules"
          // code = 'o' or 'O' for "other reason
          //     - e.g. has to stop playing to get an assignment finished
-    
     
     public String testMethod(String message) throws RemoteException;
 }

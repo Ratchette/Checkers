@@ -19,8 +19,7 @@ public class BoardTest {
 	@Before
 	public void setup() {
 		try {
-			boardDesign = new BoardDesign("British");
-			board = new Board(boardDesign);
+			board = new Board(BoardDesign.BRITISH);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

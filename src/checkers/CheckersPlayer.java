@@ -1,15 +1,16 @@
 package checkers;
 
+import java.net.InetAddress;
 import java.rmi.RemoteException;
 
 public class CheckersPlayer implements Player {
-	private GameInfo myGame;
-	public Board theBoard;
+	private Board theBoard;
+	private PlayerInfo myID;
 
-	public CheckersPlayer(int gameType){
+	public CheckersPlayer(int gameType, PlayerInfo myName){
+		myID = myName;
 		
 		try {
-			// FIX THIS
 			theBoard = new Board(gameType);
 			// TODO - needs more stuff
 			
@@ -57,5 +58,10 @@ public class CheckersPlayer implements Player {
 			throws RemoteException {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public PlayerInfo getPlayerInfo() throws RemoteException {
+		return new PlayerInfo(myID);
 	}
 }
