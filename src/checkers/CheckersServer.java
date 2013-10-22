@@ -34,6 +34,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		this.suggestions = new ArrayList<GameInfo>();
 		
 		this.gameInProgress = false;
+		this.currentGame = null;
 		
 		// TODO FIXTHIS
 	}
@@ -168,57 +169,116 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			return "Reject:Game in Progress";
 		}
 		
-		if(suggestions.size() == 0){
-			printStatus(playerName, "Reject play request: There has been no suggested game yet\n");
-			return "No Players";
-		}
+		if(currentGame == null){
+			// if no suggestions exist yet
+			if(suggestions.size() == 0){
+				printStatus(playerName, "Reject play request: There has been no suggested game yet\n");
+				return "No Players";
+			}
+			
+			// if a suggestion has been made, but there is no disagreement yet [Scenario 1.2]
+			currentGame = suggestions.remove(0);
+			printStatus(playerName, "Game offered: [ " + currentGame.getPlayer1() + " ] suggested " 
+					+ currentGame.getCurrentBoard().getTheBoard().getGameType() + " checkers \n");
 
-		// One client has already suggested a game. Wineberg's use case [Scenario 2] 
-		// TODO - implement this part
-		players.add(requestingClient);
+			return new GameDesign(currentGame.getTheGame());
+		}
 		
-		return null; //FIXME Complete this function
+		// if a 3+ player comes along while the second is deliberating [Scenario ????]
+		printStatus(playerName, " Game offered: [ " + currentGame.getPlayer1() + " ] suggested " 
+				+ currentGame.getCurrentBoard().getTheBoard().getGameType() + " checkers \n");
+
+		return new GameDesign(currentGame.getTheGame());
+		
+		
 	}
 	
+	// FIXME - will only work for a maximum of two clients at a time ...
 	@Override
 	public Object considerGame(Player requestingClient, GameDesign aGame) throws RemoteException {
+		String response = "reject";
+		
 		String playerName = requestingClient.getPlayerInfo().getName();
 		printStatus(playerName, "Suggested game: " + aGame.getGameBoardDesign().getGameType());
 		
-		if(suggestions.size() == 0){
-			players.add(requestingClient);
-			suggestions.add(new GameInfo (aGame, requestingClient.getPlayerInfo(), new PlayerInfo("None")));
-			
-			printStatus(playerName, "Accepted suggestion: Waiting for an opponent to agree\n");
-			return "Accept";
+		if(gameInProgress){
+			printStatus(playerName, "Reject suggestion: There is already a game in progress\n");
+			return "Reject: Game in progress";
 		}
 		
-		
-		GameInfo currentSuggestion = suggestions.get(0);
-		printStatus(playerName, "Counter Suggestion: Sending " + currentSuggestion.getCurrentBoard().getTheBoard().getGameType() + "\n");
+		if(currentGame == null){
+			// nobody has suggested a game yet
+			if(suggestions.size() == 0){
+				players.add(requestingClient);
+				suggestions.add(new GameInfo (aGame, requestingClient.getPlayerInfo(), new PlayerInfo("None")));
+				
+				printStatus(playerName, "Accepted suggestion: Waiting for an opponent to agree\n");
+				return "Accept";
+			} 
+			
+			// someone already suggested a game, but it has not been offered to anyone yet
+			currentGame = suggestions.remove(0);
+			printStatus(playerName, "Game offered: [ " + currentGame.getPlayer1().getName() + " ] suggested " 
+					+ currentGame.getCurrentBoard().getTheBoard().getGameType() + " checkers \n");
 
-		return new GameDesign(currentSuggestion.getTheGame());
+			return new GameDesign(currentGame.getTheGame());
+		}
+		
+		// (P2 suggests an alternate game to P1's suggestion) OR (P3 comes along *** which is technically a bug ... ***) // FIXME
+		printStatus(playerName, "Counter Suggestion Recieved: " + aGame.getGameBoardDesign().getGameType() + " checkers");
+//		return "Game is being considered";
+		
+		Player p1 = players.get(0);
+		for(Player p : players)
+			if(p.getPlayerInfo().equals(currentGame.getPlayer1()))
+				p1 = p;
+
+		response = p1.considerGame(aGame);
+		playerName = p1.getPlayerInfo().getName();
+		
+		// FIXME - now you can only ever accept the first client's suggestion
+		if(response.equalsIgnoreCase("reject")){
+			printStatus(playerName, "Counter Suggestion Rejected: " + aGame.getGameBoardDesign().getGameType() + " checkers\n");
+			currentGame = null;
+			return "Suggestion rejected: Initiating player not interested";
+		}
+		
+		players.add(requestingClient);
+		currentGame = new GameInfo(new GameDesign(aGame), requestingClient.getPlayerInfo(), p1.getPlayerInfo());
+		
+		if(response.equalsIgnoreCase("accept") && !gameInProgress){
+			printStatus(playerName, "Counter Suggestion Accepted: " + aGame.getGameBoardDesign().getGameType() + " checkers\n");
+			this.acceptGame(p1);
+			return "Player Accepted: [ "+ aGame.getGameBoardDesign().getGameType() + " ] from [ "
+					+ requestingClient.getPlayerInfo().getName() + " ]";
+		}
+		
+		// Player 1 sent back garbage OR a new game started while p1 was deciding
+		printStatus(playerName, "Counter Suggestion Rejected: " + response + "\n");
+		return "The other player sent me back garbage. Please try again later";
 	}
 
 	@Override
 	public void acceptGame(Player aPlayer) throws RemoteException {
-		GameInfo acceptedGame = suggestions.get(0);
-		PlayerInfo p1 = acceptedGame.getPlayer1();
+		PlayerInfo p1 = currentGame.getPlayer1();
 		PlayerInfo p2 = aPlayer.getPlayerInfo();
-		printStatus(p2.getName(), "Accepted Game: " + acceptedGame.getCurrentBoard().getTheBoard().getGameType()
+		
+		printStatus(p2.getName(), "Accepted Game: " + currentGame.getCurrentBoard().getTheBoard().getGameType()
 				+ " between [ " + p1.getName() + " ] and [ " + p2.getName() + " ]");
 		
-		acceptedGame.setPlayer2(aPlayer.getPlayerInfo());
+		currentGame.setPlayer2(aPlayer.getPlayerInfo());
+		gameInProgress = true;
+		
 		
 		for(Player p : players){
 			// tell p1 that it is their turn
-			if(p.getPlayerInfo().equals(acceptedGame.getPlayer1())){
+			if(p.getPlayerInfo().equals(currentGame.getPlayer1())){
 				p.startGame();
 				printStatus("Server", "Start Game: [ " + p1.getName() + " ] informed to make first move");
 			}
 			
 			// remove any players that are not part of the current game
-			else if(!p.getPlayerInfo().equals(acceptedGame.getPlayer2())){
+			else if(!p.getPlayerInfo().equals(currentGame.getPlayer2())){
 				players.remove(p);
 				printStatus("Server", "Removed Inactive Player: [ " + p.getPlayerInfo().getName() + " ] is not playing this round");
 			}
@@ -238,11 +298,11 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		printStatus(playerName, "Resignation request");
 		
 		if(!players.contains(aPlayer)){
-			printStatus(playerName, "Rejected Resignation: The requester is not a player");
+			printStatus(playerName, "Rejected Resignation: The requester is not a player\n");
 			return;
 		}
 		
-		printStatus(playerName, "Resignation Accepted: [ " + playerName + "] has lost." );
+		printStatus(playerName, "Resignation Accepted: [ " + playerName + "] has lost.\n" );
 		
 		for(Player p : players){
 			p.playerResigned(aPlayer.getPlayerInfo(), code, reason);
@@ -285,15 +345,10 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			//			Then print it to the command line
 			server.startup();
 			
+			
+			// FIXME to kill the server enter anything into the terminal
 			Scanner reader = new Scanner(System.in);
 			reader.nextLine();
-//			
-//			// FIXME
-//			GameObserver client = server.observers.get(0);
-//			client.gameOver(new PlayerInfo("Player2"));
-//			
-//			reader.nextLine();
-//			reader.close();
 			
 			server.shutdown();
 		}

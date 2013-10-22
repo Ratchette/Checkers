@@ -14,8 +14,7 @@ import java.rmi.RemoteException;
 public interface Player extends Remote{
 	PlayerInfo getPlayerInfo() throws RemoteException;
 	
-	Object considerGame(GameDesign aGame) throws RemoteException; 
-	//The return Object = {String, GameDesign}
+	String considerGame(GameDesign aGame) throws RemoteException; 
 
 	void startGame() throws RemoteException;
 	

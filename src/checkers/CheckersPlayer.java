@@ -22,7 +22,7 @@ public class CheckersPlayer implements Player {
 	}
 	
 	@Override
-	public Object considerGame(GameDesign aGame) throws RemoteException {
+	public String considerGame(GameDesign aGame) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}

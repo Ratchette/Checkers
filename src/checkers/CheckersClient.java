@@ -66,7 +66,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 				JOptionPane.PLAIN_MESSAGE,
 				null,
 				options,
-				options[2]);
+				options[0]);
 		
 		if(answer == 2)
 			System.exit(0);
@@ -100,14 +100,14 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	}
 
 	@Override
-	public Object considerGame(GameDesign aGame) {
-		// TODO Auto-generated method stub
-		return null;
+	public String considerGame(GameDesign aGame) {
+		System.out.println("An alternate game was suggested!");
+		return "NEITHER!";
 	}
 
 	@Override
 	public void startGame() {
-		// TODO Auto-generated method stub
+		System.out.println("It's my turn!");
 		
 	}
 
