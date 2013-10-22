@@ -233,6 +233,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			if(p.getPlayerInfo().equals(currentGame.getPlayer1()))
 				p1 = p;
 
+		// FIXME - client will send back decline if they don't want to play
 		response = p1.considerGame(aGame);
 		playerName = p1.getPlayerInfo().getName();
 		
@@ -246,7 +247,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		players.add(requestingClient);
 		currentGame = new GameInfo(new GameDesign(aGame), requestingClient.getPlayerInfo(), p1.getPlayerInfo());
 		
-		if(response.equalsIgnoreCase("accept") && !gameInProgress){
+		if(response.equalsIgnoreCase("AcceptGame") && !gameInProgress){
 			printStatus(playerName, "Counter Suggestion Accepted: " + aGame.getGameBoardDesign().getGameType() + " checkers\n");
 			this.acceptGame(p1);
 			return "Player Accepted: [ "+ aGame.getGameBoardDesign().getGameType() + " ] from [ "
@@ -321,7 +322,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	
 	
 	/*************************************************************************
-	 * 							CUSTOM METHODS
+	 * 							Printing and main methods
 	 *************************************************************************/
 	
 	public void printStatus( String requester, String message){

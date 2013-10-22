@@ -7,19 +7,23 @@ public class CheckersPlayer implements Player {
 	private Board theBoard;
 	private PlayerInfo myID;
 
-	public CheckersPlayer(int gameType, PlayerInfo myName){
+	public CheckersPlayer(PlayerInfo myName){
 		myID = myName;
-		
-		try {
-			theBoard = new Board(gameType);
-			// TODO - needs more stuff
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}
 	}
+	
+//	public CheckersPlayer(int gameType, PlayerInfo myName){
+//		myID = myName;
+//		
+//		try {
+//			theBoard = new Board(gameType);
+//			// TODO - needs more stuff
+//			
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//
+//		}
+//	}
 	
 	@Override
 	public String considerGame(GameDesign aGame) throws RemoteException {
