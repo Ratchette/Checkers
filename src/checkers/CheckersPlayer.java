@@ -10,12 +10,15 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	private static final long serialVersionUID = 1L;
 	
 	private Server server;
-	private Board theBoard;
+	private GameInfo myGame;
+//	private Board theBoard;
 	private PlayerInfo myID;
+	Gui display;
 
 	public CheckersPlayer(Server server, PlayerInfo myName) throws RemoteException{
 		this.server = server;
 		this.myID = myName;
+		this.display = null;
 	}
 	
 	
@@ -54,16 +57,23 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 //		}
 //	}
 	
-	public Board getBoard() throws Exception{
-		return new Board(theBoard);
-	}
-	public void setBoard(Board newBoard){
-		theBoard = newBoard;
+
+	public GameInfo getMyGame() {
+		return myGame;
 	}
 
+	public void setMyGame(GameInfo myGame) {
+		this.myGame = myGame;
+	}
+	
 	@Override
 	public void startGame() throws RemoteException {
-		// FIXME This function needs to be rewritten
+//		try {
+//			this.display = new Gui(this.myGame.getCurrentBoard(), this.myID);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override
@@ -84,4 +94,8 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	public PlayerInfo getPlayerInfo() throws RemoteException {
 		return new PlayerInfo(myID);
 	}
+
+
+
+
 }

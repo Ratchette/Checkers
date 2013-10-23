@@ -49,6 +49,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		String date = new SimpleDateFormat("HH-mm-ss").format(new Date());
 		myID = new PlayerInfo(InetAddress.getLocalHost().getHostName() + " @ " + date);
 		
+		// FIXME change variable name
 		if(isPlayer == 0){
 			observer = null;
 			player = new CheckersPlayer(server, myID);
@@ -188,7 +189,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	
 	public static void main(String[] args) {
 		Scanner keyboard;		// testing feature that waits for user input
-		CheckersClient client;
+		CheckersClient client1, client2;
 		Server server;			// The client does not need to know the name of the class that implements the server interface
 		Object response;
 		
@@ -196,22 +197,47 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 			server = connect(args);
 			printStatus("Now connected to server");
 			
-			client = new CheckersClient(server);
-			if(client.observer != null){
-				response = server.watch(client);
-				
-				if(response != null && response.getClass().equals(String.class)){
-					printStatus("[ Server ] " + response);
-					return;
-				}
-				
-				client.observer.setGame((GameInfo)response);
-				// TODO - implement the option for the observer to detach
-			}
+			// TESTING start
+			client1 = new CheckersClient(server);
+			client2 = new CheckersClient(server);
 			
-			else{
-				
-			}
+			server.considerGame(client1, new GameDesign(BoardDesign.BRITISH));
+			client2.myGame = new GameInfo((GameDesign) server.considerGame(client2, new GameDesign(BoardDesign.BRITISH)), 
+						client1.getPlayerInfo(), client2.getPlayerInfo());
+			server.acceptGame(client2, client2.myGame.getTheGame());
+			Thread.sleep(1000);
+			client2.startGame();
+			client1.myGame = new GameInfo(new GameDesign(BoardDesign.BRITISH), 
+					client1.getPlayerInfo(), client2.getPlayerInfo());
+			
+			client1.player.display = new Gui(client1.myGame.getCurrentBoard(), client1.myID);
+			client2.player.display = new Gui(client2.myGame.getCurrentBoard(), client2.myID);
+			
+			// TESTING end
+
 		} catch (Exception e) {e.printStackTrace();}
+		
+		
+//		try {
+//			server = connect(args);
+//			printStatus("Now connected to server");
+//			
+//			client = new CheckersClient(server);
+//			if(client.observer != null){
+//				response = server.watch(client);
+//				
+//				if(response != null && response.getClass().equals(String.class)){
+//					printStatus("[ Server ] " + response);
+//					return;
+//				}
+//				
+//				client.observer.setGame((GameInfo)response);
+//				// TODO - implement the option for the observer to detach
+//			}
+//			
+//			else{
+//				
+//			}
+//		} catch (Exception e) {e.printStackTrace();}
 	}
 }
