@@ -39,8 +39,8 @@ public class Gui implements ActionListener {
 	/* Board info */
 	private Board currentBoard;
 	private PlayerInfo currentPlayer;
-	private Moves possibleMoves[];
-	private int currentPiece;
+	private int currentClick[] = { -1, -1, -1, -1 };
+	private int currentPiece = -1;
 	private int gridSize;
 
 	
@@ -179,28 +179,33 @@ public class Gui implements ActionListener {
 		drawBoard(currentBoard);
 		int buttonNum = Integer.parseInt(pressedButton.getName());
 		// If this click is moving a piece
-		if (buttonNum == currentClick[1] || buttonNum == currentClick[2] 
-				|| buttonNum == currentClick[3] || buttonNum == currentClick[4]) {
+		if (buttonNum == currentClick[0] || buttonNum == currentClick[1] 
+				|| buttonNum == currentClick[2] || buttonNum == currentClick[3]) {
 			int xy[] = getXY(buttonNum);
 			try {
 				// Move the piece
 				Piece[] p = currentBoard.getPiecePlacement();
-				p[currentClick[0]].setPiecePosition(new Position(xy[0], xy[1]));
+				p[currentPiece].setPiecePosition(new Position(xy[0], xy[1]));
 				currentBoard.setPiecePlacement(p);
 
 				// Check if the piece is now a king
-				if (p[currentClick[0]].getColour() == Piece.WHITE && xy[1] == 0) {
-					p[currentClick[0]].turnKing();
+				if (p[currentPiece].getColour() == Piece.WHITE && xy[1] == 0) {
+					p[currentPiece].turnKing();
 				}
-				if (p[currentClick[0]].getColour() == Piece.BLACK
+				if (p[currentPiece].getColour() == Piece.BLACK
 						&& xy[1] == gridSize) {
-					p[currentClick[0]].turnKing();
+					p[currentPiece].turnKing();
 				}
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			//JenDo: Send move to other client/server
+			//for (int i=0; i<currentClick.length; i++){
+			//	if (buttonNum == currentClick[i]){
+			//		send ( currentBoard.getMovesFor(currentPiece)[i] );
+			//	} 
+			//}
 			drawBoard(currentBoard);
 			changeTurn();
 			clearMoves();
@@ -221,14 +226,14 @@ public class Gui implements ActionListener {
 						if (currentBoard.getPiecePlacement()[i].getColour() == Piece.WHITE
 								&& currentPlayer.getName().equals("Player1")) {
 							highlightSquare(pos);
-							Move possibleMoves[];
-							currentClick = showMoves(possibleMoves,i);
+							Move possibleMoves[]  = currentBoard.getMovesFor(i);
+							showMoves(possibleMoves,i);
 						}
 						else if (currentBoard.getPiecePlacement()[i].getColour() == Piece.BLACK
 								&& currentPlayer.getName().equals("Player2")) {
 							highlightSquare(pos);
-							Move possibleMoves[];
-							currentClick = showMoves(possibleMoves,i);
+							Move possibleMoves[] = currentBoard.getMovesFor(i);
+							showMoves(possibleMoves,i);
 						}
 						else {
 							clearMoves();
@@ -248,9 +253,10 @@ public class Gui implements ActionListener {
 
 	
 	
-	public int[] showMoves(Move moves[], int current) throws Exception {
-		int highlightedButtons[] = { current, -1, -1, -1, -1 };
-
+	public void showMoves(Move moves[], int current) throws Exception {
+		clearMoves();
+		currentPiece = current;
+		
 		for (int i = 0; i < moves.length; i++) {
 			int finalPos = moves[i].moveSequence().length - 1;
 			Position pos = moves[i].moveSequence()[finalPos]
@@ -259,10 +265,8 @@ public class Gui implements ActionListener {
 			int y = pos.getY();
 			int potentialMoveButton = getButtonPos(x, y);
 			highlightSquare(potentialMoveButton);
-			highlightedButtons[i+1] = potentialMoveButton;
+			currentClick[i] = potentialMoveButton;
 		}
-
-		return highlightedButtons;
 	}
 
 	
@@ -272,7 +276,7 @@ public class Gui implements ActionListener {
 		currentClick[1] = -1;
 		currentClick[2] = -1;
 		currentClick[3] = -1;
-		currentClick[4] = -1;
+		currentPiece = -1;
 	}
 	
 	
