@@ -1,12 +1,16 @@
 package checkers;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class CheckersObserver implements GameObserver{
+public class CheckersObserver extends UnicastRemoteObject implements GameObserver{
+	private static final long serialVersionUID = 1L;
+	
+	private Server server;
 	private GameInfo myGame;
 	private PlayerInfo myID;
 	
-	CheckersObserver(PlayerInfo myName){
+	CheckersObserver(PlayerInfo myName) throws RemoteException{
 		myID = myName;
 	}
 	
@@ -25,15 +29,11 @@ public class CheckersObserver implements GameObserver{
 	}
 
 	@Override
-	public void gameOver(PlayerInfo winner) throws RemoteException {
-		// TODO Display the message that the game is now over and who has won
-		
-		System.out.println("*** GAME OVER ***");
-		System.out.println("Player [ " + winner.getName() + " ] has won!");
-	}
-
-	@Override
 	public PlayerInfo getPlayerInfo() throws RemoteException{
 		return new PlayerInfo(myID);
+	}
+	
+	public void setGame(GameInfo newGame) throws Exception{
+		this.myGame = new GameInfo(newGame);
 	}
 }

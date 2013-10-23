@@ -2,13 +2,41 @@ package checkers;
 
 import java.net.InetAddress;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class CheckersPlayer implements Player {
+import javax.swing.JOptionPane;
+
+public class CheckersPlayer extends UnicastRemoteObject implements Player {
+	private static final long serialVersionUID = 1L;
+	
+	private Server server;
 	private Board theBoard;
 	private PlayerInfo myID;
 
-	public CheckersPlayer(PlayerInfo myName){
+	public CheckersPlayer(PlayerInfo myName) throws RemoteException{
 		myID = myName;
+	}
+	
+	
+	
+	private int chooseGameType(){
+		// ensure that the order the game types are displayed in matches their declarations above
+		Object[] options = {"British", "American", "International", "Canadian", "Anti-Checkers", "Quit"};
+		int response;
+		
+		response = JOptionPane.showOptionDialog(null,
+				"Please choose a game style",
+				"CIS 4150 - Checkers Clinet",
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				options,
+				options[0]);
+		
+		if(response == 5)
+			System.exit(0);
+		
+		return response;
 	}
 	
 //	public CheckersPlayer(int gameType, PlayerInfo myName){
@@ -24,12 +52,6 @@ public class CheckersPlayer implements Player {
 //
 //		}
 //	}
-	
-	@Override
-	public String considerGame(GameDesign aGame) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	public Board getBoard() throws Exception{
 		return new Board(theBoard);
@@ -48,13 +70,6 @@ public class CheckersPlayer implements Player {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void youWin() throws RemoteException {
-		// TODO Auto-generated method stub
-
-	}
-
 	
 
 	@Override

@@ -22,7 +22,7 @@ public interface Server extends Remote{
     Object considerGame(Player requestingClient, GameDesign aGame) throws RemoteException;
         //Object could be String or GameDesign
 
-    void acceptGame(Player aPlayer) throws RemoteException;
+    void acceptGame(Player aPlayer, GameDesign aGame) throws RemoteException;
 
     void move(Move playersMove) throws RemoteException;
 

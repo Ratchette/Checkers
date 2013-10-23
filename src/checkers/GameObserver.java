@@ -17,6 +17,4 @@ public interface GameObserver extends Remote{
 	void receiveMove(Move playersMove) throws RemoteException;
 
 	void playerResigned(PlayerInfo aPlayer, char code, String aMessage) throws RemoteException;
-
-	void gameOver(PlayerInfo winner) throws RemoteException;
 }

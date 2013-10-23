@@ -13,8 +13,6 @@ import java.rmi.RemoteException;
 
 public interface Player extends Remote{
 	PlayerInfo getPlayerInfo() throws RemoteException;
-	
-	String considerGame(GameDesign aGame) throws RemoteException; 
 
 	void startGame() throws RemoteException;
 	
@@ -23,8 +21,4 @@ public interface Player extends Remote{
 	
 	void playerResigned(PlayerInfo aPlayer, char code, String aMessage) throws RemoteException;
 	     //  for code values, see resign() under class CheckersServer)
-	
-	void youWin() throws RemoteException;
-	     // now redundant since the winning player will get the message 
-	     // playerResigned with an 'l' or 'L' code
 }
