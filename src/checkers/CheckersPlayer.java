@@ -13,8 +13,9 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	private Board theBoard;
 	private PlayerInfo myID;
 
-	public CheckersPlayer(PlayerInfo myName) throws RemoteException{
-		myID = myName;
+	public CheckersPlayer(Server server, PlayerInfo myName) throws RemoteException{
+		this.server = server;
+		this.myID = myName;
 	}
 	
 	

@@ -70,9 +70,9 @@ public class Gui implements ActionListener {
 		Font font = new Font("Helvetica", Font.PLAIN, 30);
 
 		/* Add menu Buttons */
-		resign.setText("RESIGN");
+		resign.setText("Resign");
 		menuButtons.add(resign);
-		connect.setText("**CHECKERS**");
+		connect.setText("Stop Watching");
 		menuButtons.add(connect);
 
 		/* Setup Turn Counter in menu */
@@ -180,12 +180,14 @@ public class Gui implements ActionListener {
 	
 	public void actionPerformed(ActionEvent a) {
 		JButton pressedButton = (JButton) a.getSource();
+
 		try {
 			drawBoard(currentBoard);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+
 		int buttonNum = Integer.parseInt(pressedButton.getName());
 		// If this click is moving a piece
 		if (buttonNum == currentClick[0] || buttonNum == currentClick[1] 
@@ -197,12 +199,14 @@ public class Gui implements ActionListener {
 			//		send ( currentBoard.getMovesFor(currentPiece)[i] );
 			//	} 
 			//}
+
 			try {
 				drawBoard(currentBoard);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 			changeTurn();
 			clearMoves();
 		}
@@ -222,14 +226,14 @@ public class Gui implements ActionListener {
 						if (currentBoard.getPiecePlacement()[i].getColour() == Piece.WHITE
 								&& currentPlayer.getName().equals("Player1")) {
 							highlightSquare(pos);
-							Move possibleMoves[]  = currentBoard.getMovesFor(i);
-							showMoves(possibleMoves,i);
+//							Move possibleMoves[]  = currentBoard.getMovesFor(i);
+//							showMoves(possibleMoves,i);
 						}
 						else if (currentBoard.getPiecePlacement()[i].getColour() == Piece.BLACK
 								&& currentPlayer.getName().equals("Player2")) {
 							highlightSquare(pos);
-							Move possibleMoves[] = currentBoard.getMovesFor(i);
-							showMoves(possibleMoves,i);
+//							Move possibleMoves[] = currentBoard.getMovesFor(i);
+//							showMoves(possibleMoves,i);
 						}
 						else {
 							clearMoves();

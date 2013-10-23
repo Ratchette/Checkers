@@ -22,16 +22,15 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	
 	private ArrayList<Player> players;
 	private ArrayList<GameObserver> observers;
-	private ArrayList<GameInfo> suggestions;
+	private ArrayList<GameInfo> requestedGames;
 	
 	private Boolean gameInProgress;
 	private GameInfo currentGame;
 	
-	// constructor
 	CheckersServer() throws RemoteException{
 		this.players = new ArrayList<Player>();
 		this.observers = new ArrayList<GameObserver>();
-		this.suggestions = new ArrayList<GameInfo>();
+		this.requestedGames = new ArrayList<GameInfo>();
 		
 		this.gameInProgress = false;
 		this.currentGame = null;
@@ -65,7 +64,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	private void restart(){
 		this.players = new ArrayList<Player>();
 		this.observers = new ArrayList<GameObserver>();
-		this.suggestions = new ArrayList<GameInfo>();
+		this.requestedGames = new ArrayList<GameInfo>();
 		
 		this.gameInProgress = false;
 		this.currentGame = null;
@@ -92,7 +91,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		printStatus(playerName, "Request to watch");
 		
 		if(!gameInProgress){
-			if(suggestions.size() == 0){
+			if(requestedGames.size() == 0){
 				printStatus(playerName, "Reject watch request: No game in progress\n");
 				return "No Game Being Played: No Players";
 			}
@@ -144,7 +143,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			return new GameInfo(currentGame);
 		}
 		
-		if(suggestions.size() == 0){
+		if(requestedGames.size() == 0){
 			printStatus("UNKNOWN", "No game suggestions yet\n");
 			return "No Game Being Played: No Players";
 		}
@@ -152,7 +151,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		printStatus("UNKNOWN", "Returned first suggestion: game " + currentGame.getCurrentBoard().getTheBoard().getGameType()
 				+ " suggested by [ " + currentGame.getPlayer1().getName()+ "\n");
 		
-    	return new GameInfo(suggestions.get(0));
+    	return new GameInfo(requestedGames.get(0));
     }
 	
     
@@ -172,19 +171,19 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		}
 
 		// if no suggestions exist yet
-		if(suggestions.size() == 0){
+		if(requestedGames.size() == 0){
 			printStatus(playerName, "Reject play request: There has been no suggested game yet\n");
 			return "Reject:No Players";
 		}
 		
-		for(int i=0; i<suggestions.size(); i++){
+		for(int i=0; i<requestedGames.size(); i++){
 			
 			// check that the requesting player is NOT the one that originally suggested the game
-			if(!suggestions.get(i).getPlayer1().equals(requestingClient.getPlayerInfo())){
+			if(!requestedGames.get(i).getPlayer1().equals(requestingClient.getPlayerInfo())){
 				// move to the end of the Queue
-				GameInfo temp = suggestions.remove(i);
+				GameInfo temp = requestedGames.remove(i);
 				temp.setPlayer2(requestingClient.getPlayerInfo());
-				suggestions.add(temp);
+				requestedGames.add(temp);
 				
 				printStatus(playerName, "Game offered: [ " + currentGame.getPlayer1().getName() + " ] suggested " 
 						+ currentGame.getCurrentBoard().getTheBoard().getGameType() + " checkers \n");
@@ -210,18 +209,18 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		// add suggestion to queue
 		if(!players.contains(requestingClient))
 			players.add(requestingClient);
-		suggestions.add(new GameInfo (aGame, requestingClient.getPlayerInfo(), new PlayerInfo("None")));
+		requestedGames.add(new GameInfo (aGame, requestingClient.getPlayerInfo(), new PlayerInfo("None")));
 
 		
 		// Find a game to offer them
-		for(int i=0; i<suggestions.size(); i++){
+		for(int i=0; i<requestedGames.size(); i++){
 			
 			// check that the requesting player is NOT the one that originally suggested the game
-			if(!suggestions.get(i).getPlayer1().equals(requestingClient.getPlayerInfo())){
+			if(!requestedGames.get(i).getPlayer1().equals(requestingClient.getPlayerInfo())){
 				// move to the end of the Queue
-				GameInfo temp = suggestions.remove(i);
+				GameInfo temp = requestedGames.remove(i);
 				temp.setPlayer2(requestingClient.getPlayerInfo());
-				suggestions.add(temp);
+				requestedGames.add(temp);
 				
 				printStatus(playerName, "Game offered: [ " + temp.getPlayer1().getName() + " ] suggested " 
 						+ temp.getCurrentBoard().getTheBoard().getGameType() + " checkers \n");
@@ -240,12 +239,12 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		PlayerInfo p2 = aPlayer.getPlayerInfo();
 		
 		// Find the game that was accepted
-		for(int i=0; i<suggestions.size(); i++){
-			if(!suggestions.get(i).getPlayer2().equals(aPlayer.getPlayerInfo()) 
-					&& suggestions.get(i).getTheGame().equals(aGame)){	// ensure that this is the game that was originally sent to the client
+		for(int i=0; i<requestedGames.size(); i++){
+			if(requestedGames.get(i).getPlayer2().equals(aPlayer.getPlayerInfo()) 
+					&& requestedGames.get(i).getTheGame().equals(aGame)){	// ensure that this is the game that was originally sent to the client
 				
 				// move to the end of the Queue
-				currentGame = suggestions.get(i);
+				currentGame = requestedGames.get(i);
 				p1 = currentGame.getPlayer1();
 				
 				printStatus(p2.getName(), "Accepted Game: " + currentGame.getCurrentBoard().getTheBoard().getGameType()
@@ -287,7 +286,14 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 
 	@Override
 	public void move(Move playersMove) throws RemoteException {
-		// TODO Auto-generated method stub
+		for(Player p : players)
+			p.move(playersMove);
+		for(GameObserver o : observers)
+			o.receiveMove(playersMove);
+		
+		// FIXME - Update board
+		
+		printStatus("Move", "Rejected Resignation: The requester is not a player\n");
 	}
 
 	@Override
@@ -336,7 +342,6 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			// FIXME - Make the program find its own IP (print the IP of the machine that you have run the server on)
 			//			Then print it to the command line
 			server.startup();
-			
 			
 			// FIXME to kill the server enter anything into the terminal
 			Scanner reader = new Scanner(System.in);

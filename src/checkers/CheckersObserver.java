@@ -10,8 +10,9 @@ public class CheckersObserver extends UnicastRemoteObject implements GameObserve
 	private GameInfo myGame;
 	private PlayerInfo myID;
 	
-	CheckersObserver(PlayerInfo myName) throws RemoteException{
-		myID = myName;
+	CheckersObserver(Server server, PlayerInfo myName) throws RemoteException{
+		this.server = server;
+		this.myID = myName;
 	}
 	
 	@Override

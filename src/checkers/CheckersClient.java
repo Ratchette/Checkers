@@ -42,7 +42,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	/*************************************************************************
 	 * 						Client startup and shutdown
 	 *************************************************************************/
-	public CheckersClient() throws Exception{
+	public CheckersClient(Server server) throws Exception{
 		int isPlayer = choosePlayStyle();
 		
 		// TODO - come up with a better way to create the PlayerIDs
@@ -51,11 +51,11 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		
 		if(isPlayer == 0){
 			observer = null;
-			player = new CheckersPlayer(myID);
+			player = new CheckersPlayer(server, myID);
 		}
 		else if(isPlayer == 1){
 			player = null;
-			observer = new CheckersObserver(myID);
+			observer = new CheckersObserver(server, myID);
 		}
 		else{
 			printStatus("Chose to exit the program ");
@@ -192,18 +192,12 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		Server server;			// The client does not need to know the name of the class that implements the server interface
 		Object response;
 		
-		if(args.length > 1 ){
-			CheckersPlayer p = new CheckersPlayer(1, new PlayerInfo("Player1"));
-			Gui window = new Gui(p.getBoard(),p.getPlayerInfo());
-		}
-		
-		// TESTING
-		else{
+
 			try {
 				server = connect(args);
 				printStatus("Now connected to server");
 				
-				client = new CheckersClient();
+				client = new CheckersClient(server);
 				if(client.observer != null){
 					response = server.watch(client);
 					
@@ -236,7 +230,6 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 				}
 			} catch (Exception e) {e.printStackTrace();}
 		}
-	}
 
 	@Override
 	public String considerGame(GameDesign aGame) throws RemoteException {
