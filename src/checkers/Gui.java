@@ -70,9 +70,9 @@ public class Gui implements ActionListener {
 		Font font = new Font("Helvetica", Font.PLAIN, 30);
 
 		/* Add menu Buttons */
-		resign.setText("RESIGN");
+		resign.setText("Resign");
 		menuButtons.add(resign);
-		connect.setText("**CHECKERS**");
+		connect.setText("Stop Watching");
 		menuButtons.add(connect);
 
 		/* Setup Turn Counter in menu */

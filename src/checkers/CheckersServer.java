@@ -27,7 +27,6 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	private Boolean gameInProgress;
 	private GameInfo currentGame;
 	
-	// constructor
 	CheckersServer() throws RemoteException{
 		this.players = new ArrayList<Player>();
 		this.observers = new ArrayList<GameObserver>();
@@ -287,7 +286,14 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 
 	@Override
 	public void move(Move playersMove) throws RemoteException {
-		// TODO Auto-generated method stub
+		for(Player p : players)
+			p.move(playersMove);
+		for(GameObserver o : observers)
+			o.receiveMove(playersMove);
+		
+		// FIXME - Update board
+		
+		printStatus("Move", "Rejected Resignation: The requester is not a player\n");
 	}
 
 	@Override
@@ -336,7 +342,6 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			// FIXME - Make the program find its own IP (print the IP of the machine that you have run the server on)
 			//			Then print it to the command line
 			server.startup();
-			
 			
 			// FIXME to kill the server enter anything into the terminal
 			Scanner reader = new Scanner(System.in);

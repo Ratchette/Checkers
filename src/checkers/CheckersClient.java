@@ -42,7 +42,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	/*************************************************************************
 	 * 						Client startup and shutdown
 	 *************************************************************************/
-	public CheckersClient() throws Exception{
+	public CheckersClient(Server server) throws Exception{
 		int isPlayer = choosePlayStyle();
 		
 		// TODO - come up with a better way to create the PlayerIDs
@@ -51,11 +51,11 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		
 		if(isPlayer == 0){
 			observer = null;
-			player = new CheckersPlayer(myID);
+			player = new CheckersPlayer(server, myID);
 		}
 		else if(isPlayer == 1){
 			player = null;
-			observer = new CheckersObserver(myID);
+			observer = new CheckersObserver(server, myID);
 		}
 		else{
 			printStatus("Chose to exit the program ");
@@ -196,7 +196,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 			server = connect(args);
 			printStatus("Now connected to server");
 			
-			client = new CheckersClient();
+			client = new CheckersClient(server);
 			if(client.observer != null){
 				response = server.watch(client);
 				
@@ -206,25 +206,10 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 				}
 				
 				client.observer.setGame((GameInfo)response);
-				// TODO - implement the option for the observer to deattach
+				// TODO - implement the option for the observer to detach
 			}
 			
 			else{
-				
-				// TESTING
-				response = server.considerGame(client, new GameDesign(BoardDesign.BRITISH));
-				
-				if(response != null && response.getClass().equals(String.class)){
-					System.out.println(response);
-				}
-				
-				keyboard = new Scanner(System.in);
-				keyboard.next();
-				keyboard.close();
-				
-				
-				// continue
-				server.acceptGame(client.player, (GameDesign) response);
 				
 			}
 		} catch (Exception e) {e.printStackTrace();}
