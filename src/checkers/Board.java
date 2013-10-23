@@ -38,7 +38,6 @@ public class Board implements Remote, Serializable {
 			for (j = 0; j < boardDesign.gridSize; j++) {
 				if ((i + j) % 2 == 0) {
 					Piece piece = new Piece(new Position(j, i), false, Piece.BLACK);
-					piece.setPieceImage(piece.getPieceImage(), Gui.gridLength / boardDesign.gridSize);
 					piecePlacement[currentPiece++] = piece;
 				}
 			}
@@ -49,7 +48,6 @@ public class Board implements Remote, Serializable {
 			for (j = 0; j < boardDesign.gridSize; j++) {
 				if ((i + j) % 2 == 0) {
 					Piece piece = new Piece(new Position(j, i), false, Piece.WHITE);
-					piece.setPieceImage(piece.getPieceImage(), Gui.gridLength / boardDesign.gridSize);
 					piecePlacement[currentPiece++] = piece;
 				}
 			}
