@@ -42,13 +42,103 @@ public class Gui implements ActionListener {
 	private int currentClick[] = { -1, -1, -1, -1 };
 	private int currentPiece = -1;
 	private int gridSize;
+	
+	// TESTING
+	public Player myPlayer;
+	public Server myServer;
 
-	
-	
-	/* Initialize GUI */
 	public Gui(Board theBoard, PlayerInfo pInfo) throws Exception {
 		currentBoard = theBoard;
 		currentPlayer = pInfo;
+		
+		try {
+			gridSize = currentBoard.getTheBoard().gridSize;
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+
+		/* Setup Window */
+		window.setSize(windowSize, windowSize + 50);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		/* Setup Window, Board and Menu */
+		window.setLayout(new BorderLayout());
+		GridLayout grid = new GridLayout(gridSize, gridSize);
+		GridLayout menu = new GridLayout(1, 3);
+		board = new JPanel(grid);
+		menuButtons = new JPanel(menu);
+		board.setSize(windowSize, windowSize);
+		menuButtons.setSize(windowSize, 50);
+		Font font = new Font("Helvetica", Font.PLAIN, 30);
+
+		/* Add menu Buttons */
+		resign.setText("Resign");
+		menuButtons.add(resign);
+		connect.setText("Stop Watching");
+		menuButtons.add(connect);
+
+		/* Setup Turn Counter in menu */
+
+		if (currentPlayer.getName().equals("Player1")) {
+			turn.setText("GO");
+		} else {
+			turn.setText("STOP");
+		}
+
+		turn.setBackground(Color.gray);
+		menuButtons.add(turn);
+
+		/* Add Buttons To The Board */
+		int checkerLine = 0;
+		for (int i = 0; i <= ((gridSize * gridSize) - 1); i++) {
+			square[i] = new JButton();
+			/* Set Color of squares depending on type */
+			/* Anti Checkers not yet known */
+			if (i % gridSize == 0) {
+				checkerLine = 1 + checkerLine;
+			}
+			if ((i + checkerLine) % 2 == 0) {
+				if (currentBoard.getTheBoard().getGameEncoding() == 0
+						|| currentBoard.getTheBoard().getGameEncoding() == 1) {
+					square[i].setBackground(Color.red);
+				}
+				if (currentBoard.getTheBoard().getGameEncoding() == 2
+						|| currentBoard.getTheBoard().getGameEncoding() == 3) {
+					square[i].setBackground(Color.white);
+				}
+			} else {
+				if (currentBoard.getTheBoard().getGameEncoding() == 0
+						|| currentBoard.getTheBoard().getGameEncoding() == 1
+						|| currentBoard.getTheBoard().getGameEncoding() == 2) {
+					square[i].setBackground(Color.black);
+				}
+				if (currentBoard.getTheBoard().getGameEncoding() == 3) {
+					square[i].setBackground(Color.red);
+				}
+			}
+
+			square[i].addActionListener(this);
+			square[i].setFont(font);
+			board.add(square[i]);
+			square[i].setName(Integer.toString(i));
+		}
+
+		window.getContentPane().add(menuButtons, BorderLayout.NORTH);
+		window.getContentPane().add(board, BorderLayout.CENTER);
+
+		/* Make The Window Visible */
+		window.setVisible(true);
+		drawBoard(currentBoard);
+
+	}
+	
+	/* Initialize GUI */
+	public Gui(Board theBoard, PlayerInfo pInfo, Player p, Server server) throws Exception {
+		currentBoard = theBoard;
+		currentPlayer = pInfo;
+		this.myPlayer = p;
+		this.myServer = server;
+		
 		try {
 			gridSize = currentBoard.getTheBoard().gridSize;
 		} catch (Exception e2) {
@@ -134,6 +224,7 @@ public class Gui implements ActionListener {
 	
 	public void drawBoard(Board theBoard) throws Exception {
 		clearGUI();
+		
 		for (int i = 0; i < theBoard.getPiecePlacement().length; i++) {
 			if(theBoard.getPiecePlacement()[i] != null){
 				int x = theBoard.getPiecePlacement()[i].getPiecePosition()
@@ -148,6 +239,7 @@ public class Gui implements ActionListener {
 						600 / gridSize)));
 			}
 		}
+		this.currentBoard = theBoard;
 	}
 
 	
@@ -193,14 +285,14 @@ public class Gui implements ActionListener {
 		if (buttonNum == currentClick[0] || buttonNum == currentClick[1] 
 				|| buttonNum == currentClick[2] || buttonNum == currentClick[3]) {
 			int xy[] = getXY(buttonNum);
-			//JenDo: Send move to other client/server
-			//for (int i=0; i<currentClick.length; i++){
-			//	if (buttonNum == currentClick[i]){
-			//		send ( currentBoard.getMovesFor(currentPiece)[i] );
-			//	} 
-			//}
-
+			
+			
+			
 			try {
+				myServer.move(new SingleMove(currentBoard.getPiecePlacement()[currentPiece], null,
+						new Position(xy[0], xy[1])));
+//				myPlayer.move(new SingleMove(currentBoard.getPiecePlacement()[currentPiece], null,
+//						new Position(xy[0], xy[1])));
 				drawBoard(currentBoard);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -226,14 +318,14 @@ public class Gui implements ActionListener {
 						if (currentBoard.getPiecePlacement()[i].getColour() == Piece.WHITE
 								&& currentPlayer.getName().equals("Player1")) {
 							highlightSquare(pos);
-//							Move possibleMoves[]  = currentBoard.getMovesFor(i);
-//							showMoves(possibleMoves,i);
+							Move possibleMoves[]  = currentBoard.getMovesFor(i);
+							showMoves(possibleMoves,i);
 						}
 						else if (currentBoard.getPiecePlacement()[i].getColour() == Piece.BLACK
 								&& currentPlayer.getName().equals("Player2")) {
 							highlightSquare(pos);
-//							Move possibleMoves[] = currentBoard.getMovesFor(i);
-//							showMoves(possibleMoves,i);
+							Move possibleMoves[] = currentBoard.getMovesFor(i);
+							showMoves(possibleMoves,i);
 						}
 						else {
 							clearMoves();

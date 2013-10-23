@@ -84,7 +84,7 @@ public class GameInfo implements Remote, Serializable{
 		return currentRound;
 	}
 
-	public void setCurrentRoud(int currentRound)throws RemoteException {
+	public void setCurrentRound(int currentRound)throws RemoteException {
 		this.currentRound = currentRound;
 	}
 

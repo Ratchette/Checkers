@@ -52,9 +52,9 @@ public class Piece implements Remote, Serializable{
 		this.colour = colour;
 
 		if (colour == Piece.WHITE)
-			this.imageURL = "resources/peice8x8w.png";
+			this.imageURL = "/peice8x8w.png";
 		else
-			this.imageURL = "resources/peice8x8.png";
+			this.imageURL = "/peice8x8.png";
 	}
 
 	public Position getPiecePosition() {
@@ -109,9 +109,9 @@ public class Piece implements Remote, Serializable{
 	
 	public void turnKing(){
 		if(this.colour == 'w')
-			this.imageURL = "resources/peice8x8Kw.png";
+			this.imageURL = "/peice8x8Kw.png";
 		else
-			this.imageURL = "resources/peice8x8K.png";
+			this.imageURL = "/peice8x8K.png";
 		
 		this.crown = true;
 	}

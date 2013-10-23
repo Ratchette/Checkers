@@ -293,7 +293,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		
 		// FIXME - Update board
 		
-		printStatus("Move", "Rejected Resignation: The requester is not a player\n");
+		printStatus("Move", "Broadcasted move to all players and observers\n");
 	}
 
 	@Override
