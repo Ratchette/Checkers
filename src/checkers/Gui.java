@@ -126,6 +126,8 @@ public class Gui implements ActionListener {
 
 		/* Make The Window Visible */
 		window.setVisible(true);
+		drawBoard(currentBoard);
+
 	}
 
 	
@@ -133,16 +135,18 @@ public class Gui implements ActionListener {
 	public void drawBoard(Board theBoard) throws Exception {
 		clearGUI();
 		for (int i = 0; i < theBoard.getPiecePlacement().length; i++) {
-			int x = theBoard.getPiecePlacement()[i].getPiecePosition()
-					.getX();
-			int y = theBoard.getPiecePlacement()[i].getPiecePosition()
-					.getY();
-			int pos = getButtonPos(x, y);
-			square[pos].setIcon(new ImageIcon(scale(ImageIO
-					.read(getClass().getResource(
-							theBoard.getPiecePlacement()[i]
-									.getImageURL())), 600 / gridSize,
-					600 / gridSize)));
+			if(theBoard.getPiecePlacement()[i] != null){
+				int x = theBoard.getPiecePlacement()[i].getPiecePosition()
+						.getX();
+				int y = theBoard.getPiecePlacement()[i].getPiecePosition()
+						.getY();
+				int pos = getButtonPos(x, y);
+				square[pos].setIcon(new ImageIcon(scale(ImageIO
+						.read(getClass().getResource(
+								theBoard.getPiecePlacement()[i]
+										.getImageURL())), 600 / gridSize,
+						600 / gridSize)));
+			}
 		}
 	}
 
@@ -176,37 +180,29 @@ public class Gui implements ActionListener {
 	
 	public void actionPerformed(ActionEvent a) {
 		JButton pressedButton = (JButton) a.getSource();
-		drawBoard(currentBoard);
+		try {
+			drawBoard(currentBoard);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		int buttonNum = Integer.parseInt(pressedButton.getName());
 		// If this click is moving a piece
 		if (buttonNum == currentClick[0] || buttonNum == currentClick[1] 
 				|| buttonNum == currentClick[2] || buttonNum == currentClick[3]) {
 			int xy[] = getXY(buttonNum);
-			try {
-				// Move the piece
-				Piece[] p = currentBoard.getPiecePlacement();
-				p[currentPiece].setPiecePosition(new Position(xy[0], xy[1]));
-				currentBoard.setPiecePlacement(p);
-
-				// Check if the piece is now a king
-				if (p[currentPiece].getColour() == Piece.WHITE && xy[1] == 0) {
-					p[currentPiece].turnKing();
-				}
-				if (p[currentPiece].getColour() == Piece.BLACK
-						&& xy[1] == gridSize) {
-					p[currentPiece].turnKing();
-				}
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 			//JenDo: Send move to other client/server
 			//for (int i=0; i<currentClick.length; i++){
 			//	if (buttonNum == currentClick[i]){
 			//		send ( currentBoard.getMovesFor(currentPiece)[i] );
 			//	} 
 			//}
-			drawBoard(currentBoard);
+			try {
+				drawBoard(currentBoard);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			changeTurn();
 			clearMoves();
 		}

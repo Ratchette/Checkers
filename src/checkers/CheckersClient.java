@@ -186,15 +186,15 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	}
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException, Exception {
 		Scanner keyboard;		// testing feature that waits for user input
 		CheckersClient client;
 		Server server;			// The client does not need to know the name of the class that implements the server interface
 		Object response;
 		
 		if(args.length > 1 ){
-			CheckersPlayer player = new Player(BoardDesign.AMERICAN, new PlayerInfo("Player1"));
-			Gui window = new Gui(player.getBoard(), player.getPlayerInfo());
+			CheckersPlayer p = new CheckersPlayer(1, new PlayerInfo("Player1"));
+			Gui window = new Gui(p.getBoard(),p.getPlayerInfo());
 		}
 		
 		// TESTING
@@ -212,7 +212,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 						return;
 					}
 					
-					client.observer.setGame((GameInfo)response);
+					//client.observer.setGame((GameInfo)response);
 					// TODO - implement the option for the observer to deattach
 				}
 				
@@ -231,10 +231,28 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 					
 					
 					// continue
-					server.acceptGame(client.player, (GameDesign) response);
+					//server.acceptGame(client.player, (GameDesign) response);
 					
 				}
 			} catch (Exception e) {e.printStackTrace();}
 		}
+	}
+
+	@Override
+	public String considerGame(GameDesign aGame) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void youWin() throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void gameOver(PlayerInfo winner) throws RemoteException {
+		// TODO Auto-generated method stub
+		
 	}
 }

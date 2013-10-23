@@ -108,4 +108,16 @@ public class Board implements Remote, Serializable {
 			return false;
 		}
 	}
+
+	public Move[] getMovesFor(int pos) throws Exception {
+		Piece currentPiece = piecePlacement[pos];
+		SingleMove m[] = new SingleMove[12];
+		Position p = new Position(currentPiece.getPiecePosition().getX() ,currentPiece.getPiecePosition().getY()-1);
+		Position p2 = new Position(currentPiece.getPiecePosition().getX()-1 ,currentPiece.getPiecePosition().getY()-1);
+		Position p3 = new Position(currentPiece.getPiecePosition().getX()+1 ,currentPiece.getPiecePosition().getY()-1);
+		m[0] = new SingleMove(currentPiece, null, p);
+		m[1] = new SingleMove(currentPiece, null, p2);
+		m[2] = new SingleMove(currentPiece, null, p3);
+		return m;
+	}
 }
