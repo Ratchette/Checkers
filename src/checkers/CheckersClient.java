@@ -242,10 +242,4 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void gameOver(PlayerInfo winner) throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
 }
