@@ -192,49 +192,41 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		Server server;			// The client does not need to know the name of the class that implements the server interface
 		Object response;
 		
-		if(args.length > 1 ){
-			CheckersPlayer player = new Player(BoardDesign.AMERICAN, new PlayerInfo("Player1"));
-			Gui window = new Gui(player.getBoard(), player.getPlayerInfo());
-		}
-		
-		// TESTING
-		else{
-			try {
-				server = connect(args);
-				printStatus("Now connected to server");
+		try {
+			server = connect(args);
+			printStatus("Now connected to server");
+			
+			client = new CheckersClient();
+			if(client.observer != null){
+				response = server.watch(client);
 				
-				client = new CheckersClient();
-				if(client.observer != null){
-					response = server.watch(client);
-					
-					if(response != null && response.getClass().equals(String.class)){
-						printStatus("[ Server ] " + response);
-						return;
-					}
-					
-					client.observer.setGame((GameInfo)response);
-					// TODO - implement the option for the observer to deattach
+				if(response != null && response.getClass().equals(String.class)){
+					printStatus("[ Server ] " + response);
+					return;
 				}
 				
-				else{
-					
-					// TESTING
-					response = server.considerGame(client, new GameDesign(BoardDesign.BRITISH));
-					
-					if(response != null && response.getClass().equals(String.class)){
-						System.out.println(response);
-					}
-					
-					keyboard = new Scanner(System.in);
-					keyboard.next();
-					keyboard.close();
-					
-					
-					// continue
-					server.acceptGame(client.player, (GameDesign) response);
-					
+				client.observer.setGame((GameInfo)response);
+				// TODO - implement the option for the observer to deattach
+			}
+			
+			else{
+				
+				// TESTING
+				response = server.considerGame(client, new GameDesign(BoardDesign.BRITISH));
+				
+				if(response != null && response.getClass().equals(String.class)){
+					System.out.println(response);
 				}
-			} catch (Exception e) {e.printStackTrace();}
-		}
+				
+				keyboard = new Scanner(System.in);
+				keyboard.next();
+				keyboard.close();
+				
+				
+				// continue
+				server.acceptGame(client.player, (GameDesign) response);
+				
+			}
+		} catch (Exception e) {e.printStackTrace();}
 	}
 }
