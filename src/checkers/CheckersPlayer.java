@@ -43,7 +43,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 		return response;
 	}
 	
-//	public CheckersPlayer(int gameType, PlayerInfo myName){
+	public CheckersPlayer(int gameType, PlayerInfo myName) throws Exception{
 //		myID = myName;
 //		
 //		try {
@@ -55,7 +55,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 //			e.printStackTrace();
 //
 //		}
-//	}
+	}
 	
 
 	public GameInfo getMyGame() {
@@ -78,7 +78,24 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 
 	@Override
 	public String move(Move playersMove) throws RemoteException {
-		// TODO Auto-generated method stub
+		try {
+			// Move the piece
+			SingleMove move = (SingleMove) playersMove;
+			Position pos = move.getEndPosition();
+			move.getPieceBeignMoved().setPiecePosition(pos);
+
+			// Check if the piece is now a king
+			if (move.getPieceBeignMoved().getColour() == Piece.WHITE && pos.getY() == 0) {
+				move.getPieceBeignMoved().turnKing();
+			}
+			if (move.getPieceBeignMoved().getColour() == Piece.BLACK
+					&& pos.getY() == myGame.getCurrentBoard().getTheBoard().gridSize) {
+				move.getPieceBeignMoved().turnKing();
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
@@ -94,8 +111,4 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	public PlayerInfo getPlayerInfo() throws RemoteException {
 		return new PlayerInfo(myID);
 	}
-
-
-
-
 }

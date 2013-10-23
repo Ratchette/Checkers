@@ -187,12 +187,12 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	}
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException, Exception {
 		Scanner keyboard;		// testing feature that waits for user input
 		CheckersClient client1, client2;
 		Server server;			// The client does not need to know the name of the class that implements the server interface
 		Object response;
-		
+
 		try {
 			server = connect(args);
 			printStatus("Now connected to server");
@@ -239,5 +239,6 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 //				
 //			}
 //		} catch (Exception e) {e.printStackTrace();}
+
 	}
 }
