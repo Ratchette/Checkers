@@ -11,7 +11,7 @@ package checkers;
 import java.awt.*;
 import java.awt.event.*;
 
-import javax.swing.*;  //notice javax
+import javax.swing.*; //notice javax
 import javax.swing.border.LineBorder;
 
 import java.io.IOException;
@@ -22,364 +22,327 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.rmi.RemoteException;
 
-public class Gui implements ActionListener 
-{
+public class Gui implements ActionListener {
 
-  /*Create Window*/
-  private JFrame window = new JFrame("Premium Checkers Deluxe 3000");
-  public static final int windowSize = 600;
+	/* Create Window */
+	private JFrame window = new JFrame("Premium Checkers Deluxe 3000");
+	public static final int windowSize = 600;
 
-  /*Create button array for grids up to 12x12*/
-  private JButton square[] = new JButton[144];
-  private JButton resign = new JButton();
-  private JButton turn = new JButton();
-  private JButton connect = new JButton();
-  private JPanel board;
-  private JPanel menuButtons;
+	/* Create button array for grids up to 12x12 */
+	private JButton square[] = new JButton[144];
+	private JButton resign = new JButton();
+	private JButton turn = new JButton();
+	private JButton connect = new JButton();
+	private JPanel board;
+	private JPanel menuButtons;
 
-  /*Board info */
-  private Board currentBoard;
-  private PlayerInfo currentPlayer;
-  private int currentClick[] = {-1,-1,-1};
-  private int gridSize;
+	/* Board info */
+	private Board currentBoard;
+	private PlayerInfo currentPlayer;
+	private Moves possibleMoves[];
+	private int currentPiece;
+	private int gridSize;
 
-  
-  
-  
-  
-  /* Initialize GUI */
-  public Gui(Board theBoard,PlayerInfo pInfo)
-  {
-	currentBoard = theBoard;
-	currentPlayer = pInfo; 
-    try {
-		gridSize = currentBoard.getTheBoard().gridSize;
-	} catch (Exception e2) {
-		e2.printStackTrace();
-	}
-    
-    /* Setup Window */
-    window.setSize(windowSize,windowSize+50);
-    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
-    /* Setup Window, Board and Menu */
-    window.setLayout(new BorderLayout());
-    GridLayout grid = new GridLayout(gridSize,gridSize);
-    GridLayout menu = new GridLayout(1,3);
-    board = new JPanel(grid);
-    menuButtons = new JPanel(menu);
-    board.setSize(windowSize,windowSize);
-    menuButtons.setSize(windowSize,50);
-    Font font = new Font("Helvetica", Font.PLAIN, 30);
-    
-    /* Add menu Buttons */
-    resign.setText("RESIGN");
-    menuButtons.add(resign);
-    connect.setText("**CHECKERS**");
-    menuButtons.add(connect);
-    
-    /* Setup Turn Counter in menu*/
-    try {
-		if( currentPlayer.getName().equals("Player1") ){
-			turn.setText("GO");
+	
+	
+	/* Initialize GUI */
+	public Gui(Board theBoard, PlayerInfo pInfo) throws Exception {
+		currentBoard = theBoard;
+		currentPlayer = pInfo;
+		try {
+			gridSize = currentBoard.getTheBoard().gridSize;
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
-		else {
+
+		/* Setup Window */
+		window.setSize(windowSize, windowSize + 50);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		/* Setup Window, Board and Menu */
+		window.setLayout(new BorderLayout());
+		GridLayout grid = new GridLayout(gridSize, gridSize);
+		GridLayout menu = new GridLayout(1, 3);
+		board = new JPanel(grid);
+		menuButtons = new JPanel(menu);
+		board.setSize(windowSize, windowSize);
+		menuButtons.setSize(windowSize, 50);
+		Font font = new Font("Helvetica", Font.PLAIN, 30);
+
+		/* Add menu Buttons */
+		resign.setText("RESIGN");
+		menuButtons.add(resign);
+		connect.setText("**CHECKERS**");
+		menuButtons.add(connect);
+
+		/* Setup Turn Counter in menu */
+
+		if (currentPlayer.getName().equals("Player1")) {
+			turn.setText("GO");
+		} else {
 			turn.setText("STOP");
 		}
-	} catch (RemoteException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
+
+		turn.setBackground(Color.gray);
+		menuButtons.add(turn);
+
+		/* Add Buttons To The Board */
+		int checkerLine = 0;
+		for (int i = 0; i <= ((gridSize * gridSize) - 1); i++) {
+			square[i] = new JButton();
+			/* Set Color of squares depending on type */
+			/* Anti Checkers not yet known */
+			if (i % gridSize == 0) {
+				checkerLine = 1 + checkerLine;
+			}
+			if ((i + checkerLine) % 2 == 0) {
+				if (currentBoard.getTheBoard().getGameEncoding() == 0
+						|| currentBoard.getTheBoard().getGameEncoding() == 1) {
+					square[i].setBackground(Color.red);
+				}
+				if (currentBoard.getTheBoard().getGameEncoding() == 2
+						|| currentBoard.getTheBoard().getGameEncoding() == 3) {
+					square[i].setBackground(Color.white);
+				}
+			} else {
+				if (currentBoard.getTheBoard().getGameEncoding() == 0
+						|| currentBoard.getTheBoard().getGameEncoding() == 1
+						|| currentBoard.getTheBoard().getGameEncoding() == 2) {
+					square[i].setBackground(Color.black);
+				}
+				if (currentBoard.getTheBoard().getGameEncoding() == 3) {
+					square[i].setBackground(Color.red);
+				}
+			}
+
+			square[i].addActionListener(this);
+			square[i].setFont(font);
+			board.add(square[i]);
+			square[i].setName(Integer.toString(i));
+		}
+
+		window.getContentPane().add(menuButtons, BorderLayout.NORTH);
+		window.getContentPane().add(board, BorderLayout.CENTER);
+
+		/* Make The Window Visible */
+		window.setVisible(true);
 	}
-    turn.setBackground(Color.gray);
-    menuButtons.add(turn);
-    
-    
-    /*Add Buttons To The Board*/
-    try {
-    	int checkerLine = 0;
-	    for(int i=0; i<=((gridSize*gridSize)-1); i++){      
-	        square[i] = new JButton();
-	        /* Set Color of squares depending on type*/
-	        /* Anti Checkers not yet known */
-	        if (i%gridSize == 0) {
-	          checkerLine = 1 + checkerLine;
-	        }
-	        if( (i + checkerLine)%2 == 0) {
-	          if(currentBoard.getTheBoard().getGameEncoding() == 0
-	        		  || currentBoard.getTheBoard().getGameEncoding() == 1 ) {
-	            square[i].setBackground(Color.red);
-	          }
-	          if( currentBoard.getTheBoard().getGameEncoding() == 2
-	        		  || currentBoard.getTheBoard().getGameEncoding() == 3) {
-	            square[i].setBackground(Color.white);
-	          }
-	        } else {
-	          if(currentBoard.getTheBoard().getGameEncoding() == 0
-	        		  || currentBoard.getTheBoard().getGameEncoding() == 1
-	        		  || currentBoard.getTheBoard().getGameEncoding() == 2 ) {
-	            square[i].setBackground(Color.black);
-	          }
-	          if(currentBoard.getTheBoard().getGameEncoding() == 3) {
-	            square[i].setBackground(Color.red);
-	          }
-	        }
-	        
-	        square[i].addActionListener(this);
-	        square[i].setFont(font);
-	        board.add(square[i]);
-	        square[i].setName( Integer.toString(i) );
-	    }
-    } catch (Exception e) {
-    }
 
-    window.getContentPane().add(menuButtons,BorderLayout.NORTH);
-    window.getContentPane().add(board,BorderLayout.CENTER);
-
-    /*Make The Window Visible*/ 
-    window.setVisible(true);
-  }
-
-
-
-  
-  
-  public void drawBoard(Board theBoard){
-    clearGUI();
-    try {
-		for (int i=0; i<theBoard.getPiecePlacement().length; i++){
-		  try {
-		    int pos = (theBoard.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (theBoard.getPiecePlacement()[i].getPiecePosition().getX());
-		    square[pos].setIcon(new ImageIcon(scale(
-					ImageIO.read(getClass().getResource(theBoard.getPiecePlacement()[i].getImageURL())), 600/gridSize, 600/gridSize)));
-		  } catch (Exception ex) {
-		  }
+	
+	
+	public void drawBoard(Board theBoard) throws Exception {
+		clearGUI();
+		for (int i = 0; i < theBoard.getPiecePlacement().length; i++) {
+			int x = theBoard.getPiecePlacement()[i].getPiecePosition()
+					.getX();
+			int y = theBoard.getPiecePlacement()[i].getPiecePosition()
+					.getY();
+			int pos = getButtonPos(x, y);
+			square[pos].setIcon(new ImageIcon(scale(ImageIO
+					.read(getClass().getResource(
+							theBoard.getPiecePlacement()[i]
+									.getImageURL())), 600 / gridSize,
+					600 / gridSize)));
 		}
-  	} catch (RemoteException e) {
-  		// TODO Auto-generated catch block
-  		e.printStackTrace();
-  	}
-  }
-
-
-
-  public void clearGUI(){
-  	LineBorder bord = new LineBorder(Color.BLACK, 1);
- 	for(int i=0; i<=((gridSize*gridSize)-1); i++){ 
-	  try {     
-	    square[i].setIcon(null);
-	    square[i].setBorder(bord);
-	  }  catch (Exception ex) {
-		  System.out.println(ex);
-	  }
- 	}
-  }
-
-
-
-
-  public void actionPerformed(ActionEvent a) {
-    JButton pressedButton = (JButton)a.getSource();
-    drawBoard(currentBoard);
-    
-    // If this click is moving a piece
-    if(Integer.parseInt(pressedButton.getName()) == currentClick[0] || Integer.parseInt(pressedButton.getName()) == currentClick[1]){
-    	int pos = Integer.parseInt(pressedButton.getName());
-    	int x = pos - (pos/gridSize)*gridSize;
-    	int y = pos/gridSize;
-    	try {
-    		//Move the piece
-    		Piece[] p = currentBoard.getPiecePlacement();
-    		p[currentClick[2]].setPiecePosition(new Position(x,y));
-			currentBoard.setPiecePlacement(p);
-			
-			//Check if the piece is now a king
-			if(p[currentClick[2]].getColour() == Piece.WHITE && y == 0){
-				p[currentClick[2]].turnKing();
-			}
-			if(p[currentClick[2]].getColour() == Piece.BLACK && y == gridSize){
-				p[currentClick[2]].turnKing();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    	drawBoard(currentBoard);
-    	currentClick[0] = -1;
-    	currentClick[1] = -1;
-    	currentClick[2] = -1;
 	}
-    
-    // If this click selects a piece to plan a move
-    else {
-	    try {
-		  	for (int i=0; i<currentBoard.getPiecePlacement().length; i++){
-	  		    int pos = (currentBoard.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (currentBoard.getPiecePlacement()[i].getPiecePosition().getX());
-	  		    if(pos == Integer.parseInt(pressedButton.getName())){
-	  		    	
-	  		    	//Only allow players to move their own pieces
-	  		    	if(currentBoard.getPiecePlacement()[i].getColour() == Piece.WHITE && currentPlayer.getName().equals("Player1") ){
-	  		    		highlightSquare(pos);
-	  		    		currentClick = showMoves(pos,i);
-	  		    		currentClick[2] = i;
-	  		    	}
-	  		    	if(currentBoard.getPiecePlacement()[i].getColour() == Piece.BLACK && currentPlayer.getName().equals("Player2") ){
-	  		    		highlightSquare(pos);
-	  		    		currentClick = showMoves(pos,i);
-	  		    		currentClick[2] = i;
-	  		    	}
-	  		    }
-	  		}
-	    } catch (Exception e ){ 	
-	    }
-    }  
-  }
 
-  
-  public void highlightSquare(int pos){
-	  this.square[pos].setBorder(new LineBorder(Color.GREEN, 2));
-  }
-  
-  public int[] showMoves(int pos, int pieceNum){
-	int isValid[] = { -1, -1 , -1};
-	try {
-		if(currentBoard.getPiecePlacement()[pieceNum].getColour() == Piece.WHITE && currentPlayer.getName().equals("Player1")){
-			//Move logic for white regular move#1
-			if( (pos-gridSize-1) > (((pos/gridSize)-1)*gridSize)-1 ){
-				if( !positionOccupied(pos-gridSize-1) ){
-					highlightSquare(pos-gridSize-1);
-					isValid[0] = pos-gridSize-1;
-				} 
-				else {
-					//highlightSquare(pos-gridSize-1-gridSize-1);
-				}
-			}
-			//Move logic for white regular move#2
-			if( (pos-gridSize+1) < ((pos/gridSize)*gridSize) ){
-				if( !positionOccupied(pos-gridSize+1) ){
-					highlightSquare(pos-gridSize+1);
-					isValid[1] = pos-gridSize+1;
-				} 
-				else {
-					//highlightSquare(pos-gridSize+1-gridSize+1);
-				}
-			}
+	
+	
+	public void clearGUI() {
+		LineBorder bord = new LineBorder(Color.BLACK, 1);
+		for (int i = 0; i <= ((gridSize * gridSize) - 1); i++) {
+			square[i].setIcon(null);
+			square[i].setBorder(bord);
 		}
-		if(currentBoard.getPiecePlacement()[pieceNum].getColour() == Piece.BLACK &&currentPlayer.getName().equals("Player2")){
-			//Move logic for black regular move#1
-			if( (pos+gridSize-1) > (pos/gridSize)*gridSize+(gridSize-1) ){
-				if( !positionOccupied(pos+gridSize-1) ){
-					highlightSquare(pos+gridSize-1);
-					isValid[0] = pos+gridSize-1;
-				} else {
-					
-				}
-			}
-			//Move logic for black regular move#2
-			if( (pos+gridSize+1) < (((pos/gridSize)+1)*gridSize)+(gridSize)){
-				if( !positionOccupied(pos+gridSize+1) ){
-					highlightSquare(pos+gridSize+1);
-					isValid[1] = pos+gridSize+1;
-				} else {
-					
-				}
-			}
-		}
-	} catch (RemoteException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	}
-	return isValid;
-  }
 
-  
-  
-  
-  
-  public void changeTurn(){
-    if (turn.getText().equals("STOP")){
-        turn.setText("GO");
-        turn.setBackground(Color.green);
-    }
-    else if (turn.getText().equals("GO")){
-        turn.setText("STOP");
-        turn.setBackground(Color.red);
-    }
-  }
+	
+	
+	private int getButtonPos(int x, int y) {
+		int pos = (y * gridSize) + (x);
+		return pos;
+	}
+	
+	private int[] getXY(int buttonPos){
+		int xy[] = {0,0};
+		int x = buttonPos - (buttonPos / gridSize) * gridSize;
+		int y = buttonPos / gridSize;
+		xy[0] = x;
+		xy[1] = y;
+		return xy;
+	}
 
+	
+	
+	public void actionPerformed(ActionEvent a) {
+		JButton pressedButton = (JButton) a.getSource();
+		drawBoard(currentBoard);
+		int buttonNum = Integer.parseInt(pressedButton.getName());
+		// If this click is moving a piece
+		if (buttonNum == currentClick[1] || buttonNum == currentClick[2] 
+				|| buttonNum == currentClick[3] || buttonNum == currentClick[4]) {
+			int xy[] = getXY(buttonNum);
+			try {
+				// Move the piece
+				Piece[] p = currentBoard.getPiecePlacement();
+				p[currentClick[0]].setPiecePosition(new Position(xy[0], xy[1]));
+				currentBoard.setPiecePlacement(p);
 
+				// Check if the piece is now a king
+				if (p[currentClick[0]].getColour() == Piece.WHITE && xy[1] == 0) {
+					p[currentClick[0]].turnKing();
+				}
+				if (p[currentClick[0]].getColour() == Piece.BLACK
+						&& xy[1] == gridSize) {
+					p[currentClick[0]].turnKing();
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			//JenDo: Send move to other client/server
+			drawBoard(currentBoard);
+			changeTurn();
+			clearMoves();
+		}
 
-  
-  public Boolean positionOccupied(int pos){
-	  Boolean occupied = false;
-	  try {
-		  	for (int i=0; i<currentBoard.getPiecePlacement().length; i++){
-	  		    int p = (currentBoard.getPiecePlacement()[i].getPiecePosition().getY()*gridSize) + (currentBoard.getPiecePlacement()[i].getPiecePosition().getX());
-	  		    if(p == pos){
-	  		    	occupied = true;
-	  		    }
-	  		}
-	    } catch (Exception e ){
-	    	
-	    }
-	  return occupied;
-  }
+		// If this click selects a piece to plan a move
+		else {
+			try {
+				for (int i = 0; i < currentBoard.getPiecePlacement().length; i++) {
+					int x = currentBoard.getPiecePlacement()[i]
+							.getPiecePosition().getX();
+					int y = currentBoard.getPiecePlacement()[i]
+							.getPiecePosition().getY();
+					int pos = getButtonPos(x, y);
+					if (pos == Integer.parseInt(pressedButton.getName())) {
 
+						// Only allow players to move their own pieces
+						if (currentBoard.getPiecePlacement()[i].getColour() == Piece.WHITE
+								&& currentPlayer.getName().equals("Player1")) {
+							highlightSquare(pos);
+							Move possibleMoves[];
+							currentClick = showMoves(possibleMoves,i);
+						}
+						else if (currentBoard.getPiecePlacement()[i].getColour() == Piece.BLACK
+								&& currentPlayer.getName().equals("Player2")) {
+							highlightSquare(pos);
+							Move possibleMoves[];
+							currentClick = showMoves(possibleMoves,i);
+						}
+						else {
+							clearMoves();
+						}
+					}
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 
-  public BufferedImage scale(BufferedImage img, int targetWidth, int targetHeight) {
+	
+	
+	public void highlightSquare(int pos) {
+		this.square[pos].setBorder(new LineBorder(Color.GREEN, 2));
+	}
 
-      int type = (img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
-      BufferedImage ret = img;
-      BufferedImage scratchImage = null;
-      Graphics2D g2 = null;
+	
+	
+	public int[] showMoves(Move moves[], int current) throws Exception {
+		int highlightedButtons[] = { current, -1, -1, -1, -1 };
 
-      int w = img.getWidth();
-      int h = img.getHeight();
+		for (int i = 0; i < moves.length; i++) {
+			int finalPos = moves[i].moveSequence().length - 1;
+			Position pos = moves[i].moveSequence()[finalPos]
+					.getEndPosition();
+			int x = pos.getX();
+			int y = pos.getY();
+			int potentialMoveButton = getButtonPos(x, y);
+			highlightSquare(potentialMoveButton);
+			highlightedButtons[i+1] = potentialMoveButton;
+		}
 
-      int prevW = w;
-      int prevH = h;
+		return highlightedButtons;
+	}
 
-      do {
-          if (w > targetWidth) {
-              w /= 2;
-              w = (w < targetWidth) ? targetWidth : w;
-          }
+	
+	
+	private void clearMoves(){
+		currentClick[0] = -1;
+		currentClick[1] = -1;
+		currentClick[2] = -1;
+		currentClick[3] = -1;
+		currentClick[4] = -1;
+	}
+	
+	
+	
+	public void changeTurn() {
+		if (turn.getText().equals("STOP")) {
+			turn.setText("GO");
+			turn.setBackground(Color.green);
+		} else if (turn.getText().equals("GO")) {
+			turn.setText("STOP");
+			turn.setBackground(Color.red);
+		}
+	}
 
-          if (h > targetHeight) {
-              h /= 2;
-              h = (h < targetHeight) ? targetHeight : h;
-          }
+	
+	
+	
+	public BufferedImage scale(BufferedImage img, int targetWidth, int targetHeight) {
 
-          if (scratchImage == null) {
-              scratchImage = new BufferedImage(w, h, type);
-              g2 = scratchImage.createGraphics();
-          }
+		int type = (img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB
+				: BufferedImage.TYPE_INT_ARGB;
+		BufferedImage ret = img;
+		BufferedImage scratchImage = null;
+		Graphics2D g2 = null;
 
-          g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                  RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-          g2.drawImage(ret, 0, 0, w, h, 0, 0, prevW, prevH, null);
+		int w = img.getWidth();
+		int h = img.getHeight();
 
-          prevW = w;
-          prevH = h;
-          ret = scratchImage;
-      } while (w != targetWidth || h != targetHeight);
+		int prevW = w;
+		int prevH = h;
 
-      if (g2 != null) {
-          g2.dispose();
-      }
+		do {
+			if (w > targetWidth) {
+				w /= 2;
+				w = (w < targetWidth) ? targetWidth : w;
+			}
 
-      if (targetWidth != ret.getWidth() || targetHeight != ret.getHeight()) {
-          scratchImage = new BufferedImage(targetWidth, targetHeight, type);
-          g2 = scratchImage.createGraphics();
-          g2.drawImage(ret, 0, 0, null);
-          g2.dispose();
-          ret = scratchImage;
-      }
+			if (h > targetHeight) {
+				h /= 2;
+				h = (h < targetHeight) ? targetHeight : h;
+			}
 
-      return ret;
+			if (scratchImage == null) {
+				scratchImage = new BufferedImage(w, h, type);
+				g2 = scratchImage.createGraphics();
+			}
 
-  }
+			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+					RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g2.drawImage(ret, 0, 0, w, h, 0, 0, prevW, prevH, null);
+
+			prevW = w;
+			prevH = h;
+			ret = scratchImage;
+		} while (w != targetWidth || h != targetHeight);
+
+		if (g2 != null) {
+			g2.dispose();
+		}
+
+		if (targetWidth != ret.getWidth() || targetHeight != ret.getHeight()) {
+			scratchImage = new BufferedImage(targetWidth, targetHeight, type);
+			g2 = scratchImage.createGraphics();
+			g2.drawImage(ret, 0, 0, null);
+			g2.dispose();
+			ret = scratchImage;
+		}
+
+		return ret;
+
+	}
 
 }
-
-
-
