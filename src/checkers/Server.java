@@ -8,20 +8,12 @@ public interface Server extends Remote{
 	public static final String granger = "131.104.48.15";
 	
 	Object gameInfo() throws RemoteException;
+	
+    Object watch(GameObserver requestingClient) throws RemoteException;
+    String doNotWatch(GameObserver requestingClient) throws RemoteException;
 
     Object playGame(Player requestingClient) throws RemoteException;
-        //return Object could be String or GameDesign
-
-    Object watch(GameObserver requestingClient) throws RemoteException;
-        //return Object could be String or GameInfo 
-
-    String doNotWatch(GameObserver requestingClient) throws RemoteException;
-        //returns "Accept" if success or an error message such as
-                //"Cannot be removed: not on Observers list" 
-
     Object considerGame(Player requestingClient, GameDesign aGame) throws RemoteException;
-        //Object could be String or GameDesign
-
     void acceptGame(Player aPlayer, GameDesign aGame) throws RemoteException;
 
     void move(Move playersMove) throws RemoteException;

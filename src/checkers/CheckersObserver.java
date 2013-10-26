@@ -5,13 +5,10 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class CheckersObserver extends UnicastRemoteObject implements GameObserver{
 	private static final long serialVersionUID = 1L;
-	
-	private Server server;
 	private GameInfo myGame;
 	private PlayerInfo myID;
 	
-	CheckersObserver(Server server, PlayerInfo myName) throws RemoteException{
-		this.server = server;
+	CheckersObserver(PlayerInfo myName) throws RemoteException{
 		this.myID = myName;
 	}
 	

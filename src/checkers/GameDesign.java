@@ -15,9 +15,9 @@ import java.rmi.RemoteException;
 public class GameDesign implements Remote, Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private int gameCode;
-	private BoardDesign gameBoardDesign;
 	private Board initialBoard;
+	private BoardDesign gameBoardDesign;
+	private int gameCode;
 	
 	public GameDesign(int gameType) throws Exception{
 		initialBoard = new Board(gameType);
@@ -25,19 +25,13 @@ public class GameDesign implements Remote, Serializable{
 		gameCode = -1; // FIXME - I have no idea what to do with this ...
 	}
 	
-//	public GameDesign(BoardDesign gameBoardDesign, Board initialBoard) throws RemoteException{
-//		this.gameBoardDesign = gameBoardDesign;
-//		this.setInitialBoard(initialBoard);
-//		this.gameCode = -1;
-//	}
-	
 	public GameDesign(GameDesign copy) throws RemoteException{
 		initialBoard = new Board(copy.getInitialBoard());
 		gameBoardDesign = initialBoard.getTheBoard();
-		
 		gameCode = copy.getGameCode();
 	}
 
+	
 	public 	int getGameCode() throws RemoteException{
 		return gameCode;
 	}
@@ -45,6 +39,7 @@ public class GameDesign implements Remote, Serializable{
 	public void setGameCode(int gameCode) throws RemoteException {
 		this.gameCode = gameCode;
 	}	
+	
 
 	public BoardDesign getGameBoardDesign() throws RemoteException {
 		return gameBoardDesign;
@@ -53,6 +48,7 @@ public class GameDesign implements Remote, Serializable{
 	public void setGameBoardDesign(BoardDesign gameBoardDesign) throws RemoteException {
 		this.gameBoardDesign = gameBoardDesign;
 	}
+	
 
 	public Board getInitialBoard() throws RemoteException {
 		return initialBoard;
@@ -61,6 +57,7 @@ public class GameDesign implements Remote, Serializable{
 	public void setInitialBoard(Board initialBoard) throws RemoteException {
 		this.initialBoard = initialBoard;
 	}
+	
 	
 	@Override
 	public boolean equals(Object obj) {

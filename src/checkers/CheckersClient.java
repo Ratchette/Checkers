@@ -34,32 +34,32 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	public static final int PLAYER 		= 0;
 	public static final int OBSERVER 	= 1;
 	
+	private Server server;
 	private CheckersObserver observer;
 	private CheckersPlayer player;
 	
 	/*************************************************************************
 	 * 						Client startup and shutdown
 	 *************************************************************************/
-	public CheckersClient(Server server) throws Exception{
-		int isPlayer = choosePlayStyle();
+	public CheckersClient() throws Exception{
+		int playStyle = choosePlayStyle();
 		
 		// TODO - come up with a better way to create the PlayerIDs
 		String date = new SimpleDateFormat("HH-mm-ss").format(new Date());
 		myID = new PlayerInfo(InetAddress.getLocalHost().getHostName() + " @ " + date);
 		
-		// FIXME change variable name
-		if(isPlayer == 0){
+		if(playStyle == 0){
 			observer = null;
-			player = new CheckersPlayer(server, myID);
-			
+			player = new CheckersPlayer(myID);
 			printStatus("Initialized a player");
 		}
-		else if(isPlayer == 1){
+		
+		else if(playStyle == 1){
 			player = null;
-			observer = new CheckersObserver(server, myID);
-			
+			observer = new CheckersObserver(myID);
 			printStatus("Initialized an observer");
 		}
+		
 		else{
 			printStatus("Chose to exit the program");
 			System.exit(0);
@@ -85,6 +85,57 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		return response;
 	}
 	
+	public void connect(String hostname) throws Exception{
+		if(hostname == null)
+			hostname = Server.granger;
+
+		server = (Server)Naming.lookup("//" + hostname + ":4150/" + Server.serverName);
+		printStatus("Connected to " + Server.serverName + " on " + hostname);
+		
+		if(player != null)
+			connectPlayer();
+		else
+			connectObserver();
+	}
+	
+	// FIXME - this function is incomplete
+	private void connectObserver() throws Exception{
+		Object response;
+		
+		response = server.watch(this);
+		
+		if(response != null && response.getClass().equals(String.class)){
+			printStatus("[ Server ] " + response);
+			return;
+		}
+		
+		observer.setGame((GameInfo)response);
+		// TODO - implement the option for the observer to detach
+	}
+	
+	private void connectPlayer() throws Exception{
+		Object response;
+		int gameType;
+		
+		// Set the player's game to a temporary gameInfo until a game is chosen
+		gameType = chooseGameType();
+		player.setMyGame(new GameInfo(new GameDesign(gameType), player.getPlayerInfo(), new PlayerInfo("Opponent")));
+		response = server.considerGame(this, player.getMyGame().getTheGame());
+		
+		if(response != null){
+			if(response.getClass().equals(String.class))
+				printStatus((String)response);
+			
+			// FIXME Change the logic here to allow the user to choose the type of game being played
+			else{
+//				player.setMyGame(new GameInfo (new GameDesign((GameDesign)response), 
+//						new PlayerInfo("Opponent"), player.getPlayerInfo()));
+				
+				server.acceptGame(this, (GameDesign)response);
+				startGame();
+			}
+		}
+	}
 	
 	/*************************************************************************
 	 * 							Player Methods
@@ -92,8 +143,11 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 
 	@Override
 	public void startGame() throws RemoteException{
-		if(player != null)
-			player.startGame();
+		if(player == null)
+			return;
+		
+		player.setMyGame(new GameInfo((GameInfo)server.gameInfo()));
+		player.startGame();
 	}
 
 	@Override
@@ -114,7 +168,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		int response;
 
 		response = JOptionPane.showOptionDialog(null,
-				"Please choose a game style", "CIS 4150 - Checkers Clinet",
+				"Please choose a game style", "CIS 4150 - Checkers Client",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
 				null, options, options[0]);
 
@@ -188,91 +242,30 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		System.out.println("\t" + date + " >> " + message);
 	}
 	
-	public static Server connect(String[] args) throws Exception{
-		String hostname = Server.granger;
-
-		if (args.length > 0)
-			hostname = args[0];
-
-		printStatus("Connecting to " + Server.serverName + " on " + hostname);
-		return (Server) Naming.lookup("//" + hostname + ":4150/" + Server.serverName);
-	}
-	
 	
 	public static void main(String[] args) throws RemoteException, Exception {
-		Scanner keyboard;		// testing feature that waits for user input
-		CheckersClient client;
-		Server server;			// The client does not need to know the name of the class that implements the server interface
-		Object response;
-		int gameType;
+		Scanner 		keyboard;
+		
+		CheckersClient 	client;
+		String 			serverAddress;
 		
 		
 		try {
-			server = connect(args);
-			printStatus("Now connected to server");
+			client = new CheckersClient();
 			
-			client = new CheckersClient(server);
-			if(client.observer != null){
-				response = server.watch(client);
+			// connect to the server
+			serverAddress = null;
+			if(args.length > 0)
+				serverAddress = args[0];
+			client.connect(serverAddress);
 				
-				if(response != null && response.getClass().equals(String.class)){
-					printStatus("[ Server ] " + response);
-					return;
-				}
-				
-				client.observer.setGame((GameInfo)response);
-				// TODO - implement the option for the observer to detach
-			}
-			
-			else{
-				
-				// FIXME - change to be an exchange be part of a GUI?
-				gameType = client.chooseGameType();
-				client.player.setMyGame(new GameInfo(new GameDesign(gameType),
-						client.player.getPlayerInfo(), new PlayerInfo("Opponent")));
-				response = server.considerGame(client, client.player.getMyGame().getTheGame());
-				
-				if(response != null){
-					if(response.getClass().equals(String.class))
-						printStatus((String)response);
-					else{
-						client.player.setMyGame(new GameInfo (new GameDesign((GameDesign)response), 
-								new PlayerInfo("Opponent"), client.player.getPlayerInfo()));
-						
-						server.acceptGame(client, (GameDesign)response);
-						client.startGame();
-					}
-				}
-//				
+				// Testing stuffs
 //				keyboard = new Scanner(System.in);
 //				keyboard.nextLine();
 //				keyboard.close();
-			}
+			
 		} catch (Exception e) {e.printStackTrace();}
 
 	}
 }
-
-////TESTING start
-//client1 = new CheckersClient(server);
-//client1.myID = new PlayerInfo("Player1");
-//Thread.sleep(1000);
-//client2 = new CheckersClient(server);
-//client2.myID = new PlayerInfo("Player2");
-//
-//server.considerGame(client1, new GameDesign(BoardDesign.BRITISH));
-//client2.myGame = new GameInfo((GameDesign) server.considerGame(client2, new GameDesign(BoardDesign.BRITISH)), 
-//			client1.getPlayerInfo(), client2.getPlayerInfo());
-//server.acceptGame(client2, client2.myGame.getTheGame());
-//Thread.sleep(1000);
-//client2.startGame();
-//client1.myGame = new GameInfo(new GameDesign(BoardDesign.BRITISH), 
-//		client1.getPlayerInfo(), client2.getPlayerInfo());
-//
-//client1.player.setMyGame(client1.myGame);
-//client2.player.setMyGame(client2.myGame);
-//client1.player.display = new Gui(client1.myGame.getCurrentBoard(), client1.myID, client1.player, server);
-//client2.player.display = new Gui(client2.myGame.getCurrentBoard(), client2.myID, client2.player, server);
-//
-//// TESTING end
 

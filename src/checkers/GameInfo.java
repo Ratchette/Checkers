@@ -40,6 +40,7 @@ public class GameInfo implements Remote, Serializable{
 		this.currentRound = copy.currentRound;
 	}
 
+	
 	public GameDesign getTheGame() throws RemoteException{
 		return theGame;
 	}
@@ -47,6 +48,7 @@ public class GameInfo implements Remote, Serializable{
 	public void setTheGame(GameDesign theGame) throws RemoteException{
 		this.theGame = theGame;
 	}
+	
 
 	public Board getCurrentBoard() throws RemoteException{
 		return currentBoard;
@@ -55,6 +57,7 @@ public class GameInfo implements Remote, Serializable{
 	public void setCurrentBoard(Board currentBoard) throws RemoteException{
 		this.currentBoard = currentBoard;
 	}
+	
 
 	public PlayerInfo getPlayer1() throws RemoteException{
 		return player1;
@@ -63,6 +66,7 @@ public class GameInfo implements Remote, Serializable{
 	public void setPlayer1(PlayerInfo player1) throws RemoteException{
 		this.player1 = player1;
 	}
+	
 
 	public PlayerInfo getPlayer2() throws RemoteException{
 		return player2;
@@ -71,6 +75,7 @@ public class GameInfo implements Remote, Serializable{
 	public void setPlayer2(PlayerInfo player2) throws RemoteException{
 		this.player2 = player2;
 	}
+	
 
 	public int getPlayerTurn() throws RemoteException{
 		return playerTurn;
@@ -79,6 +84,7 @@ public class GameInfo implements Remote, Serializable{
 	public void setPlayerTurn(int playerTurn) throws RemoteException{
 		this.playerTurn = playerTurn;
 	}
+	
 
 	public int getCurrentRound() throws RemoteException{
 		return currentRound;

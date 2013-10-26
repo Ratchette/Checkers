@@ -8,25 +8,9 @@
 
 package checkers;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Transparency;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-
-/**
- * ATTENTION BEN!!!!
- * 
- * I needed to change the images from BufferedImages to ImageIcons so that they could be sent over the network
- *     - Would it be possible to remove all BufferedImages stuff and only deal with imageIcon objects?
- */
 
 
 public class Piece implements Remote, Serializable{
@@ -108,7 +92,7 @@ public class Piece implements Remote, Serializable{
 	}
 	
 	public void turnKing(){
-		if(this.colour == 'w')
+		if(this.colour == Piece.WHITE)
 			this.imageURL = "/peice8x8Kw.png";
 		else
 			this.imageURL = "/peice8x8K.png";

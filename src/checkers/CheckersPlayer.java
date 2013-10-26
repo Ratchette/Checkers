@@ -9,13 +9,11 @@ import javax.swing.JOptionPane;
 public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	private static final long serialVersionUID = 1L;
 
-	private Server server;
 	private GameInfo myGame;
 	private PlayerInfo myID;
 	private Gui display;
 
-	public CheckersPlayer(Server server, PlayerInfo myName) throws RemoteException {
-		this.server = server;
+	public CheckersPlayer(PlayerInfo myName) throws RemoteException {
 		this.myID = myName;
 		this.display = null;
 	}
