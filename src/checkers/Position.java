@@ -19,17 +19,7 @@ public class Position implements Remote, Serializable{
 	private int y;
 
 	
-	public Position(int xPos, int yPos) throws Exception {
-		if(xPos < 0) {
-			throw new Exception("Ivalid position: The x position " + xPos + 
-					" is not a valid position.");
-		}
-
-		if(yPos < 0) {
-			throw new Exception("Ivalid position: The y position " + yPos + 
-					" is not a valid position.");
-		}
-
+	public Position(int xPos, int yPos) {
 		x = xPos;
 		y = yPos;
 	}

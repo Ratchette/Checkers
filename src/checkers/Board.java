@@ -10,6 +10,7 @@ package checkers;
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Board implements Remote, Serializable {
@@ -19,7 +20,15 @@ public class Board implements Remote, Serializable {
 	private BoardDesign boardDesign;
 	private Piece[] piecePlacement;
 
+	/**
+	 * NOTES
+	 * 
+	 * The top of the board is y=0, so to move pieces down, ADD to y
+	 */
+	
+	
 	// regular constructor
+	// FIXME
 	public Board(int gameType) throws Exception {
 		int currentPiece;
 		int i, j;
@@ -37,7 +46,8 @@ public class Board implements Remote, Serializable {
 		for (i = 0; i < 3; i++) {
 			for (j = 0; j < boardDesign.gridSize; j++) {
 				if ((i + j) % 2 == 0) {
-					Piece piece = new Piece(new Position(j, i), false, Piece.BLACK);
+					// NOTE: i == y  and  j == x
+					Piece piece = new Piece(new Position(j, i), false, Piece.WHITE);
 					piecePlacement[currentPiece++] = piece;
 				}
 			}
@@ -47,7 +57,8 @@ public class Board implements Remote, Serializable {
 		for (i = boardDesign.gridSize - 1; i > boardDesign.gridSize - 4; i--) {
 			for (j = 0; j < boardDesign.gridSize; j++) {
 				if ((i + j) % 2 == 0) {
-					Piece piece = new Piece(new Position(j, i), false, Piece.WHITE);
+					// NOTE: i == y  and  j == x
+					Piece piece = new Piece(new Position(j, i), false, Piece.BLACK);
 					piecePlacement[currentPiece++] = piece;
 				}
 			}
@@ -58,7 +69,7 @@ public class Board implements Remote, Serializable {
 	
 	// Copy constructor
 	public Board(Board copy) throws RemoteException {
-		boardDesign = new BoardDesign(copy.getTheBoard());
+		boardDesign = new BoardDesign(copy.getBoardDesign());
 		Piece[] copyPieces = copy.getPiecePlacement();
 		
 		piecePlacement = new Piece[NUM_PIECES];
@@ -69,12 +80,12 @@ public class Board implements Remote, Serializable {
 	}
 
 	// getter for the board
-	public BoardDesign getTheBoard() throws RemoteException {
+	public BoardDesign getBoardDesign() throws RemoteException {
 		return boardDesign;
 	}
 
 	// setter for the board
-	public void setTheBoard(BoardDesign design) throws Exception {
+	public void setBoardDesign(BoardDesign design) throws Exception {
 		if (design == null) {
 			throw new Exception("Wrong value");
 		}
@@ -101,32 +112,50 @@ public class Board implements Remote, Serializable {
 		}
 		Board newObj = (Board) obj;
 		try {
-			return newObj.getTheBoard().equals(this.getTheBoard())
+			return newObj.getBoardDesign().equals(this.getBoardDesign())
 					&& Arrays.equals(newObj.getPiecePlacement(),
 							this.getPiecePlacement());
 		} catch (RemoteException e) {
 			return false;
 		}
 	}
-
-	public Move[] getMovesFor(int pos) throws Exception {
-		Piece currentPiece = piecePlacement[pos];
-		SingleMove m[] = new SingleMove[12];
+	
+	public Piece getPieceAtPosition(int x, int y){
+		Position pos;
 		
-		Position p2;
-		Position p3;
+		for(int i=0; i<piecePlacement.length; i++){
+			pos = piecePlacement[i].getPiecePosition();
+			if(pos.getX() == x && pos.getY() == y)
+				return piecePlacement[i];
+		}
+		
+		return null;
+	}
+
+	// FIXME this function must be rewritten
+	public ArrayList<Move> getPossibleMoves(int x, int y) throws Exception {
+		Piece currentPiece;
+		ArrayList<Move> moves;
+		
+		currentPiece = getPieceAtPosition(x, y);
+		moves = new ArrayList<Move>();
+		
+		/**
+		 * NOTES
+		 * 
+		 * The top of the board is y=0, so to move pieces down, ADD to y
+		 * (White always starts at the top)
+		 */
 		
 		if(currentPiece.getColour() == Piece.BLACK){
-			p2 = new Position(currentPiece.getPiecePosition().getX()-1 ,currentPiece.getPiecePosition().getY()+1);
-			p3 = new Position(currentPiece.getPiecePosition().getX()+1 ,currentPiece.getPiecePosition().getY()+1);
+			moves.add(new SingleMove(currentPiece, null, new Position(currentPiece.getPiecePosition().getX()-1 ,currentPiece.getPiecePosition().getY()-1)));
+			moves.add(new SingleMove(currentPiece, null, new Position(currentPiece.getPiecePosition().getX()+1 ,currentPiece.getPiecePosition().getY()-1)));
 		}
-		else{
-			p2 = new Position(currentPiece.getPiecePosition().getX()-1 ,currentPiece.getPiecePosition().getY()-1);
-			p3 = new Position(currentPiece.getPiecePosition().getX()+1 ,currentPiece.getPiecePosition().getY()-1);
+		else{ 
+			moves.add(new SingleMove(currentPiece, null, new Position(currentPiece.getPiecePosition().getX()-1 ,currentPiece.getPiecePosition().getY()+1)));
+			moves.add(new SingleMove(currentPiece, null, new Position(currentPiece.getPiecePosition().getX()+1 ,currentPiece.getPiecePosition().getY()+1)));
 		}
 		
-		m[0] = new SingleMove(currentPiece, null, p2);
-		m[1] = new SingleMove(currentPiece, null, p3);
-		return m;
+		return moves;
 	}
 }

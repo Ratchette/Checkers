@@ -21,13 +21,13 @@ public class GameDesign implements Remote, Serializable{
 	
 	public GameDesign(int gameType) throws Exception{
 		initialBoard = new Board(gameType);
-		gameBoardDesign = initialBoard.getTheBoard();
+		gameBoardDesign = initialBoard.getBoardDesign();
 		gameCode = -1; // FIXME - I have no idea what to do with this ...
 	}
 	
 	public GameDesign(GameDesign copy) throws RemoteException{
 		initialBoard = new Board(copy.getInitialBoard());
-		gameBoardDesign = initialBoard.getTheBoard();
+		gameBoardDesign = initialBoard.getBoardDesign();
 		gameCode = copy.getGameCode();
 	}
 

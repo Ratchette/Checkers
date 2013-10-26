@@ -148,7 +148,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			return "No Game Being Played: No Players";
 		}
 		
-		printStatus("UNKNOWN", "Returned first suggestion: game " + currentGame.getCurrentBoard().getTheBoard().getGameType()
+		printStatus("UNKNOWN", "Returned first suggestion: game " + currentGame.getCurrentBoard().getBoardDesign().getGameType()
 				+ " suggested by [ " + currentGame.getPlayer1().getName()+ "\n");
 		
     	return new GameInfo(requestedGames.get(0));
@@ -186,7 +186,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 				requestedGames.add(temp);
 				
 				printStatus(playerName, "Game offered: [ " + currentGame.getPlayer1().getName() + " ] suggested " 
-						+ currentGame.getCurrentBoard().getTheBoard().getGameType() + " checkers \n");
+						+ currentGame.getCurrentBoard().getBoardDesign().getGameType() + " checkers \n");
 				return new GameDesign(temp.getTheGame());
 			}
 		}
@@ -223,7 +223,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 				requestedGames.add(temp);
 				
 				printStatus(playerName, "Game offered: [ " + temp.getPlayer1().getName() + " ] suggested " 
-						+ temp.getCurrentBoard().getTheBoard().getGameType() + " checkers \n");
+						+ temp.getCurrentBoard().getBoardDesign().getGameType() + " checkers \n");
 				return new GameDesign(temp.getTheGame());
 			}
 		}
@@ -247,7 +247,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 				currentGame = requestedGames.get(i);
 				p1 = currentGame.getPlayer1();
 				
-				printStatus(p2.getName(), "Accepted Game: " + currentGame.getCurrentBoard().getTheBoard().getGameType()
+				printStatus(p2.getName(), "Accepted Game: " + currentGame.getCurrentBoard().getBoardDesign().getGameType()
 						+ " between [ " + p1.getName() + " ] and [ " + p2.getName() + " ]");
 				
 				break;
@@ -255,7 +255,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		}
 		
 		if(currentGame == null){
-			printStatus(p2.getName(), "Reject accept game: I did not recognize " + currentGame.getCurrentBoard().getTheBoard().getGameType()
+			printStatus(p2.getName(), "Reject accept game: I did not recognize " + currentGame.getCurrentBoard().getBoardDesign().getGameType()
 					+ " send to [ " + p2.getName() + " ]");
 			return;
 		}

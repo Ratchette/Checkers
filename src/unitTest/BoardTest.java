@@ -48,15 +48,15 @@ public class BoardTest {
 	@Test
 	public void testInvalidBoardDesignValue() {
 		try {
-			TestCase.assertTrue(board.getTheBoard() != null);
-			board.setTheBoard(null);
-			TestCase.assertTrue(board.getTheBoard() != null);
+			TestCase.assertTrue(board.getBoardDesign() != null);
+			board.setBoardDesign(null);
+			TestCase.assertTrue(board.getBoardDesign() != null);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
 			try {
-				TestCase.assertTrue(board.getTheBoard() != null);
+				TestCase.assertTrue(board.getBoardDesign() != null);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

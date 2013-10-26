@@ -44,11 +44,20 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 
 	@Override
 	public void startGame() throws RemoteException {
+		char myColour;
 		myGame.setCurrentRound(1);
 		myGame.setPlayerTurn(1);
 		
+		
+		// FIXME Each game type has a different colour piece going first
+		// incorperate the data from our design document into here
+		if(myGame.getPlayer1().equals(this.myID))
+			myColour = Piece.WHITE;
+		else
+			myColour = Piece.BLACK;
+		
 		 try {
-			 this.display = new Gui(myGame.getCurrentBoard(), this.myID);
+			 this.display = new Gui(myGame.getCurrentBoard(), myColour);
 		 } catch (Exception e) {
 			 // TODO Auto-generated catch block
 			 e.printStackTrace();
@@ -69,7 +78,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 				move.getPieceBeignMoved().turnKing();
 			}
 			if (move.getPieceBeignMoved().getColour() == Piece.BLACK
-					&& pos.getY() == myGame.getCurrentBoard().getTheBoard().gridSize) {
+					&& pos.getY() == myGame.getCurrentBoard().getBoardDesign().gridSize) {
 				move.getPieceBeignMoved().turnKing();
 			}
 
