@@ -19,12 +19,8 @@ import javax.swing.JOptionPane;
 
 /**
  * A bridge for communication between the server and the instantiated player or observer
- * NO functionality should take place in this class.
- * 
- * @author Rafael Aquino de Carvalho
- * @author Danielle Fudger
- * @author Ben Douek
- * @author Jennifer Winer
+ * NO game functionality should take place within this class. Instead, it forwards all 
+ * messages to the player or observer object within.
  */
 public class CheckersClient extends UnicastRemoteObject implements GameObserver, Player{
 	private static final long serialVersionUID = 1L;
@@ -35,8 +31,9 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	public static final int OBSERVER 	= 1;
 	
 	private Server server;
-	private CheckersObserver observer;
 	private CheckersPlayer player;
+	private CheckersObserver observer;
+
 	
 	/*************************************************************************
 	 * 						Client startup and shutdown

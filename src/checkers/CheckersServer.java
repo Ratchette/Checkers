@@ -34,8 +34,6 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		
 		this.gameInProgress = false;
 		this.currentGame = null;
-		
-		// FIXME - complete the constructor
 	}
 	
 	/*************************************************************************
@@ -50,7 +48,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 			LocateRegistry.createRegistry(4150);
 			Naming.rebind("//localhost:4150/" + Server.serverName, this);
 			
-			printStatus("Server", "bound to port 4150 on localhost\n"); // FIXME - print your local IP address
+			printStatus("Server", "bound to port 4150 on localhost\n"); // FIXME print your local IP address instead
 		}
 		
 		catch(Exception e){
@@ -291,7 +289,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		for(GameObserver o : observers)
 			o.receiveMove(playersMove);
 		
-		// FIXME - Update board
+		// FIXME - Update internal GameInfo
 		
 		printStatus("Move", "Broadcasted move to all players and observers\n");
 	}
@@ -339,11 +337,11 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		try{
 			server = new CheckersServer();
 			
-			// FIXME - Make the program find its own IP (print the IP of the machine that you have run the server on)
+			// TODO Make the program find its own IP (print the IP of the machine that you have run the server on)
 			//			Then print it to the command line
 			server.startup();
 			
-			// FIXME to kill the server enter anything into the terminal
+			// TODO find a better way to determine the lifespan of the server
 			Scanner reader = new Scanner(System.in);
 			reader.nextLine();
 			reader.close();

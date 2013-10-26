@@ -23,6 +23,10 @@ import java.io.File;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+/**
+ * A class that only displays information
+ * Absolutly no calculations or tranformations of ANY objects should occur in here.
+ */
 public class Gui implements ActionListener {
 	/* Create Window */
 	public static final int windowSize = 600;
@@ -38,10 +42,10 @@ public class Gui implements ActionListener {
 	private JPanel board;
 	private JPanel menuButtons;
 
-	
-	private Board currentBoard;
+	// The following variables are for display purposes only DO. NOT. MODIFY. Please only get / set them.
+	private Board currentBoard;	
 	private Piece currentPiece;
-	private char myColour;
+	private final char myColour;
 	private ArrayList<Move> potentialMoves;
 
 	
@@ -264,7 +268,6 @@ public class Gui implements ActionListener {
 	 *************************************************************************/
 	public void actionPerformed(ActionEvent a){
 		JButton pressedButton; 
-		ArrayList<Move> possibleMoves;
 		String[] buttonCoordinates;
 		int x, y;
 		
@@ -277,6 +280,7 @@ public class Gui implements ActionListener {
 		// user has clicked on a destination move
 		try{
 			if(currentPiece != null){
+				// send the move to the player, who sends it to the client, who sends it to the server
 				new SingleMove(currentPiece, /* piece captured */ null, new Position(x, y)); // FIXME - this line does nothing
 				drawBoard(currentBoard);
 				
@@ -290,8 +294,8 @@ public class Gui implements ActionListener {
 				
 				if(currentPiece.getColour() == myColour){
 					highlightSquare(x, y);
-					possibleMoves = currentBoard.getPossibleMoves(x, y);
-					showMoves(possibleMoves, x, y);
+					potentialMoves = currentBoard.getPossibleMoves(x, y);
+					showMoves(potentialMoves, x, y);
 				}
 				
 				else{

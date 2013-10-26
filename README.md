@@ -19,17 +19,29 @@ How to Compile and Run the Code
 ================================
 1) Using a terminal, navigate into the directory Checkers
 
-2) Modify the files client.policy and server.policy so in both files, their first line reads:
-    grant codeBase "file:<FULL_PATH_TO_CURRENT_DIRECTORY>/" {
-    eg. grant codeBase "file:/home/jennifer/University/CIS4150/project1/Checkers/" {
+2) Enter the following command to build all code and our javadocs:
+		ant
 
-3) Enter the command:  bash run_script.sh
-    NOTE: For your convenience the above command both compliles the code and starts the server
-
-4) In a different terminal enter the following command to start the server:
-    java -cp $PWD/checkers.jar:$PWD -Djava.security.policy=client.policy checkers.CheckersClient
+3) start up the server first, then start up your clients!
 
 
+To run the server
+------------------
+Type one of the following:
+	ant server_run
+	java -jar dist/CheckersServer.jar
+	
+	
+To run a Client
+----------------
+Type one of the following:
+	ant client_run
+	java -jar dist/CheckersClient.jar <serverIP>
+	
+		where <serverIP> is the IP of the machine that the server is running on 
+		
+	eg. java -jar dist/CheckersClient.jar localhost
+	eg. java -jar dist/CheckersClient.jar 131.104.48.15
 
 
 Features

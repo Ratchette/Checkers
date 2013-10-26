@@ -1,16 +1,23 @@
 package checkers;
 
-import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import javax.swing.JOptionPane;
-
+/**
+ * This is the class that houses the game of checkers.
+ * This class does NOT communicate with the server. It passes messages between the Board, 
+ * the GUI. It calls methods from the client class instead. 
+ * 
+ * To send a message please pass in a checkersClient object, then create a method within
+ * CheckersClient to relay the message to the server for the player 
+ */
 public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	private static final long serialVersionUID = 1L;
 
 	private GameInfo myGame;
 	private PlayerInfo myID;
+	private int myTurn;
+	private char myColour;
 	private Gui display;
 
 	public CheckersPlayer(PlayerInfo myName) throws RemoteException {
@@ -18,22 +25,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 		this.display = null;
 	}
 
-
-
-	public CheckersPlayer(int gameType, PlayerInfo myName) throws Exception {
-		// myID = myName;
-		//
-		// try {
-		// theBoard = new Board(gameType);
-		// // TODO - needs more stuff
-		//
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		//
-		// }
-	}
-
+	
 	public GameInfo getMyGame() {
 		return myGame;
 	}
@@ -41,25 +33,27 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	public void setMyGame(GameInfo myGame) {
 		this.myGame = myGame;
 	}
+	
 
 	@Override
 	public void startGame() throws RemoteException {
-		char myColour;
 		myGame.setCurrentRound(1);
 		myGame.setPlayerTurn(1);
 		
-		
 		// FIXME Each game type has a different colour piece going first
 		// incorperate the data from our design document into here
-		if(myGame.getPlayer1().equals(this.myID))
+		if(myGame.getPlayer1().equals(this.myID)){
 			myColour = Piece.WHITE;
-		else
+			myTurn = PlayerInfo.PLAYER1;
+		}
+		else{
 			myColour = Piece.BLACK;
+			myTurn = PlayerInfo.PLAYER2;
+		}
 		
 		 try {
 			 this.display = new Gui(myGame.getCurrentBoard(), myColour);
 		 } catch (Exception e) {
-			 // TODO Auto-generated catch block
 			 e.printStackTrace();
 		 }
 	}

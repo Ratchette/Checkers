@@ -15,6 +15,7 @@ import java.rmi.RemoteException;
 public class PlayerInfo implements Remote, Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	// Please refer to these variables instead of using undocumented integers
 	public static final int PLAYER1 = 1;
 	public static final int PLAYER2 = 2;
 	

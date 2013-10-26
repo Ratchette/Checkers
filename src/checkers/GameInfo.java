@@ -12,6 +12,9 @@ import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * The representation of the game in its entirety
+ */
 public class GameInfo implements Remote, Serializable{
 	private static final long serialVersionUID = 1L;
 

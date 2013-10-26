@@ -12,6 +12,9 @@ import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * This class is used to indicate the properties (rules) of the game being played
+ */
 public class GameDesign implements Remote, Serializable{
 	private static final long serialVersionUID = 1L;
 	

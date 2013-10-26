@@ -15,7 +15,8 @@ import java.util.Arrays;
 
 public class Board implements Remote, Serializable {
 	private static final long serialVersionUID = 1L;
-	private static final int NUM_PIECES = 36;
+	
+	private static final int NUM_PIECES = 36; // the maximum number of pieces in any game
 
 	private BoardDesign boardDesign;
 	private Piece[] piecePlacement;
