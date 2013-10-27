@@ -294,7 +294,7 @@ public class Gui implements ActionListener {
 	
 	
 	/**
-	 * BEN - Please cite this function ....
+	 * http://stackoverflow.com/questions/15558202/how-to-resize-image-in-java
 	 * @param img
 	 * @param targetWidth
 	 * @param targetHeight
