@@ -11,6 +11,7 @@ package checkers;
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 
 public class Piece implements Remote, Serializable{
@@ -99,4 +100,5 @@ public class Piece implements Remote, Serializable{
 		
 		this.crown = true;
 	}
+
 }

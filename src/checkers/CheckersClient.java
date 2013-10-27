@@ -140,12 +140,25 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 
 	@Override
 	public void startGame() throws RemoteException{
+		Gui display;
 		if(player == null)
 			return;
 		
-		player.setMyGame(new GameInfo((GameInfo)server.gameInfo()));
-		player.startGame();
+		try {
+			 display = new Gui( ((Board)((GameInfo) server.gameInfo()).getCurrentBoard()), player);
+			 player.setMyGame(new GameInfo((GameInfo)server.gameInfo()));
+		     player.startGame(display);
+		 } catch (Exception e) {
+			 e.printStackTrace();
+		 }
+		
 	}
+
+	public String sendMove(Move playersMove) throws RemoteException {
+		server.move(playersMove);
+		return null;
+	}
+	
 
 	@Override
 	public String move(Move playersMove) throws RemoteException {
@@ -264,5 +277,6 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		} catch (Exception e) {e.printStackTrace();}
 
 	}
+
 }
 

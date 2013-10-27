@@ -20,5 +20,7 @@ public interface Player extends Remote{
 	    //The return String = (“Accept”, “Invalid”);
 	
 	void playerResigned(PlayerInfo aPlayer, char code, String aMessage) throws RemoteException;
-	     //  for code values, see resign() under class CheckersServer)
+	     //  for code values, see resign() under class CheckersServer)\
+	
+	String sendMove(Move playersMove) throws RemoteException;
 }

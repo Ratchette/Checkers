@@ -29,7 +29,6 @@ public class Board implements Remote, Serializable {
 	
 	
 	// regular constructor
-	// FIXME
 	public Board(int gameType) throws Exception {
 		int currentPiece;
 		int i, j;
@@ -46,7 +45,7 @@ public class Board implements Remote, Serializable {
 		// create all of the black pieces
 		for (i = 0; i < 3; i++) {
 			for (j = 0; j < boardDesign.gridSize; j++) {
-				if ((i + j) % 2 == 0) {
+				if ((i + j) % 2 == 1) {
 					// NOTE: i == y  and  j == x
 					Piece piece = new Piece(new Position(j, i), false, Piece.WHITE);
 					piecePlacement[currentPiece++] = piece;
@@ -54,18 +53,16 @@ public class Board implements Remote, Serializable {
 			}
 		}
 
-		// create all of the white peices
+		// create all of the white pieces
 		for (i = boardDesign.gridSize - 1; i > boardDesign.gridSize - 4; i--) {
 			for (j = 0; j < boardDesign.gridSize; j++) {
-				if ((i + j) % 2 == 0) {
+				if ((i + j) % 2 == 1) {
 					// NOTE: i == y  and  j == x
 					Piece piece = new Piece(new Position(j, i), false, Piece.BLACK);
 					piecePlacement[currentPiece++] = piece;
 				}
 			}
 		}
-		
-		// FIXME Make sure that the pieces are placed starting on the dark square
 	}
 	
 	// Copy constructor
@@ -158,5 +155,9 @@ public class Board implements Remote, Serializable {
 		}
 		
 		return moves;
+	}
+	
+	public boolean validateMove(SingleMove move){
+		return true;
 	}
 }

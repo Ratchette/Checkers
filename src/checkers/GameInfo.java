@@ -88,6 +88,10 @@ public class GameInfo implements Remote, Serializable{
 		this.playerTurn = playerTurn;
 	}
 	
+	public void changePlayerTurn() {
+		this.playerTurn = ((playerTurn+1)%2)+1;
+	}
+	
 
 	public int getCurrentRound() throws RemoteException{
 		return currentRound;

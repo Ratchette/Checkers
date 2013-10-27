@@ -25,8 +25,10 @@ import java.util.ArrayList;
 
 /**
  * A class that only displays information
- * Absolutly no calculations or tranformations of ANY objects should occur in here.
+ * Absolutely no calculations or transformations of ANY objects should occur in here.
  */
+
+
 public class Gui implements ActionListener {
 	/* Create Window */
 	public static final int windowSize = 600;
@@ -44,16 +46,17 @@ public class Gui implements ActionListener {
 
 	// The following variables are for display purposes only DO. NOT. MODIFY. Please only get / set them.
 	private Board currentBoard;	
+	private CheckersPlayer thePlayer;
 	private Piece currentPiece;
-	private final char myColour;
 	private ArrayList<Move> potentialMoves;
 
 	
 	/*************************************************************************
 	 * 							Board Creation
 	 *************************************************************************/
-	public Gui(Board theBoard, char colour) throws Exception {
-		myColour = colour;
+	public Gui(Board theBoard, CheckersPlayer player) throws Exception {
+		
+		thePlayer = player;
 		currentBoard = theBoard;
 		currentPiece = null;
 		potentialMoves = null;
@@ -93,23 +96,20 @@ public class Gui implements ActionListener {
 		connect.setText("Stop Watching");
 		menuButtons.add(connect);
 		
-		// turn button
-//		if (!currentPlayer.getName().equals("Opponent")) {
-//			turn.setText("GO");
-//		} else {
-			turn.setText("STOP");
-//		}
-			
+		// turn indicator
+		turn.setText("STOP");
 		turn.setBackground(Color.gray);
 	    menuButtons.add(turn);
 	}
+	
+	
 	
 	private void createBoard(BoardDesign boardDesign) throws RemoteException{
 		int  gridSize;
 		Font font;
 		
 		font = new Font("Helvetica", Font.PLAIN, 30);
-		
+		clearMoves();
 		gridSize = boardDesign.gridSize;
 		square = new JButton[gridSize][];
 		for(int i=0; i<square.length; i++)
@@ -125,7 +125,7 @@ public class Gui implements ActionListener {
 				
 				square[i][j] = new JButton();
 				
-				// set the background colours of the dark tiles depending on the game type
+				// set the background colors of the dark tiles depending on the game type
 				if ((i + j) % 2 == 0) {	
 					if (boardDesign.getGameEncoding() == BoardDesign.BRITISH
 							|| boardDesign.getGameEncoding() == BoardDesign.AMERICAN
@@ -138,13 +138,13 @@ public class Gui implements ActionListener {
 					}
 				} 
 				
-				// set the background colours of the light tiles depending on the game type
+				// set the background colors of the light tiles depending on the game type
 				else {
 					if (boardDesign.getGameEncoding() == BoardDesign.BRITISH
 							|| boardDesign.getGameEncoding() == BoardDesign.AMERICAN
 							|| boardDesign.getGameEncoding() == BoardDesign.INTERNATIONAL
 							|| boardDesign.getGameEncoding() == BoardDesign.ANTICHECKERS) {
-						square[i][j].setBackground(Color.black);
+						square[i][j].setBackground(new Color(0x333333));
 					}
 					
 					else {
@@ -199,8 +199,100 @@ public class Gui implements ActionListener {
 			}
 		}
 	}
+	
+	/*************************************************************************
+	 * 							Action Listeners
+	 *************************************************************************/
+	public void actionPerformed(ActionEvent a){
+		JButton pressedButton; 
+		String[] buttonCoordinates;
+		int x, y;
+		
+		pressedButton = (JButton) a.getSource();
+		buttonCoordinates = pressedButton.getName().split(",");
+		x = Integer.parseInt(buttonCoordinates[0]);
+		y = Integer.parseInt(buttonCoordinates[1]);
+		
+		
+		// user has clicked on a destination move
+		try{
+			if(currentPiece != null){
+				// send the move to the player, who sends it to the client, who sends it to the server
+				SingleMove move = new SingleMove(currentPiece, /* piece captured */ null, new Position(x, y));
+				if (currentBoard.validateMove(move)){
+					thePlayer.sendMove(move);
+				}
+				
+				drawBoard(currentBoard);	
+				changeTurn();
+				clearMoves();
+			}
+	
+			// user has selected a piece to move
+			else {
+				currentPiece = currentBoard.getPieceAtPosition(x, y);
+				if( currentPiece != null ){
+					//System.out.println("selecting " + thePlayer.myColour);
+					if(currentPiece.getColour() == thePlayer.myColour){
+						highlightSquare(x, y);
+						potentialMoves = currentBoard.getPossibleMoves(x, y);
+						showMoves(potentialMoves, x, y);
+					}
+					else{
+						clearMoves();
+					}
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
+	public void highlightSquare(int x, int y) {
+		this.square[y][x].setBorder(new LineBorder(Color.GREEN, 2));
+	}
 
+	
+	/*************************************************************************
+	 * 							Moves Calculations
+	 *************************************************************************/
+	public void showMoves(ArrayList<Move> moves, int x, int y) throws RemoteException{
+		int finalMove;
+		Position finalPosition;
+		
+		clearMoves();
+		currentPiece = currentBoard.getPieceAtPosition(x, y);
+		
+		for (int i = 0; i < moves.size(); i++) {
+			finalMove = moves.get(i).moveSequence().length - 1;
+			finalPosition = moves.get(i).moveSequence()[finalMove].getEndPosition();
+			highlightSquare(finalPosition.getX(), finalPosition.getY());
+		}
+		
+		potentialMoves = moves;
+	}
+
+	private void clearMoves(){
+		potentialMoves = new ArrayList<Move>();
+		currentPiece = null;
+	}
+	
+	
+	// FIXME this function could use some work
+	public void changeTurn() {
+		if (turn.getText().equals("STOP")) {
+			turn.setText("GO");
+			turn.setBackground(Color.green);
+		} else if (turn.getText().equals("GO")) {
+			turn.setText("STOP");
+			turn.setBackground(Color.red);
+		}
+	}
+	
+	
+	
+	
+	
 	/**
 	 * BEN - Please cite this function ....
 	 * @param img
@@ -261,90 +353,5 @@ public class Gui implements ActionListener {
 
 		return ret;
 
-	}
-	
-	/*************************************************************************
-	 * 							Action Listeners
-	 *************************************************************************/
-	public void actionPerformed(ActionEvent a){
-		JButton pressedButton; 
-		String[] buttonCoordinates;
-		int x, y;
-		
-		pressedButton = (JButton) a.getSource();
-		buttonCoordinates = pressedButton.getName().split(",");
-		x = Integer.parseInt(buttonCoordinates[0]);
-		y = Integer.parseInt(buttonCoordinates[1]);
-		
-		
-		// user has clicked on a destination move
-		try{
-			if(currentPiece != null){
-				// send the move to the player, who sends it to the client, who sends it to the server
-				new SingleMove(currentPiece, /* piece captured */ null, new Position(x, y)); // FIXME - this line does nothing
-				drawBoard(currentBoard);
-				
-				changeTurn();
-				clearMoves();
-			}
-	
-			// user has selected a piece to move
-			else {
-				currentPiece = currentBoard.getPieceAtPosition(x, y);
-				
-				if(currentPiece.getColour() == myColour){
-					highlightSquare(x, y);
-					potentialMoves = currentBoard.getPossibleMoves(x, y);
-					showMoves(potentialMoves, x, y);
-				}
-				
-				else{
-					clearMoves();
-				}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-
-	public void highlightSquare(int x, int y) {
-		this.square[y][x].setBorder(new LineBorder(Color.GREEN, 2));
-	}
-
-	
-	/*************************************************************************
-	 * 							Moves Calculations
-	 *************************************************************************/
-	public void showMoves(ArrayList<Move> moves, int x, int y) throws RemoteException{
-		int finalMove;
-		Position finalPosition;
-		
-		clearMoves();
-		currentPiece = currentBoard.getPieceAtPosition(x, y);
-		
-		for (int i = 0; i < moves.size(); i++) {
-			finalMove = moves.get(i).moveSequence().length - 1;
-			finalPosition = moves.get(i).moveSequence()[finalMove].getEndPosition();
-			highlightSquare(finalPosition.getX(), finalPosition.getY());
-		}
-		
-		potentialMoves = moves;
-	}
-
-	private void clearMoves(){
-		potentialMoves = new ArrayList<Move>();
-		currentPiece = null;
-	}
-	
-	
-	// FIXME this function could use some work
-	public void changeTurn() {
-		if (turn.getText().equals("STOP")) {
-			turn.setText("GO");
-			turn.setBackground(Color.green);
-		} else if (turn.getText().equals("GO")) {
-			turn.setText("STOP");
-			turn.setBackground(Color.red);
-		}
 	}
 }

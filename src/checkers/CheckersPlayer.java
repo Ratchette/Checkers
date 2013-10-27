@@ -16,13 +16,12 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 
 	private GameInfo myGame;
 	private PlayerInfo myID;
-	private int myTurn;
-	private char myColour;
+	public int myTurn;
+	public char myColour;
 	private Gui display;
 
 	public CheckersPlayer(PlayerInfo myName) throws RemoteException {
 		this.myID = myName;
-		this.display = null;
 	}
 
 	
@@ -50,14 +49,33 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 			myColour = Piece.BLACK;
 			myTurn = PlayerInfo.PLAYER2;
 		}
+	}
+	
+	public void startGame(Gui window) throws RemoteException {
+		display = window;
+		myGame.setCurrentRound(1);
+		myGame.setPlayerTurn(1);
 		
-		 try {
-			 this.display = new Gui(myGame.getCurrentBoard(), myColour);
-		 } catch (Exception e) {
-			 e.printStackTrace();
-		 }
+		// FIXME Each game type has a different colour piece going first
+		// incorperate the data from our design document into here
+		if(myGame.getPlayer1().equals(this.myID)){
+			myColour = Piece.WHITE;
+			myTurn = PlayerInfo.PLAYER1;
+		}
+		else{
+			myColour = Piece.BLACK;
+			myTurn = PlayerInfo.PLAYER2;
+		}
 	}
 
+	
+	public String sendMove(Move playersMove) throws RemoteException {
+		///FIXME this should call client sendMove
+		move(playersMove);
+		return null;
+	}
+	
+	
 	@Override
 	public String move(Move playersMove) throws RemoteException {
 		try {
@@ -75,7 +93,8 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 					&& pos.getY() == myGame.getCurrentBoard().getBoardDesign().gridSize) {
 				move.getPieceBeignMoved().turnKing();
 			}
-
+			
+			myGame.changePlayerTurn();
 			this.display.drawBoard(myGame.getCurrentBoard());
 
 		} catch (Exception e) {
