@@ -122,59 +122,164 @@ public class Board implements Remote, Serializable {
 		Position pos;
 		
 		for(int i=0; i<piecePlacement.length; i++){
-			pos = piecePlacement[i].getPiecePosition();
-			if(pos.getX() == x && pos.getY() == y)
-				return piecePlacement[i];
+			if (piecePlacement[i] != null) {
+				pos = piecePlacement[i].getPiecePosition();
+				if(pos.getX() == x && pos.getY() == y)
+					return piecePlacement[i];
+			}
 		}
 		
 		return null;
 	}
+	
+	public int getPieceIndex(Position p, Piece[] pArray){
+		Position pos;
+		
+		for(int i=0; i<pArray.length; i++){
+			if (pArray[i] != null) {
+				pos = pArray[i].getPiecePosition();
+				if(pos.getX() == p.getX() && pos.getY() == p.getY())
+					return i;
+			}
+		}
+		
+		return -1;
+	}
+	
+	
 
 	// FIXME this function must be rewritten
 	public ArrayList<Move> getPossibleMoves(Piece piece) throws Exception {
 		
 		ArrayList<Move> moves = new ArrayList<Move>();
 		
-		Position pos = piece.getPiecePosition();
-		int x = pos.getX();
-		int y = pos.getY();
-		int eastX = x + 1;
-		int westX = x - 1;
-		Position east;
-		Position west;
-		
-		/**
-		 * NOTES
-		 * 
-		 * The top of the board is y=0, so to move pieces down, ADD to y
-		 * (White always starts at the top)
-		 */
-		
-		if(piece.getColour() == Piece.BLACK){
-			east = new Position (eastX, y-1);
-			west = new Position (westX, y-1);
+		//Basic jump West
+		if( checkWestDiagonal(piece, 1) && !checkWestDiagonal(piece, 2)){
+			int x = getWestDiagonal(piece, 1).getX();
+			int y = getWestDiagonal(piece, 1).getY();
+			Piece temp = getPieceAtPosition(x, y);
+			if(temp.getColour() != piece.getColour()){
+				moves.add(new SingleMove(piece, temp, getWestDiagonal(piece, 2) ) );
+			}
 		}
-		else{ 
-			east = new Position (eastX, y+1);
-			west = new Position (westX, y+1);
+		//Basic West Move logic no jumping
+		else if( !checkWestDiagonal(piece, 1) ){
+			moves.add(new SingleMove(piece, null, getWestDiagonal(piece, 1)) );
 		}
 		
 		
-		if(!positionOccupied(east) ){
-			moves.add(new SingleMove(piece, null, east) );
+		//Basic jump East
+		if( checkEastDiagonal(piece, 1) && !checkEastDiagonal(piece, 2)){
+			int x = getEastDiagonal(piece, 1).getX();
+			int y = getEastDiagonal(piece, 1).getY();
+			Piece temp = getPieceAtPosition(x, y);
+			if( piece.getColour() != temp.getColour() ){
+				moves.add(new SingleMove(piece, temp, getEastDiagonal(piece, 2) ) );
+			}
+		}
+		//Basic East Move logic no jumping
+		else if( !checkEastDiagonal(piece, 1) ){
+			moves.add(new SingleMove(piece, null, getEastDiagonal(piece, 1)) );
 		}
 		
-		if(!positionOccupied(west) ){
-			moves.add(new SingleMove(piece, null, west) );
-		}
 		
 		return moves;
 	}
 	
 	
-	public boolean validateMove(SingleMove move){
+	
+	//Returns true if position is occupied
+	public boolean checkWestDiagonal(Piece p, int space){
+		Position pos = p.getPiecePosition();
+		int x = pos.getX() - space;
+		int y = -1;
 		
-		return true;
+		if(p.getColour() == Piece.BLACK)
+			y = pos.getY() - space;
+		if(p.getColour() == Piece.WHITE)
+			y = pos.getY() + space;
+		
+		Position posDiagonal = new Position(x,y);
+		
+		
+		if(positionOccupied(posDiagonal)){
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private Position getWestDiagonal(Piece p, int space){
+		Position pos = p.getPiecePosition();
+		int x = pos.getX() - space;
+		int y = -1;
+		
+		if(p.getColour() == Piece.BLACK)
+			y = pos.getY() - space;
+		if(p.getColour() == Piece.WHITE)
+			y = pos.getY() + space;
+		
+		Position posDiagonal = new Position(x,y);
+		
+		return posDiagonal;
+	}
+	
+	
+	public boolean checkEastDiagonal(Piece p, int space){
+		Position pos = p.getPiecePosition();
+		int x = pos.getX() + space;
+		int y = -1;
+		
+		if(p.getColour() == Piece.BLACK)
+			y = pos.getY() - space;
+		if(p.getColour() == Piece.WHITE)
+			y = pos.getY() + space;
+		
+		Position posDiagonal = new Position(x,y);
+		
+		
+		if(positionOccupied(posDiagonal)){
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private Position getEastDiagonal(Piece p, int space){
+		Position pos = p.getPiecePosition();
+		int x = pos.getX() + space;
+		int y = -1;
+		
+		if(p.getColour() == Piece.BLACK)
+			y = pos.getY() - space;
+		if(p.getColour() == Piece.WHITE)
+			y = pos.getY() + space;
+		
+		Position posDiagonal = new Position(x,y);
+		
+		return posDiagonal;
+	}
+	
+	
+	public boolean validateMove(Move move) throws RemoteException{
+		Piece p = move.moveSequence()[0].getPieceBeignMoved();
+		int finalMoveP = move.moveSequence().length - 1;
+		
+		try {
+			ArrayList<Move> moves = getPossibleMoves(p);
+			for (int i = 0; i < moves.size(); i++) {
+				int finalMove = moves.get(i).moveSequence().length - 1;
+				Position finalPosition = moves.get(i).moveSequence()[finalMove].getEndPosition();
+				if ( finalPosition.equals(move.moveSequence()[finalMoveP].getEndPosition()) ){
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return false;
 	}
 	
 	
