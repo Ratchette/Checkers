@@ -271,6 +271,10 @@ public class Board implements Remote, Serializable {
 				int finalMove = moves.get(i).moveSequence().length - 1;
 				Position finalPosition = moves.get(i).moveSequence()[finalMove].getEndPosition();
 				if ( finalPosition.equals(move.moveSequence()[finalMoveP].getEndPosition()) ){
+					Piece capturedPiece = moves.get(i).moveSequence()[finalMove].getCapturedPiece();
+					if (capturedPiece != null) {
+						move.moveSequence()[finalMoveP].setCapturedPiece(capturedPiece);
+					}
 					return true;
 				}
 			}

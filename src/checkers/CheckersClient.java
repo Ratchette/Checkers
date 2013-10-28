@@ -129,7 +129,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 //				player.setMyGame(new GameInfo (new GameDesign((GameDesign)response), 
 //						new PlayerInfo("Opponent"), player.getPlayerInfo()));
 				
-				server.acceptGame(this, (GameDesign)response);
+				server.acceptGame(player, (GameDesign)response);
 				startGame();
 			}
 		}

@@ -83,6 +83,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 		try {
 			// Move the piece
 			SingleMove move = (SingleMove) playersMove;
+			Piece tempPiece = new Piece(move.getPieceBeignMoved());
 			Position pos = move.getEndPosition();
 			move.getPieceBeignMoved().setPiecePosition(pos);
 
@@ -91,13 +92,26 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 					&& pos.getY() == 0) {
 				move.getPieceBeignMoved().turnKing();
 			}
+			Board currentBoard = myGame.getCurrentBoard();
 			if (move.getPieceBeignMoved().getColour() == Piece.BLACK
-					&& pos.getY() == myGame.getCurrentBoard().getBoardDesign().gridSize) {
+					&& pos.getY() == currentBoard.getBoardDesign().gridSize) {
 				move.getPieceBeignMoved().turnKing();
 			}
 			
 			myGame.changePlayerTurn();
-			this.display.drawBoard(myGame.getCurrentBoard());
+			for (int i = 0; i < currentBoard.getPiecePlacement().length; i++) {
+				Piece piece = currentBoard.getPiecePlacement()[i];
+				if(piece != null && tempPiece.equals(piece)) {
+					currentBoard.getPiecePlacement()[i] = move.getPieceBeignMoved();
+				}
+				Piece capturedPiece = move.getCapturedPiece();
+				if(piece != null && capturedPiece != null) {
+					if (capturedPiece.equals(piece)) {
+						currentBoard.getPiecePlacement()[i] = null;
+					}
+				}
+			}
+			this.display.drawBoard(currentBoard);
 
 		} catch (Exception e) {
 			e.printStackTrace();

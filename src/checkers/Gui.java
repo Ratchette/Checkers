@@ -173,6 +173,7 @@ public class Gui implements ActionListener {
 		int gridSize;
 		int x, y;
 		
+		currentBoard = theBoard;
 		pieces = theBoard.getPiecePlacement();
 		gridSize = theBoard.getBoardDesign().gridSize;
 		resetGui(gridSize);
