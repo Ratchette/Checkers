@@ -19,6 +19,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	public int myTurn;
 	public char myColour;
 	private Gui display;
+	private CheckersClient client;
 
 	public CheckersPlayer(PlayerInfo myName) throws RemoteException {
 		this.myID = myName;
@@ -51,7 +52,8 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 		}
 	}
 	
-	public void startGame(Gui window) throws RemoteException {
+	public void startGame(Gui window, CheckersClient c) throws RemoteException {
+		client = c;
 		display = window;
 		myGame.setCurrentRound(1);
 		myGame.setPlayerTurn(1);
@@ -71,7 +73,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	
 	public String sendMove(Move playersMove) throws RemoteException {
 		///FIXME this should call client sendMove
-		move(playersMove);
+		client.sendMove(playersMove);
 		return null;
 	}
 	

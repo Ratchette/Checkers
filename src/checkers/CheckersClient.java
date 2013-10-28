@@ -33,6 +33,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	private Server server;
 	private CheckersPlayer player;
 	private CheckersObserver observer;
+	private static CheckersClient 	client;
 
 	
 	/*************************************************************************
@@ -147,7 +148,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		try {
 			 display = new Gui( ((Board)((GameInfo) server.gameInfo()).getCurrentBoard()), player);
 			 player.setMyGame(new GameInfo((GameInfo)server.gameInfo()));
-		     player.startGame(display);
+		     player.startGame(display, client);
 		 } catch (Exception e) {
 			 e.printStackTrace();
 		 }
@@ -255,8 +256,6 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	
 	public static void main(String[] args) throws RemoteException, Exception {
 		Scanner 		keyboard;
-		
-		CheckersClient 	client;
 		String 			serverAddress;
 		
 		
