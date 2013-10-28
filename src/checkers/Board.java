@@ -131,12 +131,17 @@ public class Board implements Remote, Serializable {
 	}
 
 	// FIXME this function must be rewritten
-	public ArrayList<Move> getPossibleMoves(int x, int y) throws Exception {
-		Piece currentPiece;
-		ArrayList<Move> moves;
+	public ArrayList<Move> getPossibleMoves(Piece piece) throws Exception {
 		
-		currentPiece = getPieceAtPosition(x, y);
-		moves = new ArrayList<Move>();
+		ArrayList<Move> moves = new ArrayList<Move>();
+		
+		Position pos = piece.getPiecePosition();
+		int x = pos.getX();
+		int y = pos.getY();
+		int eastX = x + 1;
+		int westX = x - 1;
+		Position east;
+		Position west;
 		
 		/**
 		 * NOTES
@@ -145,19 +150,43 @@ public class Board implements Remote, Serializable {
 		 * (White always starts at the top)
 		 */
 		
-		if(currentPiece.getColour() == Piece.BLACK){
-			moves.add(new SingleMove(currentPiece, null, new Position(currentPiece.getPiecePosition().getX()-1 ,currentPiece.getPiecePosition().getY()-1)));
-			moves.add(new SingleMove(currentPiece, null, new Position(currentPiece.getPiecePosition().getX()+1 ,currentPiece.getPiecePosition().getY()-1)));
+		if(piece.getColour() == Piece.BLACK){
+			east = new Position (eastX, y-1);
+			west = new Position (westX, y-1);
 		}
 		else{ 
-			moves.add(new SingleMove(currentPiece, null, new Position(currentPiece.getPiecePosition().getX()-1 ,currentPiece.getPiecePosition().getY()+1)));
-			moves.add(new SingleMove(currentPiece, null, new Position(currentPiece.getPiecePosition().getX()+1 ,currentPiece.getPiecePosition().getY()+1)));
+			east = new Position (eastX, y+1);
+			west = new Position (westX, y+1);
+		}
+		
+		
+		if(!positionOccupied(east) ){
+			moves.add(new SingleMove(piece, null, east) );
+		}
+		
+		if(!positionOccupied(west) ){
+			moves.add(new SingleMove(piece, null, west) );
 		}
 		
 		return moves;
 	}
 	
+	
 	public boolean validateMove(SingleMove move){
+		
 		return true;
+	}
+	
+	
+	
+	private boolean positionOccupied(Position pos){
+		for (int i = 0; i < piecePlacement.length; i++){
+			if(piecePlacement[i] != null){
+				if(piecePlacement[i].getPiecePosition().equals(pos)){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -235,7 +235,7 @@ public class Gui implements ActionListener {
 					//System.out.println("selecting " + thePlayer.myColour);
 					if(currentPiece.getColour() == thePlayer.myColour){
 						highlightSquare(x, y);
-						potentialMoves = currentBoard.getPossibleMoves(x, y);
+						potentialMoves = currentBoard.getPossibleMoves(currentBoard.getPieceAtPosition(x, y));
 						showMoves(potentialMoves, x, y);
 					}
 					else{
