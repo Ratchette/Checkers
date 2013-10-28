@@ -227,8 +227,7 @@ public class Gui implements ActionListener {
 					thePlayer.sendMove(move);
 				}
 				
-				drawBoard(currentBoard);	
-				changeTurn();
+				drawBoard(currentBoard);
 				clearMoves();
 			}
 	

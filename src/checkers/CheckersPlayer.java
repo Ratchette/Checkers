@@ -63,6 +63,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 		if(myGame.getPlayer1().equals(this.myID)){
 			myColour = Piece.WHITE;
 			myTurn = PlayerInfo.PLAYER1;
+			display.changeTurn();
 		}
 		else{
 			myColour = Piece.BLACK;
@@ -99,6 +100,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 			}
 			
 			myGame.changePlayerTurn();
+			display.changeTurn();
 			
 			for (int i = 0; i < currentBoard.getPiecePlacement().length; i++) {
 				Piece piece = currentBoard.getPiecePlacement()[i];
