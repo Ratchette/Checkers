@@ -120,4 +120,44 @@ public class GameInfo implements Remote, Serializable{
 			return false;
 		}
 	}
+	
+	public void makeMove(Move playersMove){
+		try {
+			// Move the piece
+			SingleMove move = (SingleMove) playersMove;
+			Piece tempPiece = new Piece(move.getPieceBeignMoved());
+			Position pos = move.getEndPosition();
+			move.getPieceBeignMoved().setPiecePosition(pos);
+
+			// Check if the piece is now a king
+			if (move.getPieceBeignMoved().getColour() == Piece.WHITE
+					&& pos.getY() == 0) {
+				move.getPieceBeignMoved().turnKing();
+			}
+			Board currentBoard = getCurrentBoard();
+			if (move.getPieceBeignMoved().getColour() == Piece.BLACK
+					&& pos.getY() == currentBoard.getBoardDesign().gridSize) {
+				move.getPieceBeignMoved().turnKing();
+			}
+			
+			changePlayerTurn();
+			
+			
+			for (int i = 0; i < currentBoard.getPiecePlacement().length; i++) {
+				Piece piece = currentBoard.getPiecePlacement()[i];
+				if(piece != null && tempPiece.equals(piece)) {
+					currentBoard.getPiecePlacement()[i] = move.getPieceBeignMoved();
+				}
+				Piece capturedPiece = move.getCapturedPiece();
+				if(piece != null && capturedPiece != null) {
+					if (capturedPiece.equals(piece)) {
+						currentBoard.getPiecePlacement()[i] = null;
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

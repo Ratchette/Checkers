@@ -81,44 +81,15 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	
 	@Override
 	public String move(Move playersMove) throws RemoteException {
+		this.myGame.makeMove(playersMove);
+		this.display.changeTurn();
 		try {
-			// Move the piece
-			SingleMove move = (SingleMove) playersMove;
-			Piece tempPiece = new Piece(move.getPieceBeignMoved());
-			Position pos = move.getEndPosition();
-			move.getPieceBeignMoved().setPiecePosition(pos);
-
-			// Check if the piece is now a king
-			if (move.getPieceBeignMoved().getColour() == Piece.WHITE
-					&& pos.getY() == 0) {
-				move.getPieceBeignMoved().turnKing();
-			}
-			Board currentBoard = myGame.getCurrentBoard();
-			if (move.getPieceBeignMoved().getColour() == Piece.BLACK
-					&& pos.getY() == currentBoard.getBoardDesign().gridSize) {
-				move.getPieceBeignMoved().turnKing();
-			}
-			
-			myGame.changePlayerTurn();
-			display.changeTurn();
-			
-			for (int i = 0; i < currentBoard.getPiecePlacement().length; i++) {
-				Piece piece = currentBoard.getPiecePlacement()[i];
-				if(piece != null && tempPiece.equals(piece)) {
-					currentBoard.getPiecePlacement()[i] = move.getPieceBeignMoved();
-				}
-				Piece capturedPiece = move.getCapturedPiece();
-				if(piece != null && capturedPiece != null) {
-					if (capturedPiece.equals(piece)) {
-						currentBoard.getPiecePlacement()[i] = null;
-					}
-				}
-			}
-			this.display.drawBoard(currentBoard);
-
+			this.display.drawBoard(myGame.getCurrentBoard());
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return null;
 	}
 
