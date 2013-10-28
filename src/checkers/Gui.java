@@ -216,6 +216,9 @@ public class Gui implements ActionListener {
 		
 		
 		// user has clicked on a destination move
+		if(!thePlayer.isMyTurn())
+			return;
+		
 		try{
 			if(currentPiece != null){
 				// send the move to the player, who sends it to the client, who sends it to the server

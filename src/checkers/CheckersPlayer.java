@@ -72,7 +72,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 
 	
 	public String sendMove(Move playersMove) throws RemoteException {
-		///FIXME this should call client sendMove
+		// FIXME does this function need to return anything? if so why a string?
 		client.sendMove(playersMove);
 		return null;
 	}
@@ -99,6 +99,7 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 			}
 			
 			myGame.changePlayerTurn();
+			
 			for (int i = 0; i < currentBoard.getPiecePlacement().length; i++) {
 				Piece piece = currentBoard.getPiecePlacement()[i];
 				if(piece != null && tempPiece.equals(piece)) {
@@ -129,6 +130,10 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	@Override
 	public PlayerInfo getPlayerInfo() throws RemoteException {
 		return new PlayerInfo(myID);
+	}
+	
+	public boolean isMyTurn(){
+		return this.myTurn == this.myGame.getPlayerTurn();
 	}
 
 }

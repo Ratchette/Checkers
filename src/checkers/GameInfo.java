@@ -80,7 +80,7 @@ public class GameInfo implements Remote, Serializable{
 	}
 	
 
-	public int getPlayerTurn() throws RemoteException{
+	public int getPlayerTurn(){
 		return playerTurn;
 	}
 
@@ -89,7 +89,7 @@ public class GameInfo implements Remote, Serializable{
 	}
 	
 	public void changePlayerTurn() {
-		this.playerTurn = ((playerTurn+1)%2)+1;
+		this.playerTurn = ((playerTurn)%2)+1;
 	}
 	
 
