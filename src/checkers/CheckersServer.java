@@ -284,6 +284,8 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 
 	@Override
 	public void move(Move playersMove) throws RemoteException {
+		this.currentGame.makeMove(playersMove);
+		
 		for(Player p : players)
 			p.move(playersMove);
 		for(GameObserver o : observers)

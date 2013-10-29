@@ -5,33 +5,57 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class CheckersObserver extends UnicastRemoteObject implements GameObserver{
 	private static final long serialVersionUID = 1L;
+
+	private Gui display;
 	private GameInfo myGame;
 	private PlayerInfo myID;
+	public int myTurn;
 	
-	CheckersObserver(PlayerInfo myName) throws RemoteException{
+
+	public CheckersObserver(PlayerInfo myName) throws RemoteException {
 		this.myID = myName;
 	}
 	
-	@Override
-	public void receiveMove(Move playerMove) throws RemoteException {
-		// TODO Render the move on the board WITHOUT making it this client's turn (this code should be ripped from player)
+	public GameInfo getMyGame() {
+		return myGame;
+	}
+
+	public void setMyGame(GameInfo myGame) {
+		this.myGame = myGame;
 	}
 
 	@Override
-	public void playerResigned(PlayerInfo aPlayer, char code, String aMessage) throws RemoteException {
-		// TODO Display the message that the player has given up
-		
-		System.out.println("*** GAME OVER ***");
-		System.out.println("Player [ " + aPlayer.getName() + " ] has resigned with code [ " + code + " ]");
-		System.out.println("Message : " + aMessage);
+	public void playerResigned(PlayerInfo aPlayer, char code, String aMessage)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public PlayerInfo getPlayerInfo() throws RemoteException{
+	public PlayerInfo getPlayerInfo() throws RemoteException {
 		return new PlayerInfo(myID);
 	}
 	
-	public void setGame(GameInfo newGame) throws Exception{
-		this.myGame = new GameInfo(newGame);
+	public boolean isMyTurn(){
+		return this.myTurn == this.myGame.getPlayerTurn();
 	}
+
+
+	@Override
+	public void receiveMove(Move playersMove) throws RemoteException {
+		this.myGame.makeMove(playersMove);
+		
+		try {
+			this.display.drawBoard(myGame.getCurrentBoard());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void startGame(Gui myGui){
+		this.display = myGui;
+		this.myTurn = PlayerInfo.OBSERVER;
+	}
+
 }

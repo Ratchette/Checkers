@@ -67,7 +67,7 @@ public class Gui implements ActionListener {
 		window.setLayout(new BorderLayout());
 		
 		createMenu();
-		createBoard(theBoard.getBoardDesign());
+		createBoard(player, theBoard.getBoardDesign());
 
 		window.getContentPane().add(menuButtons, BorderLayout.NORTH);
 		window.getContentPane().add(board, BorderLayout.CENTER);
@@ -104,7 +104,7 @@ public class Gui implements ActionListener {
 	
 	
 	
-	private void createBoard(BoardDesign boardDesign) throws RemoteException{
+	private void createBoard(Player player, BoardDesign boardDesign) throws RemoteException{
 		int  gridSize;
 		Font font;
 		
@@ -152,7 +152,8 @@ public class Gui implements ActionListener {
 					}
 				}
 	
-				square[i][j].addActionListener(this);
+				if(player != null)
+					square[i][j].addActionListener(this);
 				
 				square[i][j].setFont(font);
 				board.add(square[i][j]);

@@ -107,7 +107,9 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 			return;
 		}
 		
-		observer.setGame((GameInfo)response);
+		observer.setMyGame(new GameInfo((GameInfo)server.gameInfo()));
+		Gui gui = new Gui( ((Board)((GameInfo) server.gameInfo()).getCurrentBoard()), null);
+		observer.startGame(gui);
 		// TODO - implement the option for the observer to detach
 	}
 	
@@ -165,9 +167,9 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	public String move(Move playersMove) throws RemoteException {
 		if(player != null)
 			return player.move(playersMove);
+		else if(observer != null)
+			observer.receiveMove(playersMove);
 		
-		// Called a player's method to talk to the observer ... fixing it here 
-		observer.receiveMove(playersMove);
 		return "Accept";
 	}
 	

@@ -18,6 +18,7 @@ public class PlayerInfo implements Remote, Serializable{
 	// Please refer to these variables instead of using undocumented integers
 	public static final int PLAYER1 = 1;
 	public static final int PLAYER2 = 2;
+	public static final int OBSERVER = 3;
 	
 	String name;
 	
