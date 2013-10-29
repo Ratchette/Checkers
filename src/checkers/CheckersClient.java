@@ -205,7 +205,9 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	
 	public void stopWatching() {
 		try {
-			server.doNotWatch(this);
+			String response = server.doNotWatch(this);
+			printStatus(response);
+			System.exit(0);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
