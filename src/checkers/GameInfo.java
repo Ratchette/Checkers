@@ -140,9 +140,6 @@ public class GameInfo implements Remote, Serializable{
 				move.getPieceBeignMoved().turnKing();
 			}
 			
-			changePlayerTurn();
-			
-			
 			for (int i = 0; i < currentBoard.getPiecePlacement().length; i++) {
 				Piece piece = currentBoard.getPiecePlacement()[i];
 				if(piece != null && tempPiece.equals(piece)) {
@@ -155,6 +152,8 @@ public class GameInfo implements Remote, Serializable{
 					}
 				}
 			}
+			
+			changePlayerTurn();
 
 		} catch (Exception e) {
 			e.printStackTrace();

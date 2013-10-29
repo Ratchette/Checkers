@@ -259,6 +259,8 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		}
 		
 		gameInProgress = true;
+		this.currentGame.setCurrentRound(1);
+		this.currentGame.setPlayerTurn(1);
 		p1 = currentGame.getPlayer1();	// FIXME - redundant
 		opponents = new ArrayList<Player>();
 		opponents.add(aPlayer);
@@ -278,13 +280,15 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		}
 		
 		this.players = opponents;
-		
+
 		System.out.println();
 	}
 
 	@Override
 	public void move(Move playersMove) throws RemoteException {
 //		this.currentGame.makeMove(playersMove);
+//		System.out.println("passed the block");
+		// FIXME - I have no idea why the above two lines do not work ...
 		
 		for(Player p : players)
 			p.move(playersMove);
