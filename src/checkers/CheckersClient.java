@@ -108,8 +108,8 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		}
 		
 		observer.setMyGame(new GameInfo((GameInfo)server.gameInfo()));
-		Gui gui = new Gui( ((Board)((GameInfo) server.gameInfo()).getCurrentBoard()), null);
-		observer.startGame(gui);
+		Gui gui = new Gui( ((Board)((GameInfo) server.gameInfo()).getCurrentBoard()), observer);
+		observer.startGame(gui, this);
 		// TODO - implement the option for the observer to detach
 	}
 	
@@ -201,6 +201,15 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 			player.move(playersMove);
 		else
 			observer.receiveMove(playersMove);
+	}
+	
+	public void stopWatching() {
+		try {
+			server.doNotWatch(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/*************************************************************************

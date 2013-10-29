@@ -47,6 +47,7 @@ public class Gui implements ActionListener {
 	// The following variables are for display purposes only DO. NOT. MODIFY. Please only get / set them.
 	private Board currentBoard;	
 	private CheckersPlayer thePlayer;
+	private CheckersObserver theObserver;
 	private Piece currentPiece;
 	private ArrayList<Move> potentialMoves;
 
@@ -57,6 +58,7 @@ public class Gui implements ActionListener {
 	public Gui(Board theBoard, CheckersPlayer player) throws Exception {
 		
 		thePlayer = player;
+		theObserver = null;
 		currentBoard = theBoard;
 		currentPiece = null;
 		potentialMoves = null;
@@ -68,6 +70,30 @@ public class Gui implements ActionListener {
 		
 		createMenu();
 		createBoard(player, theBoard.getBoardDesign());
+
+		window.getContentPane().add(menuButtons, BorderLayout.NORTH);
+		window.getContentPane().add(board, BorderLayout.CENTER);
+
+		/* Make The Window Visible */
+		window.setVisible(true);
+		drawBoard(theBoard);
+	}
+	
+	public Gui(Board theBoard, CheckersObserver observer) throws Exception {
+		
+		thePlayer = null;
+		theObserver = observer;
+		currentBoard = theBoard;
+		currentPiece = null;
+		potentialMoves = null;
+		
+		window = new JFrame("Premium Checkers Deluxe 3000 [ OBSERVER ]");
+		window.setSize(windowSize, windowSize + menuSize);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setLayout(new BorderLayout());
+		
+		createMenu();
+		createBoard(null, theBoard.getBoardDesign());
 
 		window.getContentPane().add(menuButtons, BorderLayout.NORTH);
 		window.getContentPane().add(board, BorderLayout.CENTER);
@@ -89,11 +115,15 @@ public class Gui implements ActionListener {
 		menuButtons.setSize(windowSize, menuSize);
 		
 		// resign button
+		resign.addActionListener(this);
 		resign.setText("Resign");
+		resign.setName("Resign");
 		menuButtons.add(resign);
 		
 		// connect button
+		connect.addActionListener(this);
 		connect.setText("Stop Watching");
+		connect.setName("Stop Watching");
 		menuButtons.add(connect);
 		
 		// turn indicator
@@ -211,6 +241,12 @@ public class Gui implements ActionListener {
 		int x, y;
 		
 		pressedButton = (JButton) a.getSource();
+		if(this.theObserver != null && pressedButton.getName().equalsIgnoreCase("Stop Watching")){
+			theObserver.stopWatching();
+			return;
+		}
+			
+		
 		buttonCoordinates = pressedButton.getName().split(",");
 		x = Integer.parseInt(buttonCoordinates[0]);
 		y = Integer.parseInt(buttonCoordinates[1]);
