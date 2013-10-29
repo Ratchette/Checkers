@@ -114,23 +114,23 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	}
 
 	@Override
-	public String doNotWatch(GameObserver requestingClient) throws RemoteException {
+	public void doNotWatch(GameObserver requestingClient) throws RemoteException {
 		String playerName = requestingClient.getPlayerInfo().getName();
 		printStatus(playerName, "Request to stop watching");
 		
 		if(players.contains(requestingClient)){
 			printStatus(playerName, "Reject stop watching request: Players must watch the game\n");
-			return "Rejected: Players Must Watch";
+//			return "Rejected: Players Must Watch";
 		}
 		
 		if(!observers.contains(requestingClient)){
 			printStatus(playerName, "Reject stop watching request: Client did not previously request to watch game\n");
-			return  "Rejected: Already Not Watching";
+//			return  "Rejected: Already Not Watching";
 		}
 		
 		observers.remove(requestingClient);
 		printStatus(playerName, "Successfully stopped watching\n");
-		return "Success";
+//		return "Success";
 	}
 
     public Object gameInfo() throws RemoteException{
@@ -312,11 +312,15 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 		
 		printStatus(playerName, "Resignation Accepted: [ " + playerName + "] has lost.\n" );
 		
-		for(Player p : players)
+		for(Player p : players){
+			printStatus("Server", "Now sending quit to Player " + p.getPlayerInfo().getName());
 			p.playerResigned(aPlayer.getPlayerInfo(), code, reason);
+		}
 
-		for(GameObserver o : observers)
+		for(GameObserver o : observers){
+			printStatus("Server", "Now sending quit to Observer " + o.getPlayerInfo().getName());
 			o.playerResigned(aPlayer.getPlayerInfo(), code, reason);
+		}
 		
 		this.restart();
 	}
@@ -326,7 +330,7 @@ public class CheckersServer extends UnicastRemoteObject implements Server{
 	 * 							Printing and main methods
 	 *************************************************************************/
 	
-	public void printStatus( String requester, String message){
+	public void printStatus(String requester, String message){
 		String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 		System.out.println("\t" + date + " >> [ " + requester + " ] " + message);
 	}

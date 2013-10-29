@@ -3,6 +3,8 @@ package checkers;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import javax.swing.JOptionPane;
+
 /**
  * This is the class that houses the game of checkers.
  * This class does NOT communicate with the server. It passes messages between the Board, 
@@ -95,10 +97,11 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 	}
 
 	@Override
-	public void playerResigned(PlayerInfo aPlayer, char code, String aMessage)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-
+	public void playerResigned(PlayerInfo aPlayer, char code, String aMessage) throws RemoteException {
+		System.out.println("You Win!");
+		JOptionPane.showMessageDialog(null, "Your Opponent Quit: " + aMessage, "You Win!",
+			    JOptionPane.INFORMATION_MESSAGE);
+		System.exit(0);
 	}
 
 	@Override
@@ -110,4 +113,25 @@ public class CheckersPlayer extends UnicastRemoteObject implements Player {
 		return this.myTurn == this.myGame.getPlayerTurn();
 	}
 
+	public void sendResignation(){
+		client.sendResignation();
+	}
+	
+	@Override
+	public boolean equals (Object other){
+		if(other == null){
+			return false;
+		}
+
+		if (!(other instanceof CheckersPlayer)) {
+			return false;
+			
+		}
+		CheckersPlayer player = (CheckersPlayer) other;
+		try {
+			return this.myID.equals(player.getPlayerInfo());
+		} catch (RemoteException e1) {
+			return false;
+		}
+	}
 }

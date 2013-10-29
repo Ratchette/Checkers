@@ -205,8 +205,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 	
 	public void stopWatching() {
 		try {
-			String response = server.doNotWatch(this);
-			printStatus(response);
+			server.doNotWatch(this);
 			System.exit(0);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
@@ -224,6 +223,24 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 			player.playerResigned(aPlayer, code, aMessage);
 		else
 			observer.playerResigned(aPlayer, code, aMessage);
+	}
+	
+	public void sendResignation(){
+        String reason;
+        
+        reason = JOptionPane.showInputDialog(null, "Please enter a a reason for resigning",
+                    "Quit Game", JOptionPane.PLAIN_MESSAGE);
+        
+        if(reason != null){
+        	try {
+				server.resign(this, 'o', reason);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	
+        	System.exit(0);
+        }
 	}
 	
 	@Override
@@ -246,8 +263,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		
 		CheckersClient otherClient = (CheckersClient) other;
 		try{
-			return this.player.equals(otherClient.player)
-				&& this.observer.equals(otherClient.observer);
+			return this.getPlayerInfo().equals(otherClient.getPlayerInfo());
 		}
 		catch(Exception e){
 			System.out.println("Excpetion Occured");
@@ -256,6 +272,7 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		}
 		
 	}
+
 
 	/*************************************************************************
 	 * 							    Main
@@ -289,6 +306,8 @@ public class CheckersClient extends UnicastRemoteObject implements GameObserver,
 		} catch (Exception e) {e.printStackTrace();}
 
 	}
+	
+	
 
 }
 

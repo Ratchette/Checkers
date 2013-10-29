@@ -3,6 +3,8 @@ package checkers;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import javax.swing.JOptionPane;
+
 public class CheckersObserver extends UnicastRemoteObject implements GameObserver{
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +30,10 @@ public class CheckersObserver extends UnicastRemoteObject implements GameObserve
 	@Override
 	public void playerResigned(PlayerInfo aPlayer, char code, String aMessage)
 			throws RemoteException {
-		// TODO Auto-generated method stub
+		System.out.println("Game Over");
+		JOptionPane.showMessageDialog(null, "A player quit the game", "Game Over",
+			    JOptionPane.INFORMATION_MESSAGE);
+//		System.exit(0);
 
 	}
 
@@ -62,6 +67,10 @@ public class CheckersObserver extends UnicastRemoteObject implements GameObserve
 	
 	public void stopWatching(){
 		this.client.stopWatching();
+	}
+	
+	public void sendResignation(){
+		client.sendResignation();
 	}
 
 }

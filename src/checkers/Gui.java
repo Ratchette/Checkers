@@ -241,8 +241,18 @@ public class Gui implements ActionListener {
 		int x, y;
 		
 		pressedButton = (JButton) a.getSource();
-		if(this.theObserver != null && pressedButton.getName().equalsIgnoreCase("Stop Watching")){
-			theObserver.stopWatching();
+		
+		if(pressedButton.getName().equalsIgnoreCase("Stop Watching")){
+			if(this.theObserver != null)
+				theObserver.stopWatching();
+			return;
+		}
+		if(pressedButton.getName().equalsIgnoreCase("Resign")){
+			
+			if(this.thePlayer != null)
+				thePlayer.sendResignation();
+			else if(this.theObserver != null)
+				theObserver.sendResignation();
 			return;
 		}
 			

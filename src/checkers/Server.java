@@ -10,7 +10,7 @@ public interface Server extends Remote{
 	Object gameInfo() throws RemoteException;
 	
     Object watch(GameObserver requestingClient) throws RemoteException;
-    String doNotWatch(GameObserver requestingClient) throws RemoteException;
+    void doNotWatch(GameObserver requestingClient) throws RemoteException;
 
     Object playGame(Player requestingClient) throws RemoteException;
     Object considerGame(Player requestingClient, GameDesign aGame) throws RemoteException;
