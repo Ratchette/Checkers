@@ -129,14 +129,13 @@ public class GameInfo implements Remote, Serializable{
 			Position pos = move.getEndPosition();
 			move.getPieceBeignMoved().setPiecePosition(pos);
 
-			// Check if the piece is now a king
 			if (move.getPieceBeignMoved().getColour() == Piece.WHITE
-					&& pos.getY() == 0) {
+					&& pos.getY() == currentBoard.getBoardDesign().gridSize - 1) {
 				move.getPieceBeignMoved().turnKing();
 			}
 			Board currentBoard = getCurrentBoard();
 			if (move.getPieceBeignMoved().getColour() == Piece.BLACK
-					&& pos.getY() == currentBoard.getBoardDesign().gridSize) {
+					&& pos.getY() == 0) {
 				move.getPieceBeignMoved().turnKing();
 			}
 			
