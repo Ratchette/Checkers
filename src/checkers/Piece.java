@@ -36,10 +36,24 @@ public class Piece implements Remote, Serializable{
 		this.crown = crown;
 		this.colour = colour;
 
-		if (colour == Piece.WHITE)
-			this.imageURL = "/peice8x8w.png";
-		else
-			this.imageURL = "/peice8x8.png";
+//		if (colour == Piece.WHITE)
+//			this.imageURL = "/peice8x8w.png";
+//		else
+//			this.imageURL = "/peice8x8.png";
+		
+		// FIXME FOR TESTING PUTRPOSES ONLY!!!
+		if (colour == Piece.WHITE){
+			if(crown)
+				this.imageURL = "/peice8x8Kw.png";
+			else
+				this.imageURL = "/peice8x8w.png";
+		}
+		else{
+			if(crown)
+				this.imageURL = "/peice8x8K.png";
+			else
+				this.imageURL = "/peice8x8.png";
+		}
 	}
 
 	public Position getPiecePosition() {
