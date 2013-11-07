@@ -133,7 +133,7 @@ public class GameInfo implements Remote, Serializable{
 					&& pos.getY() == currentBoard.getBoardDesign().gridSize - 1) {
 				move.getPieceBeignMoved().turnKing();
 			}
-			Board currentBoard = getCurrentBoard();
+			
 			if (move.getPieceBeignMoved().getColour() == Piece.BLACK
 					&& pos.getY() == 0) {
 				move.getPieceBeignMoved().turnKing();

@@ -7,11 +7,14 @@
 
 package checkers;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Board implements Remote, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -297,5 +300,57 @@ public class Board implements Remote, Serializable {
 			}
 		}
 		return false;
+	}
+
+
+	/**
+	 * 
+	 * @param filename
+	 * @throws Exception
+	 * 			If the file does not exist / cannot be oppened
+	 */
+	public Board(String filename) throws Exception{
+		Scanner file;
+		String inputLine;
+		String[] squares;
+		
+		int boardSize;
+		int currentPiece;
+		int i, j;
+		
+		file = new Scanner(new BufferedReader(new FileReader(filename)));
+		
+		// Assumes that the first line in the file is the Board design
+		inputLine = file.nextLine().trim();
+		boardDesign = new BoardDesign(inputLine);
+		boardSize = boardDesign.gridSize;	
+		
+		// initialize the pieces
+		piecePlacement = new Piece[NUM_PIECES];
+		for(i=0; i<piecePlacement.length; i++)
+			piecePlacement[i] = null;
+		currentPiece = 0;
+		
+		// import pieces
+		for(i=0; i<boardSize; i++){
+			inputLine = file.nextLine().trim();
+			squares = inputLine.split(",");
+			
+			for(j=0; j<boardSize; j++){
+				if(squares[i].equals("b"))
+					piecePlacement[currentPiece++] = new Piece(new Position(j, i), false, Piece.BLACK);
+				
+				if(squares[i].equals("B"))
+					piecePlacement[currentPiece++] = new Piece(new Position(j, i), true, Piece.BLACK);
+
+				if(squares[i].equals("w"))
+					piecePlacement[currentPiece++] = new Piece(new Position(j, i), false, Piece.WHITE);
+				
+				if(squares[i].equals("W"))
+					piecePlacement[currentPiece++] = new Piece(new Position(j, i), true, Piece.WHITE);
+			}
+		}
+
+		file.close();
 	}
 }

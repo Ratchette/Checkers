@@ -53,6 +53,26 @@ public class BoardDesign implements Remote, Serializable {
 		}
 	}
 	
+	public BoardDesign(String game) throws Exception {
+		gameType = gameNametoEncoding(game);
+		
+		if (gameType == BRITISH || gameType == AMERICAN || gameType == ANTICHECKERS){
+			gridSize = 8;
+			blackCorner = Piece.WHITE;
+		}
+		else if (gameType == INTERNATIONAL) {
+			this.gridSize = 10;
+			blackCorner = Piece.BLACK;
+		}
+		else if (gameType == CANADIAN) {
+			this.gridSize = 12;
+			blackCorner = Piece.WHITE;
+		}
+		else{
+			throw new Exception("Unkonwn Game type!");
+		}
+	}
+	
 	public String getGameType(){
 		switch(this.gameType){
 			case 0: return "British";
@@ -61,6 +81,21 @@ public class BoardDesign implements Remote, Serializable {
 			case 3: return "Canadian";
 			default: return "Anti-Checkers";
 		}
+	}
+	
+	public int gameNametoEncoding(String game) throws Exception{
+		if(game.equalsIgnoreCase("British"))
+			return BRITISH;
+		if(game.equalsIgnoreCase("American"))
+			return AMERICAN;
+		if(game.equalsIgnoreCase("International"))
+			return INTERNATIONAL;
+		if(game.equalsIgnoreCase("Canadian"))
+			return CANADIAN;
+		if(game.equalsIgnoreCase("AntiCheckers"))
+			return ANTICHECKERS;
+		
+		throw new Exception("Unrecognized game type: " + game);
 	}
 	
 	public int getGameEncoding(){
