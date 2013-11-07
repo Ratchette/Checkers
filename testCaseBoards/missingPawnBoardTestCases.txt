@@ -1,0 +1,6 @@
+Check that all the pieces are on the board
+
+Try to move the missing piece
+
+Try to move any valid piece
+

@@ -1,0 +1,1 @@
+This should be all of the checks that we do to normally validate a board. 

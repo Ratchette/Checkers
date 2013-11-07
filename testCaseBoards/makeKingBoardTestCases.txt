@@ -1,0 +1,2 @@
+do a check to see if there is a king on the board - true
+makeKing: 6,2 to 5,1
