@@ -1,0 +1,32 @@
+movePiece: 6,8 to 7,9 - should not allow, out of bounds.
+
+movePiece: 2,6 to 2,7 - should not allow, sideways moves (not adjacent)
+
+movePiece: 1,7 to 2,8 - should not allow, spot taken
+
+movePiece: 1,7 - should not have any moves
+
+movePiece: while jump move on the board 
+
+kingMove: 
+
+makeKing: move 2,6 to 1,5 , change pawn to king
+
+kingJump: 
+
+jumpMove: 
+
+doubleJump: 
+
+gameEnd: 
+
+gameSetup: 
+
+* Board with 3 pieces
+* board with piece in wrong spot 
+* Board with too many pieces
+* Board with no pieces
+
+
+
+//isPossibleMoves: (stalemate)
