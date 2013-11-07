@@ -23,9 +23,9 @@ public class GameDesign implements Remote, Serializable{
 	private int gameCode;
 	
 	public GameDesign(int gameType) throws Exception{
-		// TESTING
-		initialBoard = new Board("testCaseBoards/sampleBoard.csv");
-//		initialBoard = new Board(gameType);
+                // FIXME for testing purposes only
+		//initialBoard = new Board("testCaseBoards/sampleBoard.csv");
+		initialBoard = new Board(gameType);
 		gameBoardDesign = initialBoard.getBoardDesign();
 		gameCode = -1; // FIXME - I have no idea what to do with this ...
 	}
