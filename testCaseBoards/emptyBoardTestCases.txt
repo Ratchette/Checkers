@@ -1,0 +1,2 @@
+Check if there are pieces on the board
+Try to make a move with no pieces
