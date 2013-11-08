@@ -5,7 +5,7 @@ topEdge, pawn, jumpLeft, jumpOpponent
 bottomEdge, king, simpleKingDownLeft, noPieceInWay
 almostEdgeRight, pawn, jumpRight, spotTaken
 almostEdgeLeft, king, simpleKingDownRight, sameColor
-cornerTopLeft, king, jumpKingDownLeft, jumpOpponent
-cornerTopRight, king, jumpKingDownRight, jumpOpponent
+cornerTopLeft, king, jumpKingDownRight, jumpOpponent
+cornerTopRight, king, jumpKingDownLeft, jumpOpponent
 cornerBottomLeft, king, offEdge, noPieceInWay
 cornerBottomRight, king, invalid, spotTaken
