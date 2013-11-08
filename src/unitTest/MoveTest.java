@@ -5,7 +5,8 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import checkers.MoveController;
+import checkers.Board;
+import checkers.BoardDesign;
 import checkers.Piece;
 import checkers.Position;
 import checkers.SingleMove;
@@ -17,19 +18,20 @@ public class MoveTest {
 	private Position endPosition;
 	private Position pieceToBeMovedPosition;
 	private Position capturedPiecePosition;
-	private MoveController movecontroller;
+	private Board board;
+	private Piece[] piecePlacement;
 	
 	
 	@Before
 	public void setup() {
-		
 		try {
 			pieceToBeMoved = new Piece(new Position(1,1), false, 'b');
 			capturedPiece = new Piece(new Position(1,3), false, 'w');
 			endPosition = new Position();
 			capturedPiecePosition = new Position();
 			pieceToBeMovedPosition = new Position();
-			movecontroller = new MoveController();
+			board = new Board(BoardDesign.BRITISH);
+			piecePlacement = new Piece[10];
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,8 +43,6 @@ public class MoveTest {
 	 */
 	@Test
 	public void setInvalidMoveTest() {
-		String failureMessage = "Expected exception message is not corrected.\n";
-		
 		try {
 			pieceToBeMovedPosition.setX(1);
 			pieceToBeMovedPosition.setY(2);
@@ -53,18 +53,17 @@ public class MoveTest {
 		} catch (Exception e) {
 			TestCase.fail();
 		}
-		
-		pieceToBeMoved.setPiecePosition(pieceToBeMovedPosition);
+	
 		try {
-			movecontroller.manSimpleMove(pieceToBeMoved, endPosition);
+
+			pieceToBeMoved.setPiecePosition(pieceToBeMovedPosition);
+			piecePlacement[0] = pieceToBeMoved;
+			board.setPiecePlacement(piecePlacement);
+			SingleMove move = new SingleMove(pieceToBeMoved, null, endPosition);
+			TestCase.assertFalse(board.validateMove(move));			
 		
 		} catch (Exception e) {
-			String expectedErrorMessage = "Invalid move.";
-			
-			TestCase.assertEquals(failureMessage, expectedErrorMessage, e.getMessage());
-			
-			System.out.println("Test for end position = " + endPosition + " "
-					+ ": Test ok Expected an exception.");
+			TestCase.fail();
 		}
 	}
 	
@@ -86,9 +85,6 @@ public class MoveTest {
 		
 		pieceToBeMoved.setPiecePosition(pieceToBeMovedPosition);
 		try {
-			SingleMove singleMove = movecontroller.
-					manSimpleMove(pieceToBeMoved, endPosition);
-			TestCase.assertEquals(endPosition, singleMove.getEndPosition());
 			
 		} catch (Exception e) {
 			TestCase.fail();
@@ -122,7 +118,6 @@ public class MoveTest {
 		pieceToBeMoved.setPiecePosition(pieceToBeMovedPosition);
 		capturedPiece.setPiecePosition(capturedPiecePosition);
 		try {
-			movecontroller.manFirstJumpMove(pieceToBeMoved, capturedPiece, endPosition);
 		
 		} catch (Exception e) {
 			String expectedErrorMessage = "Invalid move.";
@@ -161,10 +156,6 @@ public class MoveTest {
 		capturedPiece.setPiecePosition(capturedPiecePosition);
 
 		try {
-			SingleMove singleMove = movecontroller.
-					manFirstJumpMove(pieceToBeMoved, capturedPiece, endPosition);
-			TestCase.assertEquals(endPosition, singleMove.getEndPosition());
-			TestCase.assertEquals(capturedPiece, singleMove.getCapturedPiece());
 			
 		} catch (Exception e) {
 			TestCase.fail();
