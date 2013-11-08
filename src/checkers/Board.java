@@ -337,17 +337,8 @@ public class Board implements Remote, Serializable {
 			squares = inputLine.split(",");
 			
 			for(j=0; j<boardSize; j++){
-				if(squares[j].equals("b"))
+				if(squares[j].equals("@"))
 					piecePlacement[currentPiece++] = new Piece(new Position(j, i), false, Piece.BLACK);
-				
-				if(squares[j].equals("B"))
-					piecePlacement[currentPiece++] = new Piece(new Position(j, i), true, Piece.BLACK);
-
-				if(squares[j].equals("w"))
-					piecePlacement[currentPiece++] = new Piece(new Position(j, i), false, Piece.WHITE);
-				
-				if(squares[j].equals("W"))
-					piecePlacement[currentPiece++] = new Piece(new Position(j, i), true, Piece.WHITE);
 			}
 		}
 

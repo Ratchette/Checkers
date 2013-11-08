@@ -54,7 +54,7 @@ public class BoardDesign implements Remote, Serializable {
 	}
 	
 	public BoardDesign(String game) throws Exception {
-		gameType = gameNametoEncoding(game);
+		gameType = BoardDesign.gameNametoEncoding(game);
 		
 		if (gameType == BRITISH || gameType == AMERICAN || gameType == ANTICHECKERS){
 			gridSize = 8;
@@ -83,7 +83,7 @@ public class BoardDesign implements Remote, Serializable {
 		}
 	}
 	
-	public int gameNametoEncoding(String game) throws Exception{
+	public static int gameNametoEncoding(String game) throws Exception{
 		if(game.equalsIgnoreCase("British"))
 			return BRITISH;
 		if(game.equalsIgnoreCase("American"))
