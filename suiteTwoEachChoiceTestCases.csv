@@ -6,6 +6,6 @@ bottomEdge, king, simpleKingDownLeft, noPieceInWay
 almostEdgeRight, pawn, jumpLeft, spotTaken
 almostEdgeLeft, king, simpleKingDownRight, sameColor
 almostEdgeTop,king, invalid, spotTaken
-almostEdgeBottom,king,jumpKingDownRight,sameColor
+almostEdgeBottom,king,jumpKingRight,sameColor
 cornerTopRight,king,jumpKingDownLeft,jumpOpponent
 cornerBottomLeft, king, offEdge, noPieceInWay

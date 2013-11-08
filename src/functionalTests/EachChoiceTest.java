@@ -14,7 +14,7 @@ public class EachChoiceTest {
 	private Board board;
 	
 	/**
-	 * Test if a pawn in the center of the boardcould move to a invalid place
+	 * Test if a pawn in the center of the board could move to a invalid place
 	 * in the board, with no piece on it.
 	 * Expects that the validateMove method return false, because it is a invalid move.
 	 */
@@ -81,7 +81,7 @@ public class EachChoiceTest {
 	 * Test if a king piece on the top edge of the board could jump 
 	 * an opponent piece in a diagonal left backward.
 	 * Expects that the test that  the method validateMove return true, because for a king it is a valid move.
-	 * This test found a bug, which the King was not moving or jumping backward properly.
+	 * This test found a bug, which the King was not moving backward properly.
 	 */
 	@Test
 	public void testKingTopEdgeJumpOpponentDownLeft() {
@@ -127,14 +127,16 @@ public class EachChoiceTest {
 	@Test
 	public void testKingAlmostRightEdgeJumpLeftSpotTaken() {
 		try {
-			board = new Board("testCaseBoard/almostRightEdgeBoard.csv");
+			board = new Board("testCaseBoards/almostRightEdgeBoard.csv");
 			Piece piece = board.getPiecePlacement()[0];
-			piece.setCrown(false);
+			piece.setCrown(true);
 			Position initialPosition = piece.getPiecePosition();
 			Position endPosition = new Position(initialPosition.getX() - 2, initialPosition.getY() - 2);
-			Piece otherPiece = new Piece(new Position(initialPosition.getX() - 2, initialPosition.getY() - 2), false, Piece.WHITE);
-			board.getPiecePlacement()[1] = otherPiece;
-			SingleMove move = new SingleMove(piece, otherPiece, endPosition);
+			Piece capturedPiece = new Piece(new Position(initialPosition.getX() - 2, initialPosition.getY() - 2), false, Piece.WHITE);
+			board.getPiecePlacement()[1] = capturedPiece;
+			Piece pieceOnTheSpot = new Piece(new Position(initialPosition.getX() - 2, initialPosition.getY() - 2), false, Piece.WHITE);
+			board.getPiecePlacement()[2] = pieceOnTheSpot;
+			SingleMove move = new SingleMove(piece, capturedPiece, endPosition);
 			TestCase.assertFalse(board.validateMove(move));
 		} catch (Exception e) {
 			TestCase.fail();
@@ -153,8 +155,91 @@ public class EachChoiceTest {
 			piece.setCrown(true);
 			Position initialPosition = piece.getPiecePosition();
 			Position endPosition = new Position(initialPosition.getX() + 1, initialPosition.getY() - 1);
+			Piece otherPiece = new Piece(endPosition, false, Piece.BLACK);
+			board.getPiecePlacement()[1] = otherPiece;
+			SingleMove move = new SingleMove(piece, null, endPosition);
+			TestCase.assertFalse(board.validateMove(move));
+		} catch (Exception e) {
+			TestCase.fail();
+		}
+	}
+	
+	/**
+	 * Test if the king could move to an invalid place that is already occupied by a piece.
+	 * The return of the method validateMove is expected to be false.
+	 */
+	@Test
+	public void testKingAlmostTopEdgeInvalidMoveSpotTaken() {
+		try {
+			board = new Board("testCaseBoards/almostTopEdgeBoard.csv");
+			Piece piece = board.getPiecePlacement()[0];
+			piece.setCrown(true);
+			Position initialPosition = piece.getPiecePosition();
+			Position endPosition = new Position(initialPosition.getX() + 5, initialPosition.getY() - 1);
 			Piece otherPiece = new Piece(endPosition, false, Piece.WHITE);
 			board.getPiecePlacement()[1] = otherPiece;
+			SingleMove move = new SingleMove(piece, null, endPosition);
+			TestCase.assertFalse(board.validateMove(move));
+		} catch (Exception e) {
+			TestCase.fail();
+		}
+	}
+	
+	/**
+	 * Test if the king could jump over an piece of the same colour.
+	 * The return of the method validateMove is expected to be false.
+	 */
+	@Test
+	public void testKingAlmostBottomEdgeJumpRightSameColour() {
+		try {
+			board = new Board("testCaseBoards/almostBottomEdgeBoard.csv");
+			Piece piece = board.getPiecePlacement()[0];
+			piece.setCrown(true);
+			Position initialPosition = piece.getPiecePosition();
+			Position endPosition = new Position(initialPosition.getX() - 2, initialPosition.getY() + 2);
+			Piece otherPiece = new Piece(new Position(initialPosition.getX() - 1, initialPosition.getY() + 1), false, Piece.BLACK);
+			board.getPiecePlacement()[1] = otherPiece;
+			SingleMove move = new SingleMove(piece, otherPiece, endPosition);
+			TestCase.assertFalse(board.validateMove(move));
+		} catch (Exception e) {
+			TestCase.fail();
+		}
+	}
+	
+	/**
+	 * Test if the king could jump over opponent.
+	 * The return of the method validateMove is expected to be true.
+	 * Was discovered a bug with this test case for kings jumping backward
+	 */
+	@Test
+	public void testKingCornerTopRightJumpDownLeftOpponent() {
+		try {
+			board = new Board("testCaseBoards/cornerTopRightBoard.csv");
+			Piece piece = board.getPiecePlacement()[0];
+			piece.setCrown(true);
+			Position initialPosition = piece.getPiecePosition();
+			Position endPosition = new Position(initialPosition.getX() - 2, initialPosition.getY() + 2);
+			Piece otherPiece = new Piece(new Position(initialPosition.getX() - 1, initialPosition.getY() + 1), false, Piece.WHITE);
+			board.getPiecePlacement()[1] = otherPiece;
+			SingleMove move = new SingleMove(piece, otherPiece, endPosition);
+			TestCase.assertTrue(board.validateMove(move));
+		} catch (Exception e) {
+			TestCase.fail();
+		}
+	}
+	
+	/**
+	 * Test if the king could move to an off board place.
+	 * The return of the method validateMove is expected to be false.
+	 */
+	@Test
+	public void testKingCornerBottomLeftJumpDownLeftOpponent() {
+		try {
+			board = new Board("testCaseBoards/cornerBottomLeftBoard.csv");
+			Piece piece = board.getPiecePlacement()[0];
+			piece.setCrown(true);
+			Position initialPosition = piece.getPiecePosition();
+			Position endPosition = new Position(initialPosition.getX() - 1, initialPosition.getY() + 1);
 			SingleMove move = new SingleMove(piece, null, endPosition);
 			TestCase.assertFalse(board.validateMove(move));
 		} catch (Exception e) {
