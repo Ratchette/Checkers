@@ -205,7 +205,7 @@ public class Board implements Remote, Serializable {
 		Position posDiagonal = new Position(x,y);
 		
 		
-		if(positionOccupied(posDiagonal)  || x > boardDesign.gridSize || y > boardDesign.gridSize || x < 0 || y < 0){
+		if(positionOccupied(posDiagonal)  || x >= boardDesign.gridSize || y >= boardDesign.gridSize || x < 0 || y < 0){
 			return true;
 		}
 		
@@ -241,7 +241,7 @@ public class Board implements Remote, Serializable {
 		Position posDiagonal = new Position(x,y);
 		
 		
-		if(positionOccupied(posDiagonal) || x > boardDesign.gridSize || y > boardDesign.gridSize || x < 0 || y < 0){
+		if(positionOccupied(posDiagonal) || x >= boardDesign.gridSize || y >= boardDesign.gridSize || x < 0 || y < 0){
 			return true;
 		}
 		

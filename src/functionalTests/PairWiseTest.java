@@ -9,7 +9,7 @@ import checkers.Piece;
 import checkers.Position;
 import checkers.SingleMove;
 
-public class MoveCenterBoardTest {
+public class PairWiseTest {
 
 	private Board board;
 	
@@ -61,7 +61,7 @@ public class MoveCenterBoardTest {
 			TestCase.fail();
 		}
 	}
-	
+	  
 	@Test
 	public void testKingJumpBackward() {
 		try {
