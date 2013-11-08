@@ -1,53 +1,53 @@
-center,pawn,invalid,noPieceInWay
-!center,pawn,simpleRight,jumpOpponent
-center,pawn,simpleKingDownLeft,spotTaken
-!center,pawn,simpleKingDownRight,jumpOpponent
-center,pawn,jumpKingDownLeft,jumpSameColor
-center,king,simpleLeft,spotTaken
-center,king,jumpLeft,jumpSameColor
-center,king,jumpRight,noPieceInWay
-center,king,jumpKingDownRight,jumpSameColor
-center,king,offEdge,jumpOpponent
-!leftEdge,pawn,simpleLeft,jumpSameColor
-leftEdge,pawn,simpleRight,noPieceInWay
-leftEdge,pawn,jumpRight,jumpOpponent
-leftEdge,pawn,jumpKingDownRight,spotTaken
-leftEdge,pawn,offEdge,noPieceInWay
-leftEdge,king,invalid,jumpOpponent
-!leftEdge,king,jumpLeft,spotTaken
-!leftEdge,king,simpleKingDownLeft,jumpSameColor
-leftEdge,king,simpleKingDownRight,noPieceInWay
-!leftEdge,king,jumpKingDownLeft,spotTaken
-rightEdge,pawn,invalid,jumpSameColor
-!rightEdge,pawn,simpleRight,spotTaken
-rightEdge,pawn,simpleKingDownLeft,noPieceInWay
-!rightEdge,pawn,simpleKingDownRight,jumpSameColor
-rightEdge,pawn,jumpKingDownLeft,spotTaken
-!rightEdge,king,simpleLeft,jumpOpponent
-rightEdge,king,jumpLeft,noPieceInWay
-!rightEdge,king,jumpRight,spotTaken
-!rightEdge,king,jumpKingDownRight,jumpOpponent
-rightEdge,king,offEdge,noPieceInWay
-!topEdge,pawn,simpleLeft,spotTaken
-!topEdge,pawn,jumpLeft,jumpOpponent
-!topEdge,pawn,jumpRight,jumpOpponent
-topEdge,pawn,jumpKingDownRight,noPieceInWay
-topEdge,pawn,offEdge,jumpOpponent
-topEdge,king,invalid,noPieceInWay
-!topEdge,king,simpleRight,jumpSameColor
-!topEdge,king,simpleKingDownLeft,jumpSameColor
-topEdge,king,simpleKingDownRight,spotTaken
-topEdge,king,jumpKingDownLeft,jumpSameColor
-!bottomEdge,pawn,simpleLeft,jumpSameColor
-bottomEdge,pawn,jumpLeft,spotTaken
-bottomEdge,pawn,simpleKingDownLeft,noPieceInWay
-!bottomEdge,pawn,simpleKingDownRight,jumpOpponent
-bottomEdge,pawn,jumpKingDownLeft,noPieceInWay
-bottomEdge,king,invalid,jumpOpponent
-bottomEdge,king,simpleRight,noPieceInWay
-bottomEdge,king,jumpRight,spotTaken
-!bottomEdge,king,jumpKingDownRight,jumpSameColor
-!bottomEdge,king,offEdge,spotTaken
+x center,pawn,invalid,noPieceInWay
+x !center,pawn,simpleRight,jumpOpponent
+x center,pawn,simpleKingDownLeft,spotTaken
+x !center,pawn,simpleKingDownRight,jumpOpponent
+x center,pawn,jumpKingDownLeft,jumpSameColor
+x center,king,simpleLeft,spotTaken
+x center,king,jumpLeft,jumpSameColor
+x center,king,jumpRight,noPieceInWay
+x center,king,jumpKingDownRight,jumpSameColor
+x center,king,offEdge,jumpOpponent
+x !leftEdge,pawn,simpleLeft,jumpSameColor
+x leftEdge,pawn,simpleRight,noPieceInWay
+x leftEdge,pawn,jumpRight,jumpOpponent
+x leftEdge,pawn,jumpKingDownRight,spotTaken
+x leftEdge,pawn,offEdge,noPieceInWay
+x leftEdge,king,invalid,jumpOpponent
+x !leftEdge,king,jumpLeft,spotTaken
+x !leftEdge,king,simpleKingDownLeft,jumpSameColor
+x leftEdge,king,simpleKingDownRight,noPieceInWay
+x !leftEdge,king,jumpKingDownLeft,spotTaken
+x rightEdge,pawn,invalid,jumpSameColor
+x !rightEdge,pawn,simpleRight,spotTaken
+x rightEdge,pawn,simpleKingDownLeft,noPieceInWay
+x !rightEdge,pawn,simpleKingDownRight,jumpSameColor
+x rightEdge,pawn,jumpKingDownLeft,spotTaken
+x !rightEdge,king,simpleLeft,jumpOpponent
+x rightEdge,king,jumpLeft,noPieceInWay
+x !rightEdge,king,jumpRight,spotTaken
+x !rightEdge,king,jumpKingDownRight,jumpOpponent
+x rightEdge,king,offEdge,noPieceInWay
+x !topEdge,pawn,simpleLeft,spotTaken
+x !topEdge,pawn,jumpLeft,jumpOpponent
+x !topEdge,pawn,jumpRight,jumpOpponent
+x !topEdge,pawn,jumpKingDownRight,noPieceInWay
+x !topEdge,pawn,offEdge,jumpOpponent
+x topEdge,king,invalid,noPieceInWay
+x !topEdge,king,simpleRight,jumpSameColor
+x !topEdge,king,simpleKingDownLeft,jumpSameColor
+x topEdge,king,simpleKingDownRight,spotTaken
+x topEdge,king,jumpKingDownLeft,jumpSameColor
+x !bottomEdge,pawn,simpleLeft,jumpSameColor
+x bottomEdge,pawn,jumpLeft,spotTaken
+x bottomEdge,pawn,simpleKingDownLeft,noPieceInWay
+x !bottomEdge,pawn,simpleKingDownRight,jumpOpponent
+x bottomEdge,pawn,jumpKingDownLeft,noPieceInWay
+x bottomEdge,king,invalid,jumpOpponent
+x bottomEdge,king,simpleRight,noPieceInWay
+x bottomEdge,king,jumpRight,spotTaken
+x !bottomEdge,king,jumpKingDownRight,jumpSameColor
+x !bottomEdge,king,offEdge,spotTaken
 almostEdgeRight,pawn,invalid,spotTaken
 almostEdgeRight,pawn,jumpLeft,jumpSameColor
 almostEdgeRight,pawn,jumpRight,jumpSameColor
