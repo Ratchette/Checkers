@@ -30,3 +30,11 @@ gameSetup:
 
 
 //isPossibleMoves: (stalemate)
+
+What does partition stuff mean? 
+Pair-wise?
+Board focused with a bunch of different moves?
+OR
+Goal focused with a bunch different boards
+
+We need structure
