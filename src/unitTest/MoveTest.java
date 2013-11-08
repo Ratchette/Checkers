@@ -25,8 +25,8 @@ public class MoveTest {
 	@Before
 	public void setup() {
 		try {
-			pieceToBeMoved = new Piece(new Position(1,1), false, 'b');
-			capturedPiece = new Piece(new Position(1,3), false, 'w');
+			pieceToBeMoved = new Piece(new Position(1,1), false, Piece.BLACK);
+			capturedPiece = new Piece(new Position(1,3), false, Piece.WHITE);
 			endPosition = new Position();
 			capturedPiecePosition = new Position();
 			pieceToBeMovedPosition = new Position();
@@ -73,11 +73,11 @@ public class MoveTest {
 	@Test
 	public void setValidMoveTest() {		
 		try {
-			pieceToBeMovedPosition.setX(1);
+			pieceToBeMovedPosition.setX(3);
 			pieceToBeMovedPosition.setY(2);
 			
 			endPosition.setX(2);
-			endPosition.setY(3);
+			endPosition.setY(1);
 			
 		} catch (Exception e) {
 			TestCase.fail();
@@ -85,7 +85,10 @@ public class MoveTest {
 		
 		pieceToBeMoved.setPiecePosition(pieceToBeMovedPosition);
 		try {
-			
+			piecePlacement[0] = pieceToBeMoved;
+			board.setPiecePlacement(piecePlacement);
+			SingleMove move = new SingleMove(pieceToBeMoved, null, endPosition);
+			TestCase.assertTrue(board.validateMove(move));			
 		} catch (Exception e) {
 			TestCase.fail();
 		}
@@ -98,18 +101,17 @@ public class MoveTest {
 	 * the player can just jump in a diagonal forward direction.
 	 */
 	@Test
-	public void setValidFirstJumpMoveTest() {
-		String failureMessage = "Expected exception message is not corrected.\n";
+	public void setValidJumpMoveTest() {
 		
 		try {
-			pieceToBeMovedPosition.setX(1);
-			pieceToBeMovedPosition.setY(2);
+			pieceToBeMovedPosition.setX(5);
+			pieceToBeMovedPosition.setY(4);
 			
-			capturedPiecePosition.setX(3);
-			capturedPiecePosition.setY(2);
+			capturedPiecePosition.setX(4);
+			capturedPiecePosition.setY(3);
 			
 			endPosition.setX(3);
-			endPosition.setY(4);
+			endPosition.setY(2);
 			
 		} catch (Exception e) {
 			TestCase.fail();
@@ -118,14 +120,13 @@ public class MoveTest {
 		pieceToBeMoved.setPiecePosition(pieceToBeMovedPosition);
 		capturedPiece.setPiecePosition(capturedPiecePosition);
 		try {
-		
+			piecePlacement[0] = pieceToBeMoved;
+			piecePlacement[1] = capturedPiece;
+			board.setPiecePlacement(piecePlacement);
+			SingleMove move = new SingleMove(pieceToBeMoved, capturedPiece, endPosition);
+			TestCase.assertTrue(board.validateMove(move));
 		} catch (Exception e) {
-			String expectedErrorMessage = "Invalid move.";
-			
-			TestCase.assertEquals(failureMessage, expectedErrorMessage, e.getMessage());
-			
-			System.out.println("Test for end position = " + endPosition + " "
-					+ ": Test ok Expected an exception.");
+			TestCase.fail();
 		}
 	}
 	
@@ -136,7 +137,7 @@ public class MoveTest {
 	 * the player can just jump in a diagonal forward direction.
 	 */
 	@Test
-	public void setInvalidFirstJumpMoveTest() {
+	public void setInvalidJumpMoveTest() {
 		
 		try {
 			pieceToBeMovedPosition.setX(1);
@@ -156,7 +157,11 @@ public class MoveTest {
 		capturedPiece.setPiecePosition(capturedPiecePosition);
 
 		try {
-			
+			piecePlacement[0] = pieceToBeMoved;
+			piecePlacement[1] = capturedPiece;
+			board.setPiecePlacement(piecePlacement);
+			SingleMove move = new SingleMove(pieceToBeMoved, capturedPiece, endPosition);
+			TestCase.assertFalse(board.validateMove(move));
 		} catch (Exception e) {
 			TestCase.fail();
 		}
