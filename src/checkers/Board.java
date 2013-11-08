@@ -185,6 +185,39 @@ public class Board implements Remote, Serializable {
 			moves.add(new SingleMove(piece, null, getEastDiagonal(piece, 1)) );
 		}
 		
+		/* KING LOGIC */
+		if(piece.isCrown()){
+//			changeColor(piece);
+			//Basic jump West
+			if( checkWestDiagonal(piece, 1) && !checkWestDiagonal(piece, 2)){
+				int x = getWestDiagonal(piece, 1).getX();
+				int y = getWestDiagonal(piece, 1).getY();
+				Piece temp = getPieceAtPosition(x, y);
+				if(temp.getColour() != piece.getColour()){
+					moves.add(new SingleMove(piece, temp, getWestDiagonal(piece, 2) ) );
+				}
+			}
+			//Basic West Move logic no jumping
+			else if( !checkWestDiagonal(piece, 1) ){
+				moves.add(new SingleMove(piece, null, getWestDiagonal(piece, 1)) );
+			}
+			
+			
+			//Basic jump East
+			if( checkEastDiagonal(piece, 1) && !checkEastDiagonal(piece, 2)){
+				int x = getEastDiagonal(piece, 1).getX();
+				int y = getEastDiagonal(piece, 1).getY();
+				Piece temp = getPieceAtPosition(x, y);
+				if( piece.getColour() != temp.getColour() ){
+					moves.add(new SingleMove(piece, temp, getEastDiagonal(piece, 2) ) );
+				}
+			}
+			//Basic East Move logic no jumping
+			else if( !checkEastDiagonal(piece, 1) ){
+				moves.add(new SingleMove(piece, null, getEastDiagonal(piece, 1)) );
+			}
+//			changeColor(piece);
+		}
 		
 		return moves;
 	}
